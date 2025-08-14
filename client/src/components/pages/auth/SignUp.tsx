@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import {
   signUpSchema,
   SignUpFormValues,
-} from "@/lib/features/auth/authSchemas";
+} from "@/lib/features/auth/auth.schemas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

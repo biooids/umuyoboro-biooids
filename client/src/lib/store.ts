@@ -1,37 +1,44 @@
 // src/lib/store.ts
+
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
+import persistenceMiddleware from "./middleware/persistenceMiddleware";
 
 // --- Reducer Imports ---
 import authReducer from "./features/auth/authSlice";
+import uiReducer from "./features/ui/uiSlice"; // <-- Import uiSlice
 
 // --- API Slice Imports ---
 import { authApiSlice } from "./features/auth/authApiSlice";
+import { userApiSlice } from "./features/user/userApiSlice"; // <-- Import the new userApiSlice
 import { adminApiSlice } from "./features/admin/adminApiSlice";
 import { examApiSlice } from "./features/exams/examApiSlice";
 import { exerciseApiSlice } from "./features/exercises/exerciseApiSlice";
 
 export const store = configureStore({
   reducer: {
-    // Regular Redux slice
+    // Regular Redux slices
     auth: authReducer,
+    ui: uiReducer, // <-- Add uiReducer
 
     // API slice reducers
     [authApiSlice.reducerPath]: authApiSlice.reducer,
+    [userApiSlice.reducerPath]: userApiSlice.reducer, // <-- Add userApiSlice reducer
     [adminApiSlice.reducerPath]: adminApiSlice.reducer,
     [examApiSlice.reducerPath]: examApiSlice.reducer,
-
     [exerciseApiSlice.reducerPath]: exerciseApiSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
+      .concat(persistenceMiddleware) // <-- Add persistenceMiddleware
       .concat(authApiSlice.middleware)
+      .concat(userApiSlice.middleware) // <-- Add userApiSlice middleware
       .concat(adminApiSlice.middleware)
       .concat(examApiSlice.middleware)
-
       .concat(exerciseApiSlice.middleware),
 });
 
+// setupListeners is used to enable refetchOnFocus and refetchOnReconnect behaviors.
 setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof store.getState>;

@@ -7,7 +7,7 @@ import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react"; // --- UPDATE:
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { loginSchema, LoginFormValues } from "@/lib/features/auth/authSchemas";
+import { loginSchema, LoginFormValues } from "@/lib/features/auth/auth.schemas";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
