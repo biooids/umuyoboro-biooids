@@ -1,3 +1,4 @@
+//src/app/(app)/exams/[examId]/page.tsx
 "use client";
 
 import ExamDetails from "@/components/pages/exams/ExamDetails";

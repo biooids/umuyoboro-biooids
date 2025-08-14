@@ -1,3 +1,5 @@
+//src/app/auth/signup/page.tsx
+
 import SignUpForm from "@/components/pages/auth/SignUp";
 
 function page() {
