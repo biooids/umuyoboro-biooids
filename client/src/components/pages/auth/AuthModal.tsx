@@ -1,4 +1,5 @@
 // src/components/auth/AuthModal.tsx
+
 "use client";
 
 import {
@@ -9,7 +10,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation"; // FIX: Import the useRouter hook
+import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks/hooks";
 import {
   closeAuthModal,
@@ -17,14 +18,19 @@ import {
 } from "@/lib/features/ui/uiSlice";
 import { Lock } from "lucide-react";
 
+/**
+ * A modal dialog that prompts unauthenticated users to log in or sign up
+ * when they try to perform an action that requires authentication.
+ */
 export function AuthModal() {
-  const router = useRouter(); // FIX: Initialize the router
+  const router = useRouter();
   const dispatch = useAppDispatch();
   const { isAuthModalOpen, interactionType } =
     useAppSelector(selectAuthModalState);
 
   const handleClose = () => dispatch(closeAuthModal());
 
+  // A helper to navigate to the login or signup page and close the modal.
   const handleNavigate = (path: string) => {
     handleClose();
     router.push(path);
@@ -41,7 +47,6 @@ export function AuthModal() {
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-2 gap-2.5 mt-3">
-          {/* FIX: Use a handler to close the modal before navigating */}
           <Button size="sm" onClick={() => handleNavigate("/auth/login")}>
             Log In
           </Button>

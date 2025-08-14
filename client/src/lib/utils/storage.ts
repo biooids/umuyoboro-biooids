@@ -1,24 +1,19 @@
 // src/lib/utils/storage.ts
 
 /**
- * A simple, Promise-based wrapper around the browser's localStorage
- * that mimics the API of React Native's AsyncStorage.
+ * A simple, Promise-based wrapper around the browser's localStorage.
+ * It now includes helpers for storing and retrieving objects as JSON.
  */
 const storage = {
   /**
-   * Saves a key-value pair to localStorage.
-   * @param key The key to save.
-   * @param value The value to save.
-   * @returns A Promise that resolves when the operation is complete.
+   * Saves a string key-value pair to localStorage.
    */
   setItem: async (key: string, value: string): Promise<void> => {
     return Promise.resolve(localStorage.setItem(key, value));
   },
 
   /**
-   * Retrieves a value from localStorage by its key.
-   * @param key The key to retrieve.
-   * @returns A Promise that resolves with the value, or null if not found.
+   * Retrieves a string value from localStorage by its key.
    */
   getItem: async (key: string): Promise<string | null> => {
     return Promise.resolve(localStorage.getItem(key));
@@ -26,11 +21,37 @@ const storage = {
 
   /**
    * Removes a key-value pair from localStorage.
-   * @param key The key to remove.
-   * @returns A Promise that resolves when the operation is complete.
    */
   removeItem: async (key: string): Promise<void> => {
     return Promise.resolve(localStorage.removeItem(key));
+  },
+
+  /**
+   * NEW: Saves an object to localStorage after converting it to a JSON string.
+   * @param key The key to save.
+   * @param value The object to save.
+   */
+  setObject: async (key: string, value: object): Promise<void> => {
+    const jsonValue = JSON.stringify(value);
+    return Promise.resolve(localStorage.setItem(key, jsonValue));
+  },
+
+  /**
+   * NEW: Retrieves an object from localStorage by its key and parses it from JSON.
+   * @param key The key to retrieve.
+   * @returns A Promise that resolves with the parsed object, or null if not found or invalid.
+   */
+  getObject: async <T>(key: string): Promise<T | null> => {
+    const jsonValue = await Promise.resolve(localStorage.getItem(key));
+    if (jsonValue === null) {
+      return null;
+    }
+    try {
+      return JSON.parse(jsonValue) as T;
+    } catch (e) {
+      console.error("Failed to parse JSON from storage", e);
+      return null;
+    }
   },
 };
 

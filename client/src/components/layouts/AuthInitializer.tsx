@@ -1,12 +1,19 @@
-//src/components/layouts/AuthInitializer.tsx
+// src/components/layouts/AuthInitializer.tsx
+
 "use client";
 
 import { useEffect, useState } from "react";
 import { useAppDispatch } from "@/lib/hooks/hooks";
 import { setCredentials } from "@/lib/features/auth/authSlice";
-import storage from "@/lib/utils/storage"; // <-- IMPORT our new DIY storage
+import storage from "@/lib/utils/storage";
 import { Loader2 } from "lucide-react";
+import { SanitizedUserDto } from "@/lib/features/auth/authTypes";
 
+/**
+ * A component that runs once on application startup to rehydrate the
+ * authentication state from localStorage. This prevents the user from
+ * being logged out on every page refresh.
+ */
 export default function AuthInitializer({
   children,
 }: {
@@ -18,15 +25,18 @@ export default function AuthInitializer({
   useEffect(() => {
     const rehydrateAuth = async () => {
       try {
+        // CHANGE: Attempt to load both the user and the token from storage.
         const token = await storage.getItem("authToken");
-        if (token) {
-          // If we found a token, put it back in the Redux store
-          dispatch(setCredentials({ token }));
+        const user = await storage.getObject<SanitizedUserDto>("authUser");
+
+        if (token && user) {
+          // If both are found, dispatch them to the Redux store to restore the session.
+          dispatch(setCredentials({ token, user }));
         }
       } catch (error) {
         console.error("Failed to rehydrate auth state:", error);
       } finally {
-        // No matter what, we're done loading
+        // No matter what, we are done with the initial loading.
         setIsLoading(false);
       }
     };
@@ -34,8 +44,7 @@ export default function AuthInitializer({
     rehydrateAuth();
   }, [dispatch]);
 
-  // While we're checking for the token, show a loading screen.
-  // This prevents the race condition and stops the logout-on-reload issue.
+  // While checking storage, show a loading spinner to prevent UI flicker.
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -44,5 +53,6 @@ export default function AuthInitializer({
     );
   }
 
+  // Once loading is complete, render the rest of the application.
   return <>{children}</>;
 }

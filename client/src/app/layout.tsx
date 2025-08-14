@@ -1,12 +1,14 @@
 // src/app/layout.tsx
+
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layouts/ThemeProvider";
 import { Toaster } from "react-hot-toast";
 import SocketProvider from "@/components/layouts/SocketProvider";
-import AuthInitializer from "@/components/layouts/AuthInitializer"; // <-- IMPORT
+import AuthInitializer from "@/components/layouts/AuthInitializer";
 import ReduxProvider from "@/components/layouts/ReduxProvider";
+import { AuthModal } from "@/components/pages/auth/AuthModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,6 +19,10 @@ export const metadata = {
   description: "My new application",
 };
 
+/**
+ * The root layout for the entire application.
+ * It sets up global styles, fonts, and context providers.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -27,8 +33,6 @@ export default function RootLayout({
       <body className={`${geistSans.variable} antialiased`}>
         <ReduxProvider>
           <AuthInitializer>
-            {" "}
-            {/* <-- WRAP HERE */}
             <SocketProvider>
               <ThemeProvider
                 attribute="class"
@@ -37,6 +41,7 @@ export default function RootLayout({
                 disableTransitionOnChange
               >
                 <Toaster position="top-center" />
+                <AuthModal /> {/* <-- ADD AuthModal here */}
                 {children}
               </ThemeProvider>
             </SocketProvider>
