@@ -7,21 +7,20 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/utils";
 import { navLinks } from "@/components/shared/nav-links";
 
+/**
+ * The main sidebar navigation for desktop screens.
+ * It is hidden on mobile.
+ */
 export default function Sidebar() {
   const pathname = usePathname();
 
   return (
     <aside className="hidden h-full w-64 flex-col border-r bg-background md:flex">
-      <div className="flex h-14 shrink-0 items-center border-b px-4 lg:h-[60px] lg:px-6">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
-          {/* You can replace this with your actual Logo component */}
-          <span className="">MyApp</span>
-        </Link>
-      </div>
-
-      <div className="flex-1 overflow-auto py-2">
+      {/* CHANGE: The header/logo section has been removed and unified into the main Header.tsx */}
+      <div className="flex-1 overflow-auto py-4">
         <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
           {navLinks.map((link) => {
+            // This logic correctly handles the active state for the root path.
             const isActive =
               link.href === "/"
                 ? pathname === link.href

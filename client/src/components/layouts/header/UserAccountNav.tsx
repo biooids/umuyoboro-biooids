@@ -1,4 +1,5 @@
 // src/components/layouts/header/UserAccountNav.tsx
+
 "use client";
 
 import Link from "next/link";
@@ -12,15 +13,18 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut } from "lucide-react";
+import { LogOut, User as UserIcon } from "lucide-react"; // CHANGE: Import User icon
 import { useLogoutMutation } from "@/lib/features/auth/authApiSlice";
 import { useAuth } from "@/lib/hooks/useAuth";
 
-const getInitials = (username: string | undefined): string => {
-  if (!username) return "U";
+const getInitials = (username: string): string => {
   return username.slice(0, 2).toUpperCase();
 };
 
+/**
+ * A component that displays a "Log In" button for guests or a user avatar
+ * with a dropdown menu for authenticated users.
+ */
 export function UserAccountNav() {
   const { user } = useAuth();
   const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
@@ -28,14 +32,11 @@ export function UserAccountNav() {
   const handleLogout = async () => {
     try {
       await logout().unwrap();
-      // The auth state will be cleared automatically by the onQueryStarted logic
-      // in authApiSlice. No need to call signOut.
     } catch (error) {
       console.error("Failed to log out:", error);
     }
   };
 
-  // If there's no user, show a simple Log In button
   if (!user) {
     return (
       <Button asChild>
@@ -44,7 +45,6 @@ export function UserAccountNav() {
     );
   }
 
-  // If there is a user, show the avatar and dropdown menu
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -58,10 +58,20 @@ export function UserAccountNav() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">@{user.username}</p>
+            <p className="text-xs leading-none text-muted-foreground">
+              {user.phone}
+            </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {/* Links to Profile and Settings have been removed for simplicity */}
+        {/* CHANGE: Add a link to the user's profile page. */}
+        <DropdownMenuItem asChild className="cursor-pointer">
+          <Link href="/profile">
+            <UserIcon className="mr-2 h-4 w-4" />
+            <span>Profile</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={handleLogout}
           disabled={isLoggingOut}

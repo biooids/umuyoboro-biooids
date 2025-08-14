@@ -1,4 +1,4 @@
-// FILE: src/components/layouts/sidebar/MobileBottomBar.tsx
+// src/components/layouts/sidebar/MobileBottomBar.tsx
 
 "use client";
 
@@ -7,14 +7,24 @@ import { usePathname } from "next/navigation";
 import { navLinks } from "@/components/shared/nav-links";
 import { cn } from "@/lib/utils/utils";
 
+/**
+ * A bottom navigation bar for mobile screens, providing quick access
+ * to the most important pages.
+ */
 export default function MobileBottomBar() {
   const pathname = usePathname();
 
   return (
-    <div className="fixed bottom-0 w-full border-t bg-background/95 backdrop-blur-sm md:hidden">
-      <nav className="grid h-14 grid-cols-5 items-center justify-center text-xs">
+    // Consider a higher z-index if it conflicts with other elements.
+    <div className="fixed bottom-0 z-40 w-full border-t bg-background/95 backdrop-blur-sm md:hidden">
+      <nav className="grid h-14 grid-cols-4 items-center justify-center text-xs">
         {navLinks.map((link) => {
-          const isActive = pathname.startsWith(link.href);
+          // CHANGE: Corrected logic to prevent the "Home" link from always being active.
+          const isActive =
+            link.href === "/"
+              ? pathname === link.href
+              : pathname.startsWith(link.href);
+
           return (
             <Link
               key={link.href}

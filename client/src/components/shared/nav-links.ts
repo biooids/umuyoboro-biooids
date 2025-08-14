@@ -2,6 +2,11 @@
 
 import { Home, Compass, Book, Pen } from "lucide-react";
 
+/**
+ * A centralized array of navigation link objects.
+ * This makes it easy to update navigation across all components (desktop and mobile)
+ * by modifying a single file.
+ */
 export const navLinks = [
   {
     href: "/",

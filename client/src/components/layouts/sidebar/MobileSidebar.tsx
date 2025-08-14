@@ -1,22 +1,27 @@
-// FILE: src/components/layouts/sidebar/MobileSidebar.tsx
+// src/components/layouts/sidebar/MobileSidebar.tsx
 
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, Settings } from "lucide-react";
+import { Menu } from "lucide-react";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { navLinks, settingsLink } from "@/components/shared/nav-links";
-import { cn } from "@/lib/utils/utils";
 
+import { cn } from "@/lib/utils/utils";
+import { navLinks } from "@/components/shared/nav-links";
+
+/**
+ * A slide-out ("sheet") sidebar for mobile screens, triggered by a hamburger menu icon.
+ * To avoid redundancy, consider using this for secondary navigation (e.g., settings, profile)
+ * while the MobileBottomBar handles primary navigation.
+ */
 export default function MobileSidebar() {
   const pathname = usePathname();
 
@@ -29,21 +34,23 @@ export default function MobileSidebar() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="flex flex-col p-4">
-        {/* Accessibility: Title and Description for screen readers */}
         <SheetHeader className="text-left border-b pb-4">
           <SheetTitle>
             <Link href="/" className="flex items-center gap-2 font-semibold">
-              <span className="">Your App Name</span>
+              <span className="">MyApp</span>
             </Link>
           </SheetTitle>
-          <SheetDescription>Select a page to navigate to.</SheetDescription>
         </SheetHeader>
 
-        {/* Main navigation links */}
         <div className="flex-1 mt-4">
           <nav className="grid gap-2 text-base font-medium">
             {navLinks.map((link) => {
-              const isActive = pathname.startsWith(link.href);
+              // CHANGE: Corrected logic to prevent the "Home" link from always being active.
+              const isActive =
+                link.href === "/"
+                  ? pathname === link.href
+                  : pathname.startsWith(link.href);
+
               return (
                 <Link
                   key={link.href}
@@ -59,20 +66,6 @@ export default function MobileSidebar() {
               );
             })}
           </nav>
-        </div>
-
-        {/* Settings link at the bottom */}
-        <div className="mt-auto">
-          <Link
-            href={settingsLink.href}
-            className={cn(
-              "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-              pathname.startsWith(settingsLink.href) && "bg-muted text-primary"
-            )}
-          >
-            <Settings className="h-5 w-5" />
-            {settingsLink.label}
-          </Link>
         </div>
       </SheetContent>
     </Sheet>

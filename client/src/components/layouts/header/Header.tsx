@@ -1,31 +1,47 @@
-// src/components/layout/Header.tsx
+// src/components/layouts/header/Header.tsx
+
 "use client";
 
+import Link from "next/link";
 import { useAuth } from "@/lib/hooks/useAuth";
 import ThemeToggler from "./ThemeToggler";
 import { UserAccountNav } from "./UserAccountNav";
+import MobileSidebar from "../sidebar/MobileSidebar";
 
+/**
+ * The main application header. It is responsive and adapts its content
+ * based on the user's authentication state.
+ */
 export default function Header() {
   const { user } = useAuth();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/60 shadow-sm backdrop-blur-lg">
+    <header className="sticky top-0 z-40 w-full border-b bg-background/80 shadow-sm backdrop-blur-lg">
       <div className="container flex h-16 items-center justify-between">
-        {/* === Left Side === */}
+        {/* === Left Side: App Logo and Mobile Nav Trigger === */}
         <div className="flex items-center gap-4">
-          {user ? (
+          {/* CHANGE: The mobile sidebar trigger is now part of the unified header. */}
+          <MobileSidebar />
+          {/* CHANGE: The app name/logo is now in the header for a consistent look. */}
+          <Link
+            href="/"
+            className="hidden items-center gap-2 font-semibold md:flex"
+          >
+            <span className="text-lg">MyApp</span>
+          </Link>
+        </div>
+
+        {/* === Center (Visible for logged-in users on larger screens) === */}
+        <div className="hidden flex-1 justify-center md:flex">
+          {user && (
             <h1 className="text-lg font-semibold text-foreground">
               Welcome back,{" "}
               <span className="text-primary">{user.username}</span>
             </h1>
-          ) : (
-            <h1 className="text-lg font-semibold text-foreground">
-              Welcome to <span className="text-primary">MyApp</span>
-            </h1>
           )}
         </div>
 
-        {/* === Right Side === */}
+        {/* === Right Side: Theme and User Account Buttons === */}
         <div className="flex items-center gap-2 md:gap-4">
           <ThemeToggler />
           <UserAccountNav />
