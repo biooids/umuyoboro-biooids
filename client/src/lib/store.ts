@@ -6,39 +6,30 @@ import persistenceMiddleware from "./middleware/persistenceMiddleware";
 
 // --- Reducer Imports ---
 import authReducer from "./features/auth/authSlice";
-import uiReducer from "./features/ui/uiSlice"; // <-- Import uiSlice
+import uiReducer from "./features/ui/uiSlice";
 
-// --- API Slice Imports ---
-import { authApiSlice } from "./features/auth/authApiSlice";
-import { userApiSlice } from "./features/user/userApiSlice"; // <-- Import the new userApiSlice
-import { adminApiSlice } from "./features/admin/adminApiSlice";
-import { examApiSlice } from "./features/exams/examApiSlice";
-import { exerciseApiSlice } from "./features/exercises/exerciseApiSlice";
+// --- API Slice Import ---
+// CHANGE: Import only the single, central apiSlice.
+import { apiSlice } from "./api/apiSlice";
 
 export const store = configureStore({
   reducer: {
     // Regular Redux slices
     auth: authReducer,
-    ui: uiReducer, // <-- Add uiReducer
+    ui: uiReducer,
 
-    // API slice reducers
-    [authApiSlice.reducerPath]: authApiSlice.reducer,
-    [userApiSlice.reducerPath]: userApiSlice.reducer, // <-- Add userApiSlice reducer
-    [adminApiSlice.reducerPath]: adminApiSlice.reducer,
-    [examApiSlice.reducerPath]: examApiSlice.reducer,
-    [exerciseApiSlice.reducerPath]: exerciseApiSlice.reducer,
+    // CHANGE: Add only the single reducer from the central apiSlice.
+    // All injected endpoints will be handled by this one reducer.
+    [apiSlice.reducerPath]: apiSlice.reducer,
   },
+  // CHANGE: Add only the single middleware from the central apiSlice.
+  // This one middleware handles all API requests, caching, and invalidation.
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
-      .concat(persistenceMiddleware) // <-- Add persistenceMiddleware
-      .concat(authApiSlice.middleware)
-      .concat(userApiSlice.middleware) // <-- Add userApiSlice middleware
-      .concat(adminApiSlice.middleware)
-      .concat(examApiSlice.middleware)
-      .concat(exerciseApiSlice.middleware),
+      .concat(persistenceMiddleware)
+      .concat(apiSlice.middleware),
 });
 
-// setupListeners is used to enable refetchOnFocus and refetchOnReconnect behaviors.
 setupListeners(store.dispatch);
 
 export type RootState = ReturnType<typeof store.getState>;

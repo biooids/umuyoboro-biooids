@@ -1,25 +1,25 @@
 // src/lib/features/exercises/exerciseApiSlice.ts
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithReauth } from "../../api/baseQueryWithReauth";
+
+import { apiSlice } from "../../api/apiSlice"; // CHANGE: Import the central apiSlice.
 import {
   AllExercisesApiResponse,
   SingleExerciseApiResponse,
 } from "./exerciseTypes";
 
-export const exerciseApiSlice = createApi({
-  reducerPath: "exerciseApi",
-  baseQuery: baseQueryWithReauth,
-  tagTypes: ["Exercises"],
+export const exerciseApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getAllExercises: builder.query<AllExercisesApiResponse, void>({
       query: () => "/exercises",
-      providesTags: ["Exercises"],
+      providesTags: ["Exercise"],
     }),
     getExerciseById: builder.query<
       SingleExerciseApiResponse,
       { exerciseId: string }
     >({
       query: ({ exerciseId }) => `/exercises/${exerciseId}`,
+      providesTags: (result, error, { exerciseId }) => [
+        { type: "Exercise", id: exerciseId },
+      ],
     }),
   }),
 });

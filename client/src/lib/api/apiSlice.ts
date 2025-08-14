@@ -5,14 +5,17 @@ import { baseQueryWithReauth } from "./baseQueryWithReauth";
 
 /**
  * This is the central "root" API slice.
- * All other API slices will inject their endpoints into this one.
- * It is configured with the base query and defines the tag types used for caching.
- * The `endpoints` section is intentionally left empty as endpoints will be added via injection.
+ * All other feature-specific API slices will inject their endpoints into this one.
+ * It is configured with the base query and defines the master list of tag types
+ * used for caching and invalidation across the entire application.
  */
 export const apiSlice = createApi({
-  reducerPath: "api", // A single reducer path for the entire API.
+  // The reducerPath is the key where this slice's state will be stored in the Redux store.
+  reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  // Define the tag types that will be used for caching and invalidation across the app.
+  // Define the tag types that can be used to invalidate and refetch data.
   tagTypes: ["User", "Exam", "Exercise"],
-  endpoints: (builder) => ({}), // Endpoints are injected in other files.
+  // The `endpoints` section is intentionally left empty.
+  // Endpoints will be added from other files using `injectEndpoints`.
+  endpoints: (builder) => ({}),
 });

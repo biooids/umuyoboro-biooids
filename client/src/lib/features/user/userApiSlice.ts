@@ -1,27 +1,16 @@
 // src/lib/features/user/userApiSlice.ts
 
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithReauth } from "../../api/baseQueryWithReauth";
+import { apiSlice } from "../../api/apiSlice"; // CHANGE: Import the central apiSlice.
 import { setCredentials, loggedOut } from "../auth/authSlice";
 import type { UserUpdateInputDto, UserProfileApiResponse } from "./userTypes";
+import { RootState } from "@/lib/store";
 
-export const userApiSlice = createApi({
-  reducerPath: "userApi",
-  baseQuery: baseQueryWithReauth,
-  // Tag types are used for caching and invalidation.
-  tagTypes: ["User"],
+export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    /**
-     * Query to get the current authenticated user's profile.
-     */
     getProfile: builder.query<UserProfileApiResponse, void>({
       query: () => "/users/me",
-      providesTags: ["User"], // This query provides a 'User' tag.
+      providesTags: ["User"],
     }),
-
-    /**
-     * Mutation to update the current user's profile.
-     */
     updateProfile: builder.mutation<UserProfileApiResponse, UserUpdateInputDto>(
       {
         query: (credentials) => ({
@@ -29,45 +18,39 @@ export const userApiSlice = createApi({
           method: "PATCH",
           body: credentials,
         }),
-        // After the mutation succeeds, we want to update the user data in the auth slice.
-        async onQueryStarted(_, { dispatch, queryFulfilled }) {
+
+        async onQueryStarted(_, { dispatch, queryFulfilled, getState }) {
           try {
             const { data } = await queryFulfilled;
-            // Dispatch `setCredentials` to update the user object in the global state.
-            // We pass the existing token back to itself to avoid clearing it.
+            const currentToken = (getState() as RootState).auth.token;
+            if (!currentToken) {
+              // This case should not be reachable for an authenticated user
+              throw new Error(
+                "User is not authenticated, cannot update profile."
+              );
+            }
             dispatch(
               setCredentials({
                 user: data.data.user,
-                token: (
-                  (await dispatch(userApiSlice.endpoints.getProfile.initiate()))
-                    .data?.data.user as any
-                )?.token,
+                token: currentToken,
               })
             );
           } catch (error) {
             console.error("Profile update failed:", error);
           }
         },
-        // Invalidate the 'User' tag to force a refetch of the user's profile data.
         invalidatesTags: ["User"],
       }
     ),
-
-    /**
-     * Mutation to permanently delete the current user's account.
-     */
     deleteAccount: builder.mutation<{ message: string }, void>({
       query: () => ({
         url: "/users/me",
         method: "DELETE",
       }),
-      // After the delete mutation is initiated, log the user out on the client immediately.
       async onQueryStarted(_, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
-          dispatch(loggedOut());
-        } catch (error) {
-          // Even if the backend call fails, log the user out on the client.
+        } finally {
           dispatch(loggedOut());
         }
       },
@@ -75,7 +58,6 @@ export const userApiSlice = createApi({
   }),
 });
 
-// Export the auto-generated hooks.
 export const {
   useGetProfileQuery,
   useUpdateProfileMutation,
