@@ -1,11 +1,12 @@
-import MyProfile from "@/components/pages/profile/MyProfile";
+// src/app/(app)/profile/page.tsx
 
-//src/app/(app)/profile/page.tsx
-function page() {
-  return (
-    <div>
-      <MyProfile />
-    </div>
-  );
+import ProfilePage from "@/components/pages/profile/ProfilePage";
+
+/**
+ * The page route for the user profile.
+ * It's placed within the `(app)` route group, which likely applies
+ * a layout and ensures the user is authenticated.
+ */
+export default function Page() {
+  return <ProfilePage />;
 }
-export default page;
