@@ -1,9 +1,10 @@
 // src/components/pages/auth/Login.tsx
+
 "use client";
 
-import React, { useState } from "react"; // --- UPDATE: Import useState
+import React, { useState } from "react";
 import Link from "next/link";
-import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react"; // --- UPDATE: Import Eye and EyeOff
+import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -31,7 +32,7 @@ const LoginForm = () => {
   const dispatch = useAppDispatch();
   const [login, { isLoading }] = useLoginMutation();
   const [formError, setFormError] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false); // --- ADD: State for password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -49,7 +50,14 @@ const LoginForm = () => {
     setFormError(null);
     try {
       const response = await login(data).unwrap();
-      dispatch(setCredentials({ token: response.data.accessToken }));
+      // CHANGE: Dispatch both the user object and the token to the store.
+      dispatch(
+        setCredentials({
+          user: response.data.user,
+          token: response.data.accessToken,
+        })
+      );
+      // Redirect to the home page on successful login.
       router.push("/");
     } catch (err) {
       setFormError(getApiErrorMessage(err));
@@ -83,41 +91,40 @@ const LoginForm = () => {
               </Alert>
             )}
 
+            {/* --- CHANGE: The login field is now 'phone' instead of 'username' --- */}
             <div className="space-y-1.5">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="phone">Phone Number</Label>
               <Input
-                id="username"
-                type="text"
-                placeholder="Enter your username"
-                autoComplete="username"
-                {...register("username")}
-                className={cn(errors.username && "border-destructive")}
-                aria-invalid={!!errors.username}
+                id="phone"
+                type="tel"
+                placeholder="Enter your phone number"
+                autoComplete="tel"
+                {...register("phone")}
+                className={cn(errors.phone && "border-destructive")}
+                aria-invalid={!!errors.phone}
               />
-              {errors.username && (
+              {errors.phone && (
                 <p className="text-destructive text-xs">
-                  {errors.username.message}
+                  {errors.phone.message}
                 </p>
               )}
             </div>
 
             <div className="space-y-1.5">
               <Label htmlFor="password">Password</Label>
-              {/* --- UPDATE: Wrap Input and Button for positioning --- */}
               <div className="relative">
                 <Input
                   id="password"
-                  type={showPassword ? "text" : "password"} // --- UPDATE: Conditional type
+                  type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   autoComplete="current-password"
                   {...register("password")}
                   className={cn(
-                    "pr-10",
+                    "pr-10", // Add padding for the icon
                     errors.password && "border-destructive"
-                  )} // Add padding for icon
+                  )}
                   aria-invalid={!!errors.password}
                 />
-                {/* --- ADD: Visibility toggle button --- */}
                 <Button
                   type="button"
                   variant="ghost"

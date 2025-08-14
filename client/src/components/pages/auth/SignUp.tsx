@@ -1,9 +1,10 @@
 // src/components/pages/auth/SignUp.tsx
+
 "use client";
 
-import React, { useState } from "react"; // --- UPDATE: Import useState
+import React, { useState } from "react";
 import Link from "next/link";
-import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react"; // --- UPDATE: Import Eye and EyeOff
+import { Loader2, AlertCircle, Eye, EyeOff } from "lucide-react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -34,8 +35,8 @@ const SignUpForm = () => {
   const dispatch = useAppDispatch();
   const [signup, { isLoading }] = useSignupMutation();
   const [formError, setFormError] = useState<string | null>(null);
-  const [showPassword, setShowPassword] = useState(false); // --- ADD: State for password
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // --- ADD: State for confirm password
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     register,
@@ -53,7 +54,14 @@ const SignUpForm = () => {
     setFormError(null);
     try {
       const response = await signup(data).unwrap();
-      dispatch(setCredentials({ token: response.data.accessToken }));
+      // CHANGE: Dispatch both the user object and the token to the store.
+      dispatch(
+        setCredentials({
+          user: response.data.user,
+          token: response.data.accessToken,
+        })
+      );
+      // Redirect to the home page on successful signup.
       router.push("/");
     } catch (err) {
       setFormError(getApiErrorMessage(err));
