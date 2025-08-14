@@ -1,3 +1,5 @@
+// src/components/pages/exams/Exams.tsx
+
 "use client";
 
 import React from "react";
@@ -6,11 +8,18 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import ExamCard from "./ExamCard"; // <-- Import the separate component
+import ExamCard from "./ExamCard";
 
+/**
+ * A page component that displays a list of all available exams.
+ * It handles loading and error states for the API request.
+ */
 export default function Exams() {
+  // Use the RTK Query hook to fetch the list of exams.
+  // It automatically handles caching, loading, and error states.
   const { data: response, isLoading, isError } = useGetAllExamsQuery();
 
+  // Display a skeleton loader while the data is being fetched.
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -29,6 +38,7 @@ export default function Exams() {
     );
   }
 
+  // Display an error message if the API call fails.
   if (isError) {
     return (
       <Alert variant="destructive">
@@ -53,6 +63,7 @@ export default function Exams() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {exams.map((exam) => (
+            // Render a separate card component for each exam.
             <ExamCard key={exam.id} exam={exam} />
           ))}
         </div>

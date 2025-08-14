@@ -1,3 +1,5 @@
+// src/components/pages/exercises/ExerciseCard.tsx
+
 "use client";
 
 import Link from "next/link";
@@ -20,6 +22,9 @@ interface ExerciseCardProps {
   };
 }
 
+/**
+ * A reusable card component to display summary information for a single exercise.
+ */
 export default function ExerciseCard({ exercise }: ExerciseCardProps) {
   return (
     <Card className="w-full sm:max-w-sm">

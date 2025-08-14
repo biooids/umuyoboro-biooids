@@ -1,3 +1,5 @@
+// src/components/pages/exercises/Exercises.tsx
+
 "use client";
 
 import React from "react";
@@ -8,9 +10,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import ExerciseCard from "./ExerciseCard";
 
+/**
+ * A page component that displays a list of all available practice exercises.
+ * It uses RTK Query to handle fetching, loading, and error states.
+ */
 export default function Exercises() {
   const { data: response, isLoading, isError } = useGetAllExercisesQuery();
 
+  // Display a skeleton loading state while the data is being fetched.
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -29,6 +36,7 @@ export default function Exercises() {
     );
   }
 
+  // Display an error message if the API call fails.
   if (isError) {
     return (
       <Alert variant="destructive">

@@ -1,6 +1,8 @@
+// src/components/pages/exercises/ExerciseDetails.tsx
+
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useGetExerciseByIdQuery } from "@/lib/features/exercises/exerciseApiSlice";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -23,44 +25,51 @@ interface ExerciseDetailsProps {
   exerciseId: string;
 }
 
+/**
+ * A component that handles the entire exercise experience, showing questions
+ * one by one and providing immediate feedback.
+ * For maintainability in a larger application, you could consider splitting the
+ * results screen and the question display into separate sub-components.
+ */
 export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
+  // --- Redux and API Hooks ---
   const token = useAppSelector((state) => state.auth.token);
+  // Fetch the exercise data, but only if the user is logged in.
   const {
     data: response,
     isLoading,
     isError,
-  } = useGetExerciseByIdQuery(
-    { exerciseId },
-    {
-      skip: !token,
-    }
-  );
+    error,
+  } = useGetExerciseByIdQuery({ exerciseId }, { skip: !token });
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [showHint, setShowHint] = useState(false);
-  const [showResults, setShowResults] = useState(false);
-  const [score, setScore] = useState(0);
-  const [timer, setTimer] = useState(60);
+  // --- Component State ---
+  const [currentIndex, setCurrentIndex] = useState(0); // Tracks the current question index.
+  const [selectedOption, setSelectedOption] = useState<number | null>(null); // Tracks the user's answer for the current question.
+  const [showHint, setShowHint] = useState(false); // Toggles the hint visibility.
+  const [showResults, setShowResults] = useState(false); // Toggles the final results screen.
+  const [score, setScore] = useState(0); // Tracks the user's score.
+  const [timer, setTimer] = useState(60); // A 60-second timer for each question.
 
+  // --- Derived State ---
   const exerciseData = response?.data;
   const questions = exerciseData?.questions ?? [];
   const currentQuestion = questions[currentIndex];
 
-  // --- THIS IS THE CORRECTED TIMER LOGIC ---
+  // Effect to manage the timer for each question.
   useEffect(() => {
-    // Don't start a timer if the question is already answered or the exercise is over
+    // Don't run the timer if an answer is selected or the exercise is finished.
     if (selectedOption !== null || showResults) {
       return;
     }
 
-    setTimer(60); // Reset timer for the new question
+    // Reset the timer to 60 seconds for each new question.
+    setTimer(60);
 
     const interval = setInterval(() => {
       setTimer((prev) => {
         if (prev === 1) {
           clearInterval(interval);
-          // When time is up, lock and reveal the correct answer
+          // If time runs out, auto-select the correct answer to show the user.
           if (currentQuestion) {
             setSelectedOption(currentQuestion.correctAnswerIndex);
           }
@@ -70,32 +79,38 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
       });
     }, 1000);
 
-    // The cleanup function will stop the timer if the question changes
-    // or if the component unmounts.
+    // Cleanup function to clear the interval when the component unmounts
+    // or when the dependencies (like the current question) change.
     return () => clearInterval(interval);
+  }, [currentIndex, showResults, currentQuestion, selectedOption]);
 
-    // This effect now only depends on the current question index and showResults state.
-    // It will not restart when you select an answer.
-  }, [currentIndex, showResults, currentQuestion]);
+  // --- Event Handlers ---
 
+  /** Handles the user selecting an answer. */
   const handleSelectAnswer = (optionIndex: number) => {
+    // Lock the answer once one is chosen.
     if (selectedOption !== null) return;
     setSelectedOption(optionIndex);
+    // Increment the score immediately if the answer is correct.
     if (optionIndex === currentQuestion.correctAnswerIndex) {
       setScore((prev) => prev + 1);
     }
   };
 
+  /** Handles moving to the next question or finishing the exercise. */
   const handleNext = () => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
+      // Reset state for the next question.
       setSelectedOption(null);
       setShowHint(false);
     } else {
+      // If it's the last question, show the final results screen.
       setShowResults(true);
     }
   };
 
+  /** Handles resetting the exercise to its initial state. */
   const handleReset = () => {
     setCurrentIndex(0);
     setSelectedOption(null);
@@ -104,7 +119,8 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
     setScore(0);
   };
 
-  // --- The rest of the component's render logic is the same ---
+  // --- Render Logic ---
+
   if (!token) {
     return (
       <div className="container py-8">
@@ -125,15 +141,20 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>{getApiErrorMessage(isError)}</AlertDescription>
+        <AlertDescription>{getApiErrorMessage(error)}</AlertDescription>
       </Alert>
     );
   }
 
   if (!exerciseData || !currentQuestion) {
-    return <p>Exercise not found or has no questions.</p>;
+    return (
+      <p className="text-center mt-8">
+        Exercise not found or has no questions.
+      </p>
+    );
   }
 
+  // Render the final results card when the exercise is complete.
   if (showResults) {
     return (
       <Card className="max-w-2xl mx-auto my-8">
@@ -158,7 +179,7 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
   const isAnswered = selectedOption !== null;
 
   return (
-    <div className="max-w-3xl mx-auto py-8">
+    <div className="max-w-3xl mx-auto py-8 px-4">
       <div className="mb-4">
         <p className="text-sm text-muted-foreground">
           Question {currentIndex + 1} of {questions.length}
@@ -189,7 +210,8 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
                     key={optionIndex}
                     variant="outline"
                     className={cn(
-                      "w-full justify-start h-auto py-3 whitespace-normal",
+                      "w-full justify-start h-auto py-3 whitespace-normal text-left",
+                      // Style the button to show immediate feedback after an answer is selected.
                       isAnswered &&
                         isCorrectAnswer &&
                         "bg-green-500/20 border-green-500 text-green-800 dark:text-green-300",
@@ -201,12 +223,12 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
                     disabled={isAnswered}
                   >
                     <div className="flex items-center w-full">
-                      <span className="flex-1 text-left">{option}</span>
+                      <span className="flex-1">{option}</span>
                       {isAnswered && isCorrectAnswer && (
-                        <Check className="h-5 w-5 text-green-600" />
+                        <Check className="h-5 w-5 text-green-600 ml-2" />
                       )}
                       {isSelected && !isCorrectAnswer && (
-                        <X className="h-5 w-5 text-red-600" />
+                        <X className="h-5 w-5 text-red-600 ml-2" />
                       )}
                     </div>
                   </Button>
@@ -233,6 +255,7 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
             </div>
           )}
 
+          {/* Show the "Next" button only after an answer has been selected. */}
           {isAnswered && (
             <div className="flex justify-end pt-6 border-t">
               <Button onClick={handleNext}>

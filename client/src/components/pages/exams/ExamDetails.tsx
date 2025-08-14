@@ -1,6 +1,8 @@
+// src/components/pages/exams/ExamDetails.tsx
+
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react"; // CHANGE: Import useCallback
 import {
   useStartExamMutation,
   useSubmitExamMutation,
@@ -15,6 +17,7 @@ import {
   SubmitExamApiResponse,
 } from "@/lib/features/exams/examTypes";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // CHANGE: Import useRouter for retakes
 
 type ExamData = StartExamApiResponse["data"]["exam"];
 type ResultsData = SubmitExamApiResponse["data"];
@@ -23,12 +26,18 @@ interface ExamDetailsProps {
   examId: string;
 }
 
+/**
+ * A component that handles the entire exam-taking process:
+ * starting, answering questions, timing, submitting, and viewing results.
+ */
 export default function ExamDetails({ examId }: ExamDetailsProps) {
+  const router = useRouter(); // CHANGE: Initialize router for retakes
   const [startExam, { isLoading: isStarting, error: startError }] =
     useStartExamMutation();
   const [submitExam, { isLoading: isSubmitting, error: submitError }] =
     useSubmitExamMutation();
 
+  // Component state management
   const [examData, setExamData] = useState<ExamData | null>(null);
   const [attemptId, setAttemptId] = useState<string | null>(null);
   const [selectedAnswers, setSelectedAnswers] = useState<
@@ -37,12 +46,14 @@ export default function ExamDetails({ examId }: ExamDetailsProps) {
   const [results, setResults] = useState<ResultsData | null>(null);
   const [timer, setTimer] = useState(0);
 
+  // Effect to start the exam when the component mounts.
   useEffect(() => {
     const beginExam = async () => {
       try {
         const response = await startExam({ examId }).unwrap();
         setExamData(response.data.exam);
         setAttemptId(response.data.attemptId);
+        // Set the timer based on 1 minute per question.
         setTimer(response.data.exam.questions.length * 60);
       } catch (err) {
         console.error("Failed to start exam:", err);
@@ -53,32 +64,44 @@ export default function ExamDetails({ examId }: ExamDetailsProps) {
     }
   }, [startExam, examId]);
 
-  const handleSubmit = async () => {
-    if (!attemptId) return;
+  // CHANGE: Wrap handleSubmit in useCallback to memoize the function.
+  // This is a good practice for functions passed as dependencies to other hooks (like useEffect).
+  const handleSubmit = useCallback(async () => {
+    if (!attemptId || results) return; // Prevent submission if no attempt ID or already submitted
     try {
       const response = await submitExam({
         attemptId,
         answers: selectedAnswers,
       }).unwrap();
       setResults(response.data);
-      setTimer(0);
+      setTimer(0); // Stop the timer
     } catch (err) {
       console.error("Failed to submit exam:", err);
     }
-  };
+  }, [attemptId, selectedAnswers, submitExam, results]);
 
+  // Effect to manage the countdown timer.
   useEffect(() => {
     if (timer > 0 && !results) {
       const interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
       return () => clearInterval(interval);
     } else if (timer === 0 && examData && !results) {
+      // Auto-submit the exam when the timer runs out.
       handleSubmit();
     }
-  }, [timer, results, examData]);
+  }, [timer, results, examData, handleSubmit]);
 
   const handleSelectAnswer = (questionId: string, optionIndex: number) => {
+    // Don't allow changing answers after the exam is submitted.
     if (results) return;
     setSelectedAnswers((prev) => ({ ...prev, [questionId]: optionIndex }));
+  };
+
+  // CHANGE: Add a function to handle retaking the exam.
+  const handleReset = () => {
+    // A simple page reload will trigger the `startExam` useEffect again,
+    // creating a fresh attempt.
+    router.refresh();
   };
 
   const formatTime = (seconds: number) => {
@@ -109,11 +132,11 @@ export default function ExamDetails({ examId }: ExamDetailsProps) {
   }
 
   if (!examData) {
-    return null;
+    return null; // Render nothing if the exam data hasn't loaded yet.
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-8">
+    <div className="max-w-3xl mx-auto py-8 px-4">
       <Card>
         <CardHeader className="sticky top-0 bg-background/90 backdrop-blur-sm z-10 border-b">
           <div className="flex justify-between items-center">
@@ -131,7 +154,8 @@ export default function ExamDetails({ examId }: ExamDetailsProps) {
                 Your Score: {results.score} / {results.totalQuestions}
               </p>
               <div className="flex justify-center gap-4">
-                {/* <Button onClick={handleReset}>Try Again</Button> */}
+                {/* CHANGE: Enable the "Try Again" button */}
+                <Button onClick={handleReset}>Try Again</Button>
                 <Button variant="outline" asChild>
                   <Link href="/exams">Back to Exams</Link>
                 </Button>
@@ -156,7 +180,7 @@ export default function ExamDetails({ examId }: ExamDetailsProps) {
                       key={optionIndex}
                       variant="outline"
                       className={cn(
-                        "w-full justify-start h-auto py-3 whitespace-normal",
+                        "w-full justify-start h-auto py-3 whitespace-normal text-left",
                         isSelected && !results && "ring-2 ring-primary",
                         results &&
                           isCorrect &&
@@ -169,12 +193,12 @@ export default function ExamDetails({ examId }: ExamDetailsProps) {
                       disabled={!!results}
                     >
                       <div className="flex items-center w-full">
-                        <span className="flex-1 text-left">{option}</span>
+                        <span className="flex-1">{option}</span>
                         {results && isCorrect && (
-                          <Check className="h-5 w-5 text-green-600" />
+                          <Check className="h-5 w-5 text-green-600 ml-2" />
                         )}
                         {results && isWrong && (
-                          <X className="h-5 w-5 text-red-600" />
+                          <X className="h-5 w-5 text-red-600 ml-2" />
                         )}
                       </div>
                     </Button>
