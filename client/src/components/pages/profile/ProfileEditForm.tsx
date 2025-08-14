@@ -29,12 +29,9 @@ import { useFocusOnError } from "@/lib/hooks/useFocusOnError";
 
 interface ProfileEditFormProps {
   user: SanitizedUserDto;
-  onFinished: () => void; // Callback to switch back to view mode
+  onFinished: () => void;
 }
 
-/**
- * A form component for editing the user's profile information.
- */
 export default function ProfileEditForm({
   user,
   onFinished,
@@ -60,7 +57,7 @@ export default function ProfileEditForm({
     setFormError(null);
     try {
       await updateProfile(data).unwrap();
-      onFinished(); // On success, call the callback to switch back to view mode
+      onFinished();
     } catch (err) {
       setFormError(getApiErrorMessage(err));
     }

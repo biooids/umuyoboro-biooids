@@ -6,20 +6,32 @@ import { exerciseController } from "./exercise.controller.js";
 
 const router: Router = Router();
 
-/**
- * Defines all API routes related to exercises.
- * All endpoints in this file are protected and require the user to be authenticated.
- */
-
-// This middleware ensures that a user must be logged in to access any exercise routes.
 router.use(authenticate({ required: true }));
 
-// GET /api/v1/exercises
-// Retrieves a list of all available exercises.
+// GET /api/v1/exercises - (Remains the same)
 router.get("/", exerciseController.getAllExercises);
 
-// GET /api/v1/exercises/:id
-// Retrieves a single, specific exercise by its ID, including all its questions and answers.
-router.get("/:id", exerciseController.getExerciseById);
+// --- NEW STATEFUL AND HISTORY ROUTES ---
+
+// POST /api/v1/exercises/:exerciseId/start
+router.post("/:exerciseId/start", exerciseController.startExercise);
+
+// POST /api/v1/exercises/attempts/:attemptId/submit-answer
+router.post(
+  "/attempts/:attemptId/submit-answer",
+  exerciseController.submitAnswer
+);
+
+// POST /api/v1/exercises/attempts/:attemptId/finalize
+router.post(
+  "/attempts/:attemptId/finalize",
+  exerciseController.finalizeExercise
+);
+
+// GET /api/v1/exercises/history
+router.get("/history", exerciseController.getExerciseHistory);
+
+// GET /api/v1/exercises/history/:attemptId
+router.get("/history/:attemptId", exerciseController.getExerciseReview);
 
 export default router;

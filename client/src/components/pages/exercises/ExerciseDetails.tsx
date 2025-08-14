@@ -3,7 +3,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useGetExerciseByIdQuery } from "@/lib/features/exercises/exerciseApiSlice";
+import {
+  useStartExerciseMutation,
+  useSubmitAnswerMutation,
+  useFinalizeExerciseMutation,
+} from "@/lib/features/exercises/exerciseApiSlice";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -17,153 +21,196 @@ import {
 } from "lucide-react";
 import { cn, getApiErrorMessage } from "@/lib/utils/utils";
 import { Progress } from "@/components/ui/progress";
-import PleaseLogin from "@/components/shared/PleaseLogin";
-import { useAppSelector } from "@/lib/hooks/hooks";
 import Link from "next/link";
+import { ExerciseQuestion } from "@/lib/features/exercises/exerciseTypes";
+
+type Feedback = { message: string; color: string; emoji: string };
+const getFeedbackForScore = (score: number, total: number): Feedback => {
+  if (total === 0)
+    return {
+      message: "No questions?",
+      color: "text-muted-foreground",
+      emoji: "🤔",
+    };
+  const percentage = (score / total) * 100;
+  if (percentage >= 90)
+    return {
+      message: "Excellent! You've mastered this.",
+      color: "text-green-500",
+      emoji: "🏆",
+    };
+  if (percentage >= 70)
+    return {
+      message: "Great Job! Solid understanding.",
+      color: "text-blue-500",
+      emoji: "🎉",
+    };
+  if (percentage >= 50)
+    return {
+      message: "Good Effort! Keep practicing.",
+      color: "text-yellow-500",
+      emoji: "👍",
+    };
+  return {
+    message: "Keep Trying! You'll get it.",
+    color: "text-red-500",
+    emoji: "💪",
+  };
+};
 
 interface ExerciseDetailsProps {
   exerciseId: string;
 }
 
-/**
- * A component that handles the entire exercise experience, showing questions
- * one by one and providing immediate feedback.
- * For maintainability in a larger application, you could consider splitting the
- * results screen and the question display into separate sub-components.
- */
 export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
-  // --- Redux and API Hooks ---
-  const token = useAppSelector((state) => state.auth.token);
-  // Fetch the exercise data, but only if the user is logged in.
-  const {
-    data: response,
-    isLoading,
-    isError,
-    error,
-  } = useGetExerciseByIdQuery({ exerciseId }, { skip: !token });
+  const [startExercise, { isLoading: isStarting, error: startError }] =
+    useStartExerciseMutation();
+  const [submitAnswer, { isLoading: isSubmitting }] = useSubmitAnswerMutation();
+  const [finalizeExercise] = useFinalizeExerciseMutation();
 
-  // --- Component State ---
-  const [currentIndex, setCurrentIndex] = useState(0); // Tracks the current question index.
-  const [selectedOption, setSelectedOption] = useState<number | null>(null); // Tracks the user's answer for the current question.
-  const [showHint, setShowHint] = useState(false); // Toggles the hint visibility.
-  const [showResults, setShowResults] = useState(false); // Toggles the final results screen.
-  const [score, setScore] = useState(0); // Tracks the user's score.
-  const [timer, setTimer] = useState(60); // A 60-second timer for each question.
+  const [attemptId, setAttemptId] = useState<string | null>(null);
+  const [exerciseData, setExerciseData] = useState<{
+    title: string;
+    questions: ExerciseQuestion[];
+  } | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [userAnswers, setUserAnswers] = useState<
+    Record<
+      string,
+      { selected: number; isCorrect: boolean; correctAnswer: number }
+    >
+  >({});
+  const [showHint, setShowHint] = useState(false);
+  const [score, setScore] = useState(0);
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const [timer, setTimer] = useState(60);
+  const [apiError, setApiError] = useState<string | null>(null);
 
-  // --- Derived State ---
-  const exerciseData = response?.data;
   const questions = exerciseData?.questions ?? [];
   const currentQuestion = questions[currentIndex];
+  const isAnswered = userAnswers[currentQuestion?.id] !== undefined;
 
-  // Effect to manage the timer for each question.
   useEffect(() => {
-    // Don't run the timer if an answer is selected or the exercise is finished.
-    if (selectedOption !== null || showResults) {
-      return;
-    }
+    const beginExercise = async () => {
+      try {
+        const response = await startExercise({ exerciseId }).unwrap();
+        setAttemptId(response.data.attemptId);
+        setExerciseData(response.data.exercise);
+      } catch (err) {
+        setApiError(getApiErrorMessage(err));
+      }
+    };
+    beginExercise();
+  }, [exerciseId, startExercise]);
 
-    // Reset the timer to 60 seconds for each new question.
+  useEffect(() => {
+    if (isAnswered || feedback) return;
     setTimer(60);
-
     const interval = setInterval(() => {
       setTimer((prev) => {
-        if (prev === 1) {
+        if (prev <= 1) {
           clearInterval(interval);
-          // If time runs out, auto-select the correct answer to show the user.
-          if (currentQuestion) {
-            setSelectedOption(currentQuestion.correctAnswerIndex);
-          }
+          handleSelectAnswer(-1);
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
-
-    // Cleanup function to clear the interval when the component unmounts
-    // or when the dependencies (like the current question) change.
     return () => clearInterval(interval);
-  }, [currentIndex, showResults, currentQuestion, selectedOption]);
+  }, [currentIndex, isAnswered, feedback]);
 
-  // --- Event Handlers ---
+  const handleSelectAnswer = async (selectedOptionIndex: number) => {
+    if (isAnswered || !attemptId || !currentQuestion) return;
+    setApiError(null);
+    try {
+      const response = await submitAnswer({
+        attemptId,
+        answerData: { questionId: currentQuestion.id, selectedOptionIndex },
+      }).unwrap();
 
-  /** Handles the user selecting an answer. */
-  const handleSelectAnswer = (optionIndex: number) => {
-    // Lock the answer once one is chosen.
-    if (selectedOption !== null) return;
-    setSelectedOption(optionIndex);
-    // Increment the score immediately if the answer is correct.
-    if (optionIndex === currentQuestion.correctAnswerIndex) {
-      setScore((prev) => prev + 1);
+      const { isCorrect, correctAnswerIndex } = response.data;
+      if (isCorrect) {
+        setScore((prev) => prev + 1);
+      }
+      setUserAnswers((prev) => ({
+        ...prev,
+        [currentQuestion.id]: {
+          selected: selectedOptionIndex,
+          isCorrect,
+          correctAnswer: correctAnswerIndex,
+        },
+      }));
+    } catch (err: any) {
+      if (err.status === 408) {
+        // Handle server-side timeout
+        const correctAnswer = parseInt(err.data.message.match(/\d+$/)[0]) - 1;
+        setUserAnswers((prev) => ({
+          ...prev,
+          [currentQuestion.id]: {
+            selected: -1,
+            isCorrect: false,
+            correctAnswer,
+          },
+        }));
+      }
+      setApiError(getApiErrorMessage(err));
     }
   };
 
-  /** Handles moving to the next question or finishing the exercise. */
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex((prev) => prev + 1);
-      // Reset state for the next question.
-      setSelectedOption(null);
       setShowHint(false);
     } else {
-      // If it's the last question, show the final results screen.
-      setShowResults(true);
+      if (attemptId) {
+        const finalData = await finalizeExercise({ attemptId }).unwrap();
+        const finalScore = finalData.data.score;
+        setFeedback(getFeedbackForScore(finalScore, questions.length));
+      }
     }
   };
 
-  /** Handles resetting the exercise to its initial state. */
-  const handleReset = () => {
-    setCurrentIndex(0);
-    setSelectedOption(null);
-    setShowHint(false);
-    setShowResults(false);
-    setScore(0);
-  };
+  const handleReset = () => window.location.reload();
 
-  // --- Render Logic ---
+  const effectiveError = apiError || getApiErrorMessage(startError);
 
-  if (!token) {
-    return (
-      <div className="container py-8">
-        <PleaseLogin message="You must be logged in to do exercises." />
-      </div>
-    );
-  }
-
-  if (isLoading) {
+  if (isStarting)
     return (
       <div className="flex items-center justify-center h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
-  }
-
-  if (isError) {
+  if (effectiveError)
     return (
-      <Alert variant="destructive">
+      <Alert variant="destructive" className="m-4">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>{getApiErrorMessage(error)}</AlertDescription>
+        <AlertDescription>{effectiveError}</AlertDescription>
       </Alert>
     );
-  }
-
-  if (!exerciseData || !currentQuestion) {
+  if (!exerciseData || !currentQuestion)
     return (
       <p className="text-center mt-8">
         Exercise not found or has no questions.
       </p>
     );
-  }
 
-  // Render the final results card when the exercise is complete.
-  if (showResults) {
+  if (feedback) {
     return (
-      <Card className="max-w-2xl mx-auto my-8">
-        <CardHeader>
-          <CardTitle>Exercise Complete!</CardTitle>
+      <Card
+        className={cn(
+          "max-w-2xl mx-auto my-8 border-2",
+          feedback.color.replace("text-", "border-")
+        )}
+      >
+        <CardHeader className="text-center">
+          <div className={`text-6xl mx-auto mb-4`}>{feedback.emoji}</div>
+          <CardTitle className={`text-3xl font-bold ${feedback.color}`}>
+            {feedback.message}
+          </CardTitle>
         </CardHeader>
         <CardContent className="text-center space-y-4">
           <p className="text-4xl font-bold my-4">
-            Your Score: {score} / {questions.length}
+            Your Final Score: {score} / {questions.length}
           </p>
           <div className="flex gap-4 justify-center">
             <Button onClick={handleReset}>Try Again</Button>
@@ -175,8 +222,6 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
       </Card>
     );
   }
-
-  const isAnswered = selectedOption !== null;
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
@@ -197,37 +242,46 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
+          {apiError && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{apiError}</AlertDescription>
+            </Alert>
+          )}
           <div>
             <p className="font-semibold text-lg mb-4">{currentQuestion.text}</p>
             <div className="space-y-2">
               {currentQuestion.options.map((option, optionIndex) => {
-                const isSelected = selectedOption === optionIndex;
+                const answerInfo = userAnswers[currentQuestion.id];
+                const isSelected = answerInfo?.selected === optionIndex;
                 const isCorrectAnswer =
-                  currentQuestion.correctAnswerIndex === optionIndex;
-
+                  answerInfo?.correctAnswer === optionIndex;
                 return (
                   <Button
                     key={optionIndex}
                     variant="outline"
                     className={cn(
                       "w-full justify-start h-auto py-3 whitespace-normal text-left",
-                      // Style the button to show immediate feedback after an answer is selected.
                       isAnswered &&
                         isCorrectAnswer &&
                         "bg-green-500/20 border-green-500 text-green-800 dark:text-green-300",
                       isSelected &&
-                        !isCorrectAnswer &&
+                        answerInfo &&
+                        !answerInfo.isCorrect &&
                         "bg-red-500/20 border-red-500 text-red-800 dark:text-red-300"
                     )}
                     onClick={() => handleSelectAnswer(optionIndex)}
-                    disabled={isAnswered}
+                    disabled={isAnswered || isSubmitting}
                   >
                     <div className="flex items-center w-full">
                       <span className="flex-1">{option}</span>
+                      {isSubmitting && isSelected && (
+                        <Loader2 className="h-5 w-5 ml-2 animate-spin" />
+                      )}
                       {isAnswered && isCorrectAnswer && (
                         <Check className="h-5 w-5 text-green-600 ml-2" />
                       )}
-                      {isSelected && !isCorrectAnswer && (
+                      {isSelected && answerInfo && !answerInfo.isCorrect && (
                         <X className="h-5 w-5 text-red-600 ml-2" />
                       )}
                     </div>
@@ -236,7 +290,6 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
               })}
             </div>
           </div>
-
           {currentQuestion.hint && (
             <div>
               <Button
@@ -254,8 +307,6 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
               )}
             </div>
           )}
-
-          {/* Show the "Next" button only after an answer has been selected. */}
           {isAnswered && (
             <div className="flex justify-end pt-6 border-t">
               <Button onClick={handleNext}>

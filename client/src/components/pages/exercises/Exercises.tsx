@@ -17,7 +17,6 @@ import ExerciseCard from "./ExerciseCard";
 export default function Exercises() {
   const { data: response, isLoading, isError } = useGetAllExercisesQuery();
 
-  // Display a skeleton loading state while the data is being fetched.
   if (isLoading) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -36,7 +35,6 @@ export default function Exercises() {
     );
   }
 
-  // Display an error message if the API call fails.
   if (isError) {
     return (
       <Alert variant="destructive">

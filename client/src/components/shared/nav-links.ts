@@ -1,11 +1,9 @@
 // src/lib/nav-links.ts
 
-import { Home, Compass, Book, Pen } from "lucide-react";
+import { Home, Compass, Book, Pen, History } from "lucide-react"; // CHANGE: Import History icon
 
 /**
  * A centralized array of navigation link objects.
- * This makes it easy to update navigation across all components (desktop and mobile)
- * by modifying a single file.
  */
 export const navLinks = [
   {
@@ -27,5 +25,11 @@ export const navLinks = [
     href: "/exercises",
     label: "Exercises",
     icon: Pen,
+  },
+  // CHANGE: Add a link to the new exam history page.
+  {
+    href: "/exams/history",
+    label: "History",
+    icon: History,
   },
 ];

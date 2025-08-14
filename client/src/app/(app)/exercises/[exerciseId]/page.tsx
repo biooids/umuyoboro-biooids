@@ -1,7 +1,5 @@
 //src/app/(app)/exercises/[exerciseId]/page.tsx
 
-"use client";
-
 import ExerciseDetails from "@/components/pages/exercises/ExerciseDetails";
 
 export default function ExerciseTakingPage({

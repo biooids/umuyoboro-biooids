@@ -1,4 +1,4 @@
-// prisma/seed.ts
+// src/db/seed.ts
 
 import prisma from "./prisma.js";
 
@@ -100,18 +100,12 @@ const exercisesToSeed = [
   },
 ];
 
-/**
- * A script to seed the database with initial data for exams and exercises.
- * This is typically run via `prisma db seed`.
- */
 async function main() {
   console.log(`Start seeding ...`);
 
   // --- Seed Exams ---
-  // Clear existing data first to prevent duplicates
   await prisma.question.deleteMany({});
-  await prisma.exam.deleteMany({});
-
+  await prisma.exam.deleteMany();
   for (const examData of examsToSeed) {
     await prisma.exam.create({
       data: {
@@ -131,10 +125,8 @@ async function main() {
   console.log("✅ Seeded exams.");
 
   // --- Seed Exercises ---
-  // Clear existing data first
   await prisma.exerciseQuestion.deleteMany();
   await prisma.exercise.deleteMany();
-
   for (const exerciseData of exercisesToSeed) {
     await prisma.exercise.create({
       data: {
@@ -163,6 +155,5 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    // Disconnect the shared client
     await prisma.$disconnect();
   });

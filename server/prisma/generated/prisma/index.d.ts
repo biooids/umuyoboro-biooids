@@ -48,6 +48,16 @@ export type Exercise = $Result.DefaultSelection<Prisma.$ExercisePayload>
  * 
  */
 export type ExerciseQuestion = $Result.DefaultSelection<Prisma.$ExerciseQuestionPayload>
+/**
+ * Model UserExerciseAttempt
+ * 
+ */
+export type UserExerciseAttempt = $Result.DefaultSelection<Prisma.$UserExerciseAttemptPayload>
+/**
+ * Model ExerciseAnswer
+ * 
+ */
+export type ExerciseAnswer = $Result.DefaultSelection<Prisma.$ExerciseAnswerPayload>
 
 /**
  * Enums
@@ -228,6 +238,26 @@ export class PrismaClient<
     * ```
     */
   get exerciseQuestion(): Prisma.ExerciseQuestionDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.userExerciseAttempt`: Exposes CRUD operations for the **UserExerciseAttempt** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more UserExerciseAttempts
+    * const userExerciseAttempts = await prisma.userExerciseAttempt.findMany()
+    * ```
+    */
+  get userExerciseAttempt(): Prisma.UserExerciseAttemptDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.exerciseAnswer`: Exposes CRUD operations for the **ExerciseAnswer** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more ExerciseAnswers
+    * const exerciseAnswers = await prisma.exerciseAnswer.findMany()
+    * ```
+    */
+  get exerciseAnswer(): Prisma.ExerciseAnswerDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -674,7 +704,9 @@ export namespace Prisma {
     Question: 'Question',
     UserExamAttempt: 'UserExamAttempt',
     Exercise: 'Exercise',
-    ExerciseQuestion: 'ExerciseQuestion'
+    ExerciseQuestion: 'ExerciseQuestion',
+    UserExerciseAttempt: 'UserExerciseAttempt',
+    ExerciseAnswer: 'ExerciseAnswer'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -693,7 +725,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "refreshToken" | "exam" | "question" | "userExamAttempt" | "exercise" | "exerciseQuestion"
+      modelProps: "user" | "refreshToken" | "exam" | "question" | "userExamAttempt" | "exercise" | "exerciseQuestion" | "userExerciseAttempt" | "exerciseAnswer"
       txIsolationLevel: never
     }
     model: {
@@ -1215,6 +1247,154 @@ export namespace Prisma {
           }
         }
       }
+      UserExerciseAttempt: {
+        payload: Prisma.$UserExerciseAttemptPayload<ExtArgs>
+        fields: Prisma.UserExerciseAttemptFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserExerciseAttemptFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExerciseAttemptPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserExerciseAttemptFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExerciseAttemptPayload>
+          }
+          findFirst: {
+            args: Prisma.UserExerciseAttemptFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExerciseAttemptPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserExerciseAttemptFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExerciseAttemptPayload>
+          }
+          findMany: {
+            args: Prisma.UserExerciseAttemptFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExerciseAttemptPayload>[]
+          }
+          create: {
+            args: Prisma.UserExerciseAttemptCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExerciseAttemptPayload>
+          }
+          createMany: {
+            args: Prisma.UserExerciseAttemptCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.UserExerciseAttemptDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExerciseAttemptPayload>
+          }
+          update: {
+            args: Prisma.UserExerciseAttemptUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExerciseAttemptPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserExerciseAttemptDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserExerciseAttemptUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.UserExerciseAttemptUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$UserExerciseAttemptPayload>
+          }
+          aggregate: {
+            args: Prisma.UserExerciseAttemptAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateUserExerciseAttempt>
+          }
+          groupBy: {
+            args: Prisma.UserExerciseAttemptGroupByArgs<ExtArgs>
+            result: $Utils.Optional<UserExerciseAttemptGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.UserExerciseAttemptFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.UserExerciseAttemptAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.UserExerciseAttemptCountArgs<ExtArgs>
+            result: $Utils.Optional<UserExerciseAttemptCountAggregateOutputType> | number
+          }
+        }
+      }
+      ExerciseAnswer: {
+        payload: Prisma.$ExerciseAnswerPayload<ExtArgs>
+        fields: Prisma.ExerciseAnswerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ExerciseAnswerFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExerciseAnswerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ExerciseAnswerFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExerciseAnswerPayload>
+          }
+          findFirst: {
+            args: Prisma.ExerciseAnswerFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExerciseAnswerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ExerciseAnswerFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExerciseAnswerPayload>
+          }
+          findMany: {
+            args: Prisma.ExerciseAnswerFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExerciseAnswerPayload>[]
+          }
+          create: {
+            args: Prisma.ExerciseAnswerCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExerciseAnswerPayload>
+          }
+          createMany: {
+            args: Prisma.ExerciseAnswerCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.ExerciseAnswerDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExerciseAnswerPayload>
+          }
+          update: {
+            args: Prisma.ExerciseAnswerUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExerciseAnswerPayload>
+          }
+          deleteMany: {
+            args: Prisma.ExerciseAnswerDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ExerciseAnswerUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.ExerciseAnswerUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ExerciseAnswerPayload>
+          }
+          aggregate: {
+            args: Prisma.ExerciseAnswerAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateExerciseAnswer>
+          }
+          groupBy: {
+            args: Prisma.ExerciseAnswerGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ExerciseAnswerGroupByOutputType>[]
+          }
+          findRaw: {
+            args: Prisma.ExerciseAnswerFindRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          aggregateRaw: {
+            args: Prisma.ExerciseAnswerAggregateRawArgs<ExtArgs>
+            result: JsonObject
+          }
+          count: {
+            args: Prisma.ExerciseAnswerCountArgs<ExtArgs>
+            result: $Utils.Optional<ExerciseAnswerCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1293,6 +1473,8 @@ export namespace Prisma {
     userExamAttempt?: UserExamAttemptOmit
     exercise?: ExerciseOmit
     exerciseQuestion?: ExerciseQuestionOmit
+    userExerciseAttempt?: UserExerciseAttemptOmit
+    exerciseAnswer?: ExerciseAnswerOmit
   }
 
   /* Types for Logging */
@@ -1389,11 +1571,13 @@ export namespace Prisma {
   export type UserCountOutputType = {
     refreshTokens: number
     examAttempts: number
+    exerciseAttempts: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     refreshTokens?: boolean | UserCountOutputTypeCountRefreshTokensArgs
     examAttempts?: boolean | UserCountOutputTypeCountExamAttemptsArgs
+    exerciseAttempts?: boolean | UserCountOutputTypeCountExerciseAttemptsArgs
   }
 
   // Custom InputTypes
@@ -1419,6 +1603,13 @@ export namespace Prisma {
    */
   export type UserCountOutputTypeCountExamAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: UserExamAttemptWhereInput
+  }
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountExerciseAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserExerciseAttemptWhereInput
   }
 
 
@@ -1468,10 +1659,12 @@ export namespace Prisma {
 
   export type ExerciseCountOutputType = {
     questions: number
+    attempts: number
   }
 
   export type ExerciseCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     questions?: boolean | ExerciseCountOutputTypeCountQuestionsArgs
+    attempts?: boolean | ExerciseCountOutputTypeCountAttemptsArgs
   }
 
   // Custom InputTypes
@@ -1490,6 +1683,44 @@ export namespace Prisma {
    */
   export type ExerciseCountOutputTypeCountQuestionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: ExerciseQuestionWhereInput
+  }
+
+  /**
+   * ExerciseCountOutputType without action
+   */
+  export type ExerciseCountOutputTypeCountAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserExerciseAttemptWhereInput
+  }
+
+
+  /**
+   * Count Type UserExerciseAttemptCountOutputType
+   */
+
+  export type UserExerciseAttemptCountOutputType = {
+    answers: number
+  }
+
+  export type UserExerciseAttemptCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    answers?: boolean | UserExerciseAttemptCountOutputTypeCountAnswersArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * UserExerciseAttemptCountOutputType without action
+   */
+  export type UserExerciseAttemptCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttemptCountOutputType
+     */
+    select?: UserExerciseAttemptCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * UserExerciseAttemptCountOutputType without action
+   */
+  export type UserExerciseAttemptCountOutputTypeCountAnswersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExerciseAnswerWhereInput
   }
 
 
@@ -1687,6 +1918,7 @@ export namespace Prisma {
     updatedAt?: boolean
     refreshTokens?: boolean | User$refreshTokensArgs<ExtArgs>
     examAttempts?: boolean | User$examAttemptsArgs<ExtArgs>
+    exerciseAttempts?: boolean | User$exerciseAttemptsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -1707,6 +1939,7 @@ export namespace Prisma {
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     refreshTokens?: boolean | User$refreshTokensArgs<ExtArgs>
     examAttempts?: boolean | User$examAttemptsArgs<ExtArgs>
+    exerciseAttempts?: boolean | User$exerciseAttemptsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -1715,6 +1948,7 @@ export namespace Prisma {
     objects: {
       refreshTokens: Prisma.$RefreshTokenPayload<ExtArgs>[]
       examAttempts: Prisma.$UserExamAttemptPayload<ExtArgs>[]
+      exerciseAttempts: Prisma.$UserExerciseAttemptPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2090,6 +2324,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     refreshTokens<T extends User$refreshTokensArgs<ExtArgs> = {}>(args?: Subset<T, User$refreshTokensArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RefreshTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     examAttempts<T extends User$examAttemptsArgs<ExtArgs> = {}>(args?: Subset<T, User$examAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserExamAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    exerciseAttempts<T extends User$exerciseAttemptsArgs<ExtArgs> = {}>(args?: Subset<T, User$exerciseAttemptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserExerciseAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2542,6 +2777,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: UserExamAttemptScalarFieldEnum | UserExamAttemptScalarFieldEnum[]
+  }
+
+  /**
+   * User.exerciseAttempts
+   */
+  export type User$exerciseAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttempt
+     */
+    select?: UserExerciseAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExerciseAttempt
+     */
+    omit?: UserExerciseAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExerciseAttemptInclude<ExtArgs> | null
+    where?: UserExerciseAttemptWhereInput
+    orderBy?: UserExerciseAttemptOrderByWithRelationInput | UserExerciseAttemptOrderByWithRelationInput[]
+    cursor?: UserExerciseAttemptWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserExerciseAttemptScalarFieldEnum | UserExerciseAttemptScalarFieldEnum[]
   }
 
   /**
@@ -6833,6 +7092,7 @@ export namespace Prisma {
     title?: boolean
     isFree?: boolean
     questions?: boolean | Exercise$questionsArgs<ExtArgs>
+    attempts?: boolean | Exercise$attemptsArgs<ExtArgs>
     _count?: boolean | ExerciseCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["exercise"]>
 
@@ -6848,6 +7108,7 @@ export namespace Prisma {
   export type ExerciseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "exerciseNumber" | "title" | "isFree", ExtArgs["result"]["exercise"]>
   export type ExerciseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     questions?: boolean | Exercise$questionsArgs<ExtArgs>
+    attempts?: boolean | Exercise$attemptsArgs<ExtArgs>
     _count?: boolean | ExerciseCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -6855,6 +7116,7 @@ export namespace Prisma {
     name: "Exercise"
     objects: {
       questions: Prisma.$ExerciseQuestionPayload<ExtArgs>[]
+      attempts: Prisma.$UserExerciseAttemptPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -7225,6 +7487,7 @@ export namespace Prisma {
   export interface Prisma__ExerciseClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     questions<T extends Exercise$questionsArgs<ExtArgs> = {}>(args?: Subset<T, Exercise$questionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExerciseQuestionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    attempts<T extends Exercise$attemptsArgs<ExtArgs> = {}>(args?: Subset<T, Exercise$attemptsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserExerciseAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7649,6 +7912,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ExerciseQuestionScalarFieldEnum | ExerciseQuestionScalarFieldEnum[]
+  }
+
+  /**
+   * Exercise.attempts
+   */
+  export type Exercise$attemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttempt
+     */
+    select?: UserExerciseAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExerciseAttempt
+     */
+    omit?: UserExerciseAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExerciseAttemptInclude<ExtArgs> | null
+    where?: UserExerciseAttemptWhereInput
+    orderBy?: UserExerciseAttemptOrderByWithRelationInput | UserExerciseAttemptOrderByWithRelationInput[]
+    cursor?: UserExerciseAttemptWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: UserExerciseAttemptScalarFieldEnum | UserExerciseAttemptScalarFieldEnum[]
   }
 
   /**
@@ -8691,6 +8978,2088 @@ export namespace Prisma {
 
 
   /**
+   * Model UserExerciseAttempt
+   */
+
+  export type AggregateUserExerciseAttempt = {
+    _count: UserExerciseAttemptCountAggregateOutputType | null
+    _avg: UserExerciseAttemptAvgAggregateOutputType | null
+    _sum: UserExerciseAttemptSumAggregateOutputType | null
+    _min: UserExerciseAttemptMinAggregateOutputType | null
+    _max: UserExerciseAttemptMaxAggregateOutputType | null
+  }
+
+  export type UserExerciseAttemptAvgAggregateOutputType = {
+    score: number | null
+  }
+
+  export type UserExerciseAttemptSumAggregateOutputType = {
+    score: number | null
+  }
+
+  export type UserExerciseAttemptMinAggregateOutputType = {
+    id: string | null
+    score: number | null
+    startedAt: Date | null
+    completedAt: Date | null
+    userId: string | null
+    exerciseId: string | null
+  }
+
+  export type UserExerciseAttemptMaxAggregateOutputType = {
+    id: string | null
+    score: number | null
+    startedAt: Date | null
+    completedAt: Date | null
+    userId: string | null
+    exerciseId: string | null
+  }
+
+  export type UserExerciseAttemptCountAggregateOutputType = {
+    id: number
+    score: number
+    startedAt: number
+    completedAt: number
+    userId: number
+    exerciseId: number
+    _all: number
+  }
+
+
+  export type UserExerciseAttemptAvgAggregateInputType = {
+    score?: true
+  }
+
+  export type UserExerciseAttemptSumAggregateInputType = {
+    score?: true
+  }
+
+  export type UserExerciseAttemptMinAggregateInputType = {
+    id?: true
+    score?: true
+    startedAt?: true
+    completedAt?: true
+    userId?: true
+    exerciseId?: true
+  }
+
+  export type UserExerciseAttemptMaxAggregateInputType = {
+    id?: true
+    score?: true
+    startedAt?: true
+    completedAt?: true
+    userId?: true
+    exerciseId?: true
+  }
+
+  export type UserExerciseAttemptCountAggregateInputType = {
+    id?: true
+    score?: true
+    startedAt?: true
+    completedAt?: true
+    userId?: true
+    exerciseId?: true
+    _all?: true
+  }
+
+  export type UserExerciseAttemptAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserExerciseAttempt to aggregate.
+     */
+    where?: UserExerciseAttemptWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserExerciseAttempts to fetch.
+     */
+    orderBy?: UserExerciseAttemptOrderByWithRelationInput | UserExerciseAttemptOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserExerciseAttemptWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserExerciseAttempts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserExerciseAttempts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned UserExerciseAttempts
+    **/
+    _count?: true | UserExerciseAttemptCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserExerciseAttemptAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserExerciseAttemptSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserExerciseAttemptMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserExerciseAttemptMaxAggregateInputType
+  }
+
+  export type GetUserExerciseAttemptAggregateType<T extends UserExerciseAttemptAggregateArgs> = {
+        [P in keyof T & keyof AggregateUserExerciseAttempt]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUserExerciseAttempt[P]>
+      : GetScalarType<T[P], AggregateUserExerciseAttempt[P]>
+  }
+
+
+
+
+  export type UserExerciseAttemptGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserExerciseAttemptWhereInput
+    orderBy?: UserExerciseAttemptOrderByWithAggregationInput | UserExerciseAttemptOrderByWithAggregationInput[]
+    by: UserExerciseAttemptScalarFieldEnum[] | UserExerciseAttemptScalarFieldEnum
+    having?: UserExerciseAttemptScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserExerciseAttemptCountAggregateInputType | true
+    _avg?: UserExerciseAttemptAvgAggregateInputType
+    _sum?: UserExerciseAttemptSumAggregateInputType
+    _min?: UserExerciseAttemptMinAggregateInputType
+    _max?: UserExerciseAttemptMaxAggregateInputType
+  }
+
+  export type UserExerciseAttemptGroupByOutputType = {
+    id: string
+    score: number | null
+    startedAt: Date
+    completedAt: Date | null
+    userId: string
+    exerciseId: string
+    _count: UserExerciseAttemptCountAggregateOutputType | null
+    _avg: UserExerciseAttemptAvgAggregateOutputType | null
+    _sum: UserExerciseAttemptSumAggregateOutputType | null
+    _min: UserExerciseAttemptMinAggregateOutputType | null
+    _max: UserExerciseAttemptMaxAggregateOutputType | null
+  }
+
+  type GetUserExerciseAttemptGroupByPayload<T extends UserExerciseAttemptGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserExerciseAttemptGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserExerciseAttemptGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserExerciseAttemptGroupByOutputType[P]>
+            : GetScalarType<T[P], UserExerciseAttemptGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserExerciseAttemptSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    score?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    userId?: boolean
+    exerciseId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    exercise?: boolean | ExerciseDefaultArgs<ExtArgs>
+    answers?: boolean | UserExerciseAttempt$answersArgs<ExtArgs>
+    _count?: boolean | UserExerciseAttemptCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["userExerciseAttempt"]>
+
+
+
+  export type UserExerciseAttemptSelectScalar = {
+    id?: boolean
+    score?: boolean
+    startedAt?: boolean
+    completedAt?: boolean
+    userId?: boolean
+    exerciseId?: boolean
+  }
+
+  export type UserExerciseAttemptOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "score" | "startedAt" | "completedAt" | "userId" | "exerciseId", ExtArgs["result"]["userExerciseAttempt"]>
+  export type UserExerciseAttemptInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    exercise?: boolean | ExerciseDefaultArgs<ExtArgs>
+    answers?: boolean | UserExerciseAttempt$answersArgs<ExtArgs>
+    _count?: boolean | UserExerciseAttemptCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $UserExerciseAttemptPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "UserExerciseAttempt"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      exercise: Prisma.$ExercisePayload<ExtArgs>
+      answers: Prisma.$ExerciseAnswerPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      score: number | null
+      startedAt: Date
+      completedAt: Date | null
+      userId: string
+      exerciseId: string
+    }, ExtArgs["result"]["userExerciseAttempt"]>
+    composites: {}
+  }
+
+  type UserExerciseAttemptGetPayload<S extends boolean | null | undefined | UserExerciseAttemptDefaultArgs> = $Result.GetResult<Prisma.$UserExerciseAttemptPayload, S>
+
+  type UserExerciseAttemptCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<UserExerciseAttemptFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: UserExerciseAttemptCountAggregateInputType | true
+    }
+
+  export interface UserExerciseAttemptDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['UserExerciseAttempt'], meta: { name: 'UserExerciseAttempt' } }
+    /**
+     * Find zero or one UserExerciseAttempt that matches the filter.
+     * @param {UserExerciseAttemptFindUniqueArgs} args - Arguments to find a UserExerciseAttempt
+     * @example
+     * // Get one UserExerciseAttempt
+     * const userExerciseAttempt = await prisma.userExerciseAttempt.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends UserExerciseAttemptFindUniqueArgs>(args: SelectSubset<T, UserExerciseAttemptFindUniqueArgs<ExtArgs>>): Prisma__UserExerciseAttemptClient<$Result.GetResult<Prisma.$UserExerciseAttemptPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one UserExerciseAttempt that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {UserExerciseAttemptFindUniqueOrThrowArgs} args - Arguments to find a UserExerciseAttempt
+     * @example
+     * // Get one UserExerciseAttempt
+     * const userExerciseAttempt = await prisma.userExerciseAttempt.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends UserExerciseAttemptFindUniqueOrThrowArgs>(args: SelectSubset<T, UserExerciseAttemptFindUniqueOrThrowArgs<ExtArgs>>): Prisma__UserExerciseAttemptClient<$Result.GetResult<Prisma.$UserExerciseAttemptPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserExerciseAttempt that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExerciseAttemptFindFirstArgs} args - Arguments to find a UserExerciseAttempt
+     * @example
+     * // Get one UserExerciseAttempt
+     * const userExerciseAttempt = await prisma.userExerciseAttempt.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends UserExerciseAttemptFindFirstArgs>(args?: SelectSubset<T, UserExerciseAttemptFindFirstArgs<ExtArgs>>): Prisma__UserExerciseAttemptClient<$Result.GetResult<Prisma.$UserExerciseAttemptPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first UserExerciseAttempt that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExerciseAttemptFindFirstOrThrowArgs} args - Arguments to find a UserExerciseAttempt
+     * @example
+     * // Get one UserExerciseAttempt
+     * const userExerciseAttempt = await prisma.userExerciseAttempt.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends UserExerciseAttemptFindFirstOrThrowArgs>(args?: SelectSubset<T, UserExerciseAttemptFindFirstOrThrowArgs<ExtArgs>>): Prisma__UserExerciseAttemptClient<$Result.GetResult<Prisma.$UserExerciseAttemptPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserExerciseAttempts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExerciseAttemptFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all UserExerciseAttempts
+     * const userExerciseAttempts = await prisma.userExerciseAttempt.findMany()
+     * 
+     * // Get first 10 UserExerciseAttempts
+     * const userExerciseAttempts = await prisma.userExerciseAttempt.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userExerciseAttemptWithIdOnly = await prisma.userExerciseAttempt.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends UserExerciseAttemptFindManyArgs>(args?: SelectSubset<T, UserExerciseAttemptFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserExerciseAttemptPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a UserExerciseAttempt.
+     * @param {UserExerciseAttemptCreateArgs} args - Arguments to create a UserExerciseAttempt.
+     * @example
+     * // Create one UserExerciseAttempt
+     * const UserExerciseAttempt = await prisma.userExerciseAttempt.create({
+     *   data: {
+     *     // ... data to create a UserExerciseAttempt
+     *   }
+     * })
+     * 
+     */
+    create<T extends UserExerciseAttemptCreateArgs>(args: SelectSubset<T, UserExerciseAttemptCreateArgs<ExtArgs>>): Prisma__UserExerciseAttemptClient<$Result.GetResult<Prisma.$UserExerciseAttemptPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many UserExerciseAttempts.
+     * @param {UserExerciseAttemptCreateManyArgs} args - Arguments to create many UserExerciseAttempts.
+     * @example
+     * // Create many UserExerciseAttempts
+     * const userExerciseAttempt = await prisma.userExerciseAttempt.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends UserExerciseAttemptCreateManyArgs>(args?: SelectSubset<T, UserExerciseAttemptCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a UserExerciseAttempt.
+     * @param {UserExerciseAttemptDeleteArgs} args - Arguments to delete one UserExerciseAttempt.
+     * @example
+     * // Delete one UserExerciseAttempt
+     * const UserExerciseAttempt = await prisma.userExerciseAttempt.delete({
+     *   where: {
+     *     // ... filter to delete one UserExerciseAttempt
+     *   }
+     * })
+     * 
+     */
+    delete<T extends UserExerciseAttemptDeleteArgs>(args: SelectSubset<T, UserExerciseAttemptDeleteArgs<ExtArgs>>): Prisma__UserExerciseAttemptClient<$Result.GetResult<Prisma.$UserExerciseAttemptPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one UserExerciseAttempt.
+     * @param {UserExerciseAttemptUpdateArgs} args - Arguments to update one UserExerciseAttempt.
+     * @example
+     * // Update one UserExerciseAttempt
+     * const userExerciseAttempt = await prisma.userExerciseAttempt.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends UserExerciseAttemptUpdateArgs>(args: SelectSubset<T, UserExerciseAttemptUpdateArgs<ExtArgs>>): Prisma__UserExerciseAttemptClient<$Result.GetResult<Prisma.$UserExerciseAttemptPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more UserExerciseAttempts.
+     * @param {UserExerciseAttemptDeleteManyArgs} args - Arguments to filter UserExerciseAttempts to delete.
+     * @example
+     * // Delete a few UserExerciseAttempts
+     * const { count } = await prisma.userExerciseAttempt.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends UserExerciseAttemptDeleteManyArgs>(args?: SelectSubset<T, UserExerciseAttemptDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more UserExerciseAttempts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExerciseAttemptUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many UserExerciseAttempts
+     * const userExerciseAttempt = await prisma.userExerciseAttempt.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends UserExerciseAttemptUpdateManyArgs>(args: SelectSubset<T, UserExerciseAttemptUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one UserExerciseAttempt.
+     * @param {UserExerciseAttemptUpsertArgs} args - Arguments to update or create a UserExerciseAttempt.
+     * @example
+     * // Update or create a UserExerciseAttempt
+     * const userExerciseAttempt = await prisma.userExerciseAttempt.upsert({
+     *   create: {
+     *     // ... data to create a UserExerciseAttempt
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the UserExerciseAttempt we want to update
+     *   }
+     * })
+     */
+    upsert<T extends UserExerciseAttemptUpsertArgs>(args: SelectSubset<T, UserExerciseAttemptUpsertArgs<ExtArgs>>): Prisma__UserExerciseAttemptClient<$Result.GetResult<Prisma.$UserExerciseAttemptPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more UserExerciseAttempts that matches the filter.
+     * @param {UserExerciseAttemptFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const userExerciseAttempt = await prisma.userExerciseAttempt.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: UserExerciseAttemptFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a UserExerciseAttempt.
+     * @param {UserExerciseAttemptAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const userExerciseAttempt = await prisma.userExerciseAttempt.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: UserExerciseAttemptAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of UserExerciseAttempts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExerciseAttemptCountArgs} args - Arguments to filter UserExerciseAttempts to count.
+     * @example
+     * // Count the number of UserExerciseAttempts
+     * const count = await prisma.userExerciseAttempt.count({
+     *   where: {
+     *     // ... the filter for the UserExerciseAttempts we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserExerciseAttemptCountArgs>(
+      args?: Subset<T, UserExerciseAttemptCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserExerciseAttemptCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a UserExerciseAttempt.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExerciseAttemptAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserExerciseAttemptAggregateArgs>(args: Subset<T, UserExerciseAttemptAggregateArgs>): Prisma.PrismaPromise<GetUserExerciseAttemptAggregateType<T>>
+
+    /**
+     * Group by UserExerciseAttempt.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserExerciseAttemptGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserExerciseAttemptGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserExerciseAttemptGroupByArgs['orderBy'] }
+        : { orderBy?: UserExerciseAttemptGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserExerciseAttemptGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserExerciseAttemptGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the UserExerciseAttempt model
+   */
+  readonly fields: UserExerciseAttemptFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for UserExerciseAttempt.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserExerciseAttemptClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    exercise<T extends ExerciseDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ExerciseDefaultArgs<ExtArgs>>): Prisma__ExerciseClient<$Result.GetResult<Prisma.$ExercisePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    answers<T extends UserExerciseAttempt$answersArgs<ExtArgs> = {}>(args?: Subset<T, UserExerciseAttempt$answersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExerciseAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the UserExerciseAttempt model
+   */
+  interface UserExerciseAttemptFieldRefs {
+    readonly id: FieldRef<"UserExerciseAttempt", 'String'>
+    readonly score: FieldRef<"UserExerciseAttempt", 'Int'>
+    readonly startedAt: FieldRef<"UserExerciseAttempt", 'DateTime'>
+    readonly completedAt: FieldRef<"UserExerciseAttempt", 'DateTime'>
+    readonly userId: FieldRef<"UserExerciseAttempt", 'String'>
+    readonly exerciseId: FieldRef<"UserExerciseAttempt", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * UserExerciseAttempt findUnique
+   */
+  export type UserExerciseAttemptFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttempt
+     */
+    select?: UserExerciseAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExerciseAttempt
+     */
+    omit?: UserExerciseAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExerciseAttemptInclude<ExtArgs> | null
+    /**
+     * Filter, which UserExerciseAttempt to fetch.
+     */
+    where: UserExerciseAttemptWhereUniqueInput
+  }
+
+  /**
+   * UserExerciseAttempt findUniqueOrThrow
+   */
+  export type UserExerciseAttemptFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttempt
+     */
+    select?: UserExerciseAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExerciseAttempt
+     */
+    omit?: UserExerciseAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExerciseAttemptInclude<ExtArgs> | null
+    /**
+     * Filter, which UserExerciseAttempt to fetch.
+     */
+    where: UserExerciseAttemptWhereUniqueInput
+  }
+
+  /**
+   * UserExerciseAttempt findFirst
+   */
+  export type UserExerciseAttemptFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttempt
+     */
+    select?: UserExerciseAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExerciseAttempt
+     */
+    omit?: UserExerciseAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExerciseAttemptInclude<ExtArgs> | null
+    /**
+     * Filter, which UserExerciseAttempt to fetch.
+     */
+    where?: UserExerciseAttemptWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserExerciseAttempts to fetch.
+     */
+    orderBy?: UserExerciseAttemptOrderByWithRelationInput | UserExerciseAttemptOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserExerciseAttempts.
+     */
+    cursor?: UserExerciseAttemptWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserExerciseAttempts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserExerciseAttempts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserExerciseAttempts.
+     */
+    distinct?: UserExerciseAttemptScalarFieldEnum | UserExerciseAttemptScalarFieldEnum[]
+  }
+
+  /**
+   * UserExerciseAttempt findFirstOrThrow
+   */
+  export type UserExerciseAttemptFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttempt
+     */
+    select?: UserExerciseAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExerciseAttempt
+     */
+    omit?: UserExerciseAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExerciseAttemptInclude<ExtArgs> | null
+    /**
+     * Filter, which UserExerciseAttempt to fetch.
+     */
+    where?: UserExerciseAttemptWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserExerciseAttempts to fetch.
+     */
+    orderBy?: UserExerciseAttemptOrderByWithRelationInput | UserExerciseAttemptOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for UserExerciseAttempts.
+     */
+    cursor?: UserExerciseAttemptWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserExerciseAttempts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserExerciseAttempts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of UserExerciseAttempts.
+     */
+    distinct?: UserExerciseAttemptScalarFieldEnum | UserExerciseAttemptScalarFieldEnum[]
+  }
+
+  /**
+   * UserExerciseAttempt findMany
+   */
+  export type UserExerciseAttemptFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttempt
+     */
+    select?: UserExerciseAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExerciseAttempt
+     */
+    omit?: UserExerciseAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExerciseAttemptInclude<ExtArgs> | null
+    /**
+     * Filter, which UserExerciseAttempts to fetch.
+     */
+    where?: UserExerciseAttemptWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of UserExerciseAttempts to fetch.
+     */
+    orderBy?: UserExerciseAttemptOrderByWithRelationInput | UserExerciseAttemptOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing UserExerciseAttempts.
+     */
+    cursor?: UserExerciseAttemptWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` UserExerciseAttempts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` UserExerciseAttempts.
+     */
+    skip?: number
+    distinct?: UserExerciseAttemptScalarFieldEnum | UserExerciseAttemptScalarFieldEnum[]
+  }
+
+  /**
+   * UserExerciseAttempt create
+   */
+  export type UserExerciseAttemptCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttempt
+     */
+    select?: UserExerciseAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExerciseAttempt
+     */
+    omit?: UserExerciseAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExerciseAttemptInclude<ExtArgs> | null
+    /**
+     * The data needed to create a UserExerciseAttempt.
+     */
+    data: XOR<UserExerciseAttemptCreateInput, UserExerciseAttemptUncheckedCreateInput>
+  }
+
+  /**
+   * UserExerciseAttempt createMany
+   */
+  export type UserExerciseAttemptCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many UserExerciseAttempts.
+     */
+    data: UserExerciseAttemptCreateManyInput | UserExerciseAttemptCreateManyInput[]
+  }
+
+  /**
+   * UserExerciseAttempt update
+   */
+  export type UserExerciseAttemptUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttempt
+     */
+    select?: UserExerciseAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExerciseAttempt
+     */
+    omit?: UserExerciseAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExerciseAttemptInclude<ExtArgs> | null
+    /**
+     * The data needed to update a UserExerciseAttempt.
+     */
+    data: XOR<UserExerciseAttemptUpdateInput, UserExerciseAttemptUncheckedUpdateInput>
+    /**
+     * Choose, which UserExerciseAttempt to update.
+     */
+    where: UserExerciseAttemptWhereUniqueInput
+  }
+
+  /**
+   * UserExerciseAttempt updateMany
+   */
+  export type UserExerciseAttemptUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update UserExerciseAttempts.
+     */
+    data: XOR<UserExerciseAttemptUpdateManyMutationInput, UserExerciseAttemptUncheckedUpdateManyInput>
+    /**
+     * Filter which UserExerciseAttempts to update
+     */
+    where?: UserExerciseAttemptWhereInput
+    /**
+     * Limit how many UserExerciseAttempts to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserExerciseAttempt upsert
+   */
+  export type UserExerciseAttemptUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttempt
+     */
+    select?: UserExerciseAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExerciseAttempt
+     */
+    omit?: UserExerciseAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExerciseAttemptInclude<ExtArgs> | null
+    /**
+     * The filter to search for the UserExerciseAttempt to update in case it exists.
+     */
+    where: UserExerciseAttemptWhereUniqueInput
+    /**
+     * In case the UserExerciseAttempt found by the `where` argument doesn't exist, create a new UserExerciseAttempt with this data.
+     */
+    create: XOR<UserExerciseAttemptCreateInput, UserExerciseAttemptUncheckedCreateInput>
+    /**
+     * In case the UserExerciseAttempt was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserExerciseAttemptUpdateInput, UserExerciseAttemptUncheckedUpdateInput>
+  }
+
+  /**
+   * UserExerciseAttempt delete
+   */
+  export type UserExerciseAttemptDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttempt
+     */
+    select?: UserExerciseAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExerciseAttempt
+     */
+    omit?: UserExerciseAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExerciseAttemptInclude<ExtArgs> | null
+    /**
+     * Filter which UserExerciseAttempt to delete.
+     */
+    where: UserExerciseAttemptWhereUniqueInput
+  }
+
+  /**
+   * UserExerciseAttempt deleteMany
+   */
+  export type UserExerciseAttemptDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which UserExerciseAttempts to delete
+     */
+    where?: UserExerciseAttemptWhereInput
+    /**
+     * Limit how many UserExerciseAttempts to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * UserExerciseAttempt findRaw
+   */
+  export type UserExerciseAttemptFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * UserExerciseAttempt aggregateRaw
+   */
+  export type UserExerciseAttemptAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * UserExerciseAttempt.answers
+   */
+  export type UserExerciseAttempt$answersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExerciseAnswer
+     */
+    select?: ExerciseAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExerciseAnswer
+     */
+    omit?: ExerciseAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExerciseAnswerInclude<ExtArgs> | null
+    where?: ExerciseAnswerWhereInput
+    orderBy?: ExerciseAnswerOrderByWithRelationInput | ExerciseAnswerOrderByWithRelationInput[]
+    cursor?: ExerciseAnswerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ExerciseAnswerScalarFieldEnum | ExerciseAnswerScalarFieldEnum[]
+  }
+
+  /**
+   * UserExerciseAttempt without action
+   */
+  export type UserExerciseAttemptDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserExerciseAttempt
+     */
+    select?: UserExerciseAttemptSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the UserExerciseAttempt
+     */
+    omit?: UserExerciseAttemptOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: UserExerciseAttemptInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model ExerciseAnswer
+   */
+
+  export type AggregateExerciseAnswer = {
+    _count: ExerciseAnswerCountAggregateOutputType | null
+    _avg: ExerciseAnswerAvgAggregateOutputType | null
+    _sum: ExerciseAnswerSumAggregateOutputType | null
+    _min: ExerciseAnswerMinAggregateOutputType | null
+    _max: ExerciseAnswerMaxAggregateOutputType | null
+  }
+
+  export type ExerciseAnswerAvgAggregateOutputType = {
+    selectedOptionIndex: number | null
+  }
+
+  export type ExerciseAnswerSumAggregateOutputType = {
+    selectedOptionIndex: number | null
+  }
+
+  export type ExerciseAnswerMinAggregateOutputType = {
+    id: string | null
+    questionId: string | null
+    selectedOptionIndex: number | null
+    isCorrect: boolean | null
+    submittedAt: Date | null
+    attemptId: string | null
+  }
+
+  export type ExerciseAnswerMaxAggregateOutputType = {
+    id: string | null
+    questionId: string | null
+    selectedOptionIndex: number | null
+    isCorrect: boolean | null
+    submittedAt: Date | null
+    attemptId: string | null
+  }
+
+  export type ExerciseAnswerCountAggregateOutputType = {
+    id: number
+    questionId: number
+    selectedOptionIndex: number
+    isCorrect: number
+    submittedAt: number
+    attemptId: number
+    _all: number
+  }
+
+
+  export type ExerciseAnswerAvgAggregateInputType = {
+    selectedOptionIndex?: true
+  }
+
+  export type ExerciseAnswerSumAggregateInputType = {
+    selectedOptionIndex?: true
+  }
+
+  export type ExerciseAnswerMinAggregateInputType = {
+    id?: true
+    questionId?: true
+    selectedOptionIndex?: true
+    isCorrect?: true
+    submittedAt?: true
+    attemptId?: true
+  }
+
+  export type ExerciseAnswerMaxAggregateInputType = {
+    id?: true
+    questionId?: true
+    selectedOptionIndex?: true
+    isCorrect?: true
+    submittedAt?: true
+    attemptId?: true
+  }
+
+  export type ExerciseAnswerCountAggregateInputType = {
+    id?: true
+    questionId?: true
+    selectedOptionIndex?: true
+    isCorrect?: true
+    submittedAt?: true
+    attemptId?: true
+    _all?: true
+  }
+
+  export type ExerciseAnswerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExerciseAnswer to aggregate.
+     */
+    where?: ExerciseAnswerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExerciseAnswers to fetch.
+     */
+    orderBy?: ExerciseAnswerOrderByWithRelationInput | ExerciseAnswerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: ExerciseAnswerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExerciseAnswers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExerciseAnswers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned ExerciseAnswers
+    **/
+    _count?: true | ExerciseAnswerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: ExerciseAnswerAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: ExerciseAnswerSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ExerciseAnswerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ExerciseAnswerMaxAggregateInputType
+  }
+
+  export type GetExerciseAnswerAggregateType<T extends ExerciseAnswerAggregateArgs> = {
+        [P in keyof T & keyof AggregateExerciseAnswer]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateExerciseAnswer[P]>
+      : GetScalarType<T[P], AggregateExerciseAnswer[P]>
+  }
+
+
+
+
+  export type ExerciseAnswerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ExerciseAnswerWhereInput
+    orderBy?: ExerciseAnswerOrderByWithAggregationInput | ExerciseAnswerOrderByWithAggregationInput[]
+    by: ExerciseAnswerScalarFieldEnum[] | ExerciseAnswerScalarFieldEnum
+    having?: ExerciseAnswerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ExerciseAnswerCountAggregateInputType | true
+    _avg?: ExerciseAnswerAvgAggregateInputType
+    _sum?: ExerciseAnswerSumAggregateInputType
+    _min?: ExerciseAnswerMinAggregateInputType
+    _max?: ExerciseAnswerMaxAggregateInputType
+  }
+
+  export type ExerciseAnswerGroupByOutputType = {
+    id: string
+    questionId: string
+    selectedOptionIndex: number
+    isCorrect: boolean
+    submittedAt: Date
+    attemptId: string
+    _count: ExerciseAnswerCountAggregateOutputType | null
+    _avg: ExerciseAnswerAvgAggregateOutputType | null
+    _sum: ExerciseAnswerSumAggregateOutputType | null
+    _min: ExerciseAnswerMinAggregateOutputType | null
+    _max: ExerciseAnswerMaxAggregateOutputType | null
+  }
+
+  type GetExerciseAnswerGroupByPayload<T extends ExerciseAnswerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ExerciseAnswerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ExerciseAnswerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ExerciseAnswerGroupByOutputType[P]>
+            : GetScalarType<T[P], ExerciseAnswerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type ExerciseAnswerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    questionId?: boolean
+    selectedOptionIndex?: boolean
+    isCorrect?: boolean
+    submittedAt?: boolean
+    attemptId?: boolean
+    attempt?: boolean | UserExerciseAttemptDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["exerciseAnswer"]>
+
+
+
+  export type ExerciseAnswerSelectScalar = {
+    id?: boolean
+    questionId?: boolean
+    selectedOptionIndex?: boolean
+    isCorrect?: boolean
+    submittedAt?: boolean
+    attemptId?: boolean
+  }
+
+  export type ExerciseAnswerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "questionId" | "selectedOptionIndex" | "isCorrect" | "submittedAt" | "attemptId", ExtArgs["result"]["exerciseAnswer"]>
+  export type ExerciseAnswerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    attempt?: boolean | UserExerciseAttemptDefaultArgs<ExtArgs>
+  }
+
+  export type $ExerciseAnswerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "ExerciseAnswer"
+    objects: {
+      attempt: Prisma.$UserExerciseAttemptPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      questionId: string
+      selectedOptionIndex: number
+      isCorrect: boolean
+      submittedAt: Date
+      attemptId: string
+    }, ExtArgs["result"]["exerciseAnswer"]>
+    composites: {}
+  }
+
+  type ExerciseAnswerGetPayload<S extends boolean | null | undefined | ExerciseAnswerDefaultArgs> = $Result.GetResult<Prisma.$ExerciseAnswerPayload, S>
+
+  type ExerciseAnswerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<ExerciseAnswerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ExerciseAnswerCountAggregateInputType | true
+    }
+
+  export interface ExerciseAnswerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['ExerciseAnswer'], meta: { name: 'ExerciseAnswer' } }
+    /**
+     * Find zero or one ExerciseAnswer that matches the filter.
+     * @param {ExerciseAnswerFindUniqueArgs} args - Arguments to find a ExerciseAnswer
+     * @example
+     * // Get one ExerciseAnswer
+     * const exerciseAnswer = await prisma.exerciseAnswer.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ExerciseAnswerFindUniqueArgs>(args: SelectSubset<T, ExerciseAnswerFindUniqueArgs<ExtArgs>>): Prisma__ExerciseAnswerClient<$Result.GetResult<Prisma.$ExerciseAnswerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one ExerciseAnswer that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ExerciseAnswerFindUniqueOrThrowArgs} args - Arguments to find a ExerciseAnswer
+     * @example
+     * // Get one ExerciseAnswer
+     * const exerciseAnswer = await prisma.exerciseAnswer.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ExerciseAnswerFindUniqueOrThrowArgs>(args: SelectSubset<T, ExerciseAnswerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__ExerciseAnswerClient<$Result.GetResult<Prisma.$ExerciseAnswerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExerciseAnswer that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExerciseAnswerFindFirstArgs} args - Arguments to find a ExerciseAnswer
+     * @example
+     * // Get one ExerciseAnswer
+     * const exerciseAnswer = await prisma.exerciseAnswer.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ExerciseAnswerFindFirstArgs>(args?: SelectSubset<T, ExerciseAnswerFindFirstArgs<ExtArgs>>): Prisma__ExerciseAnswerClient<$Result.GetResult<Prisma.$ExerciseAnswerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first ExerciseAnswer that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExerciseAnswerFindFirstOrThrowArgs} args - Arguments to find a ExerciseAnswer
+     * @example
+     * // Get one ExerciseAnswer
+     * const exerciseAnswer = await prisma.exerciseAnswer.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ExerciseAnswerFindFirstOrThrowArgs>(args?: SelectSubset<T, ExerciseAnswerFindFirstOrThrowArgs<ExtArgs>>): Prisma__ExerciseAnswerClient<$Result.GetResult<Prisma.$ExerciseAnswerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ExerciseAnswers that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExerciseAnswerFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ExerciseAnswers
+     * const exerciseAnswers = await prisma.exerciseAnswer.findMany()
+     * 
+     * // Get first 10 ExerciseAnswers
+     * const exerciseAnswers = await prisma.exerciseAnswer.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const exerciseAnswerWithIdOnly = await prisma.exerciseAnswer.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends ExerciseAnswerFindManyArgs>(args?: SelectSubset<T, ExerciseAnswerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ExerciseAnswerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a ExerciseAnswer.
+     * @param {ExerciseAnswerCreateArgs} args - Arguments to create a ExerciseAnswer.
+     * @example
+     * // Create one ExerciseAnswer
+     * const ExerciseAnswer = await prisma.exerciseAnswer.create({
+     *   data: {
+     *     // ... data to create a ExerciseAnswer
+     *   }
+     * })
+     * 
+     */
+    create<T extends ExerciseAnswerCreateArgs>(args: SelectSubset<T, ExerciseAnswerCreateArgs<ExtArgs>>): Prisma__ExerciseAnswerClient<$Result.GetResult<Prisma.$ExerciseAnswerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many ExerciseAnswers.
+     * @param {ExerciseAnswerCreateManyArgs} args - Arguments to create many ExerciseAnswers.
+     * @example
+     * // Create many ExerciseAnswers
+     * const exerciseAnswer = await prisma.exerciseAnswer.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends ExerciseAnswerCreateManyArgs>(args?: SelectSubset<T, ExerciseAnswerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a ExerciseAnswer.
+     * @param {ExerciseAnswerDeleteArgs} args - Arguments to delete one ExerciseAnswer.
+     * @example
+     * // Delete one ExerciseAnswer
+     * const ExerciseAnswer = await prisma.exerciseAnswer.delete({
+     *   where: {
+     *     // ... filter to delete one ExerciseAnswer
+     *   }
+     * })
+     * 
+     */
+    delete<T extends ExerciseAnswerDeleteArgs>(args: SelectSubset<T, ExerciseAnswerDeleteArgs<ExtArgs>>): Prisma__ExerciseAnswerClient<$Result.GetResult<Prisma.$ExerciseAnswerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one ExerciseAnswer.
+     * @param {ExerciseAnswerUpdateArgs} args - Arguments to update one ExerciseAnswer.
+     * @example
+     * // Update one ExerciseAnswer
+     * const exerciseAnswer = await prisma.exerciseAnswer.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends ExerciseAnswerUpdateArgs>(args: SelectSubset<T, ExerciseAnswerUpdateArgs<ExtArgs>>): Prisma__ExerciseAnswerClient<$Result.GetResult<Prisma.$ExerciseAnswerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more ExerciseAnswers.
+     * @param {ExerciseAnswerDeleteManyArgs} args - Arguments to filter ExerciseAnswers to delete.
+     * @example
+     * // Delete a few ExerciseAnswers
+     * const { count } = await prisma.exerciseAnswer.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends ExerciseAnswerDeleteManyArgs>(args?: SelectSubset<T, ExerciseAnswerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ExerciseAnswers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExerciseAnswerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ExerciseAnswers
+     * const exerciseAnswer = await prisma.exerciseAnswer.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends ExerciseAnswerUpdateManyArgs>(args: SelectSubset<T, ExerciseAnswerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one ExerciseAnswer.
+     * @param {ExerciseAnswerUpsertArgs} args - Arguments to update or create a ExerciseAnswer.
+     * @example
+     * // Update or create a ExerciseAnswer
+     * const exerciseAnswer = await prisma.exerciseAnswer.upsert({
+     *   create: {
+     *     // ... data to create a ExerciseAnswer
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ExerciseAnswer we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ExerciseAnswerUpsertArgs>(args: SelectSubset<T, ExerciseAnswerUpsertArgs<ExtArgs>>): Prisma__ExerciseAnswerClient<$Result.GetResult<Prisma.$ExerciseAnswerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more ExerciseAnswers that matches the filter.
+     * @param {ExerciseAnswerFindRawArgs} args - Select which filters you would like to apply.
+     * @example
+     * const exerciseAnswer = await prisma.exerciseAnswer.findRaw({
+     *   filter: { age: { $gt: 25 } }
+     * })
+     */
+    findRaw(args?: ExerciseAnswerFindRawArgs): Prisma.PrismaPromise<JsonObject>
+
+    /**
+     * Perform aggregation operations on a ExerciseAnswer.
+     * @param {ExerciseAnswerAggregateRawArgs} args - Select which aggregations you would like to apply.
+     * @example
+     * const exerciseAnswer = await prisma.exerciseAnswer.aggregateRaw({
+     *   pipeline: [
+     *     { $match: { status: "registered" } },
+     *     { $group: { _id: "$country", total: { $sum: 1 } } }
+     *   ]
+     * })
+     */
+    aggregateRaw(args?: ExerciseAnswerAggregateRawArgs): Prisma.PrismaPromise<JsonObject>
+
+
+    /**
+     * Count the number of ExerciseAnswers.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExerciseAnswerCountArgs} args - Arguments to filter ExerciseAnswers to count.
+     * @example
+     * // Count the number of ExerciseAnswers
+     * const count = await prisma.exerciseAnswer.count({
+     *   where: {
+     *     // ... the filter for the ExerciseAnswers we want to count
+     *   }
+     * })
+    **/
+    count<T extends ExerciseAnswerCountArgs>(
+      args?: Subset<T, ExerciseAnswerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ExerciseAnswerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ExerciseAnswer.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExerciseAnswerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ExerciseAnswerAggregateArgs>(args: Subset<T, ExerciseAnswerAggregateArgs>): Prisma.PrismaPromise<GetExerciseAnswerAggregateType<T>>
+
+    /**
+     * Group by ExerciseAnswer.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ExerciseAnswerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends ExerciseAnswerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ExerciseAnswerGroupByArgs['orderBy'] }
+        : { orderBy?: ExerciseAnswerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, ExerciseAnswerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetExerciseAnswerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the ExerciseAnswer model
+   */
+  readonly fields: ExerciseAnswerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ExerciseAnswer.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ExerciseAnswerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    attempt<T extends UserExerciseAttemptDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserExerciseAttemptDefaultArgs<ExtArgs>>): Prisma__UserExerciseAttemptClient<$Result.GetResult<Prisma.$UserExerciseAttemptPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the ExerciseAnswer model
+   */
+  interface ExerciseAnswerFieldRefs {
+    readonly id: FieldRef<"ExerciseAnswer", 'String'>
+    readonly questionId: FieldRef<"ExerciseAnswer", 'String'>
+    readonly selectedOptionIndex: FieldRef<"ExerciseAnswer", 'Int'>
+    readonly isCorrect: FieldRef<"ExerciseAnswer", 'Boolean'>
+    readonly submittedAt: FieldRef<"ExerciseAnswer", 'DateTime'>
+    readonly attemptId: FieldRef<"ExerciseAnswer", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * ExerciseAnswer findUnique
+   */
+  export type ExerciseAnswerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExerciseAnswer
+     */
+    select?: ExerciseAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExerciseAnswer
+     */
+    omit?: ExerciseAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExerciseAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which ExerciseAnswer to fetch.
+     */
+    where: ExerciseAnswerWhereUniqueInput
+  }
+
+  /**
+   * ExerciseAnswer findUniqueOrThrow
+   */
+  export type ExerciseAnswerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExerciseAnswer
+     */
+    select?: ExerciseAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExerciseAnswer
+     */
+    omit?: ExerciseAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExerciseAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which ExerciseAnswer to fetch.
+     */
+    where: ExerciseAnswerWhereUniqueInput
+  }
+
+  /**
+   * ExerciseAnswer findFirst
+   */
+  export type ExerciseAnswerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExerciseAnswer
+     */
+    select?: ExerciseAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExerciseAnswer
+     */
+    omit?: ExerciseAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExerciseAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which ExerciseAnswer to fetch.
+     */
+    where?: ExerciseAnswerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExerciseAnswers to fetch.
+     */
+    orderBy?: ExerciseAnswerOrderByWithRelationInput | ExerciseAnswerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExerciseAnswers.
+     */
+    cursor?: ExerciseAnswerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExerciseAnswers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExerciseAnswers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExerciseAnswers.
+     */
+    distinct?: ExerciseAnswerScalarFieldEnum | ExerciseAnswerScalarFieldEnum[]
+  }
+
+  /**
+   * ExerciseAnswer findFirstOrThrow
+   */
+  export type ExerciseAnswerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExerciseAnswer
+     */
+    select?: ExerciseAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExerciseAnswer
+     */
+    omit?: ExerciseAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExerciseAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which ExerciseAnswer to fetch.
+     */
+    where?: ExerciseAnswerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExerciseAnswers to fetch.
+     */
+    orderBy?: ExerciseAnswerOrderByWithRelationInput | ExerciseAnswerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for ExerciseAnswers.
+     */
+    cursor?: ExerciseAnswerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExerciseAnswers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExerciseAnswers.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of ExerciseAnswers.
+     */
+    distinct?: ExerciseAnswerScalarFieldEnum | ExerciseAnswerScalarFieldEnum[]
+  }
+
+  /**
+   * ExerciseAnswer findMany
+   */
+  export type ExerciseAnswerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExerciseAnswer
+     */
+    select?: ExerciseAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExerciseAnswer
+     */
+    omit?: ExerciseAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExerciseAnswerInclude<ExtArgs> | null
+    /**
+     * Filter, which ExerciseAnswers to fetch.
+     */
+    where?: ExerciseAnswerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of ExerciseAnswers to fetch.
+     */
+    orderBy?: ExerciseAnswerOrderByWithRelationInput | ExerciseAnswerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing ExerciseAnswers.
+     */
+    cursor?: ExerciseAnswerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` ExerciseAnswers from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` ExerciseAnswers.
+     */
+    skip?: number
+    distinct?: ExerciseAnswerScalarFieldEnum | ExerciseAnswerScalarFieldEnum[]
+  }
+
+  /**
+   * ExerciseAnswer create
+   */
+  export type ExerciseAnswerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExerciseAnswer
+     */
+    select?: ExerciseAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExerciseAnswer
+     */
+    omit?: ExerciseAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExerciseAnswerInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ExerciseAnswer.
+     */
+    data: XOR<ExerciseAnswerCreateInput, ExerciseAnswerUncheckedCreateInput>
+  }
+
+  /**
+   * ExerciseAnswer createMany
+   */
+  export type ExerciseAnswerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many ExerciseAnswers.
+     */
+    data: ExerciseAnswerCreateManyInput | ExerciseAnswerCreateManyInput[]
+  }
+
+  /**
+   * ExerciseAnswer update
+   */
+  export type ExerciseAnswerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExerciseAnswer
+     */
+    select?: ExerciseAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExerciseAnswer
+     */
+    omit?: ExerciseAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExerciseAnswerInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ExerciseAnswer.
+     */
+    data: XOR<ExerciseAnswerUpdateInput, ExerciseAnswerUncheckedUpdateInput>
+    /**
+     * Choose, which ExerciseAnswer to update.
+     */
+    where: ExerciseAnswerWhereUniqueInput
+  }
+
+  /**
+   * ExerciseAnswer updateMany
+   */
+  export type ExerciseAnswerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update ExerciseAnswers.
+     */
+    data: XOR<ExerciseAnswerUpdateManyMutationInput, ExerciseAnswerUncheckedUpdateManyInput>
+    /**
+     * Filter which ExerciseAnswers to update
+     */
+    where?: ExerciseAnswerWhereInput
+    /**
+     * Limit how many ExerciseAnswers to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExerciseAnswer upsert
+   */
+  export type ExerciseAnswerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExerciseAnswer
+     */
+    select?: ExerciseAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExerciseAnswer
+     */
+    omit?: ExerciseAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExerciseAnswerInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ExerciseAnswer to update in case it exists.
+     */
+    where: ExerciseAnswerWhereUniqueInput
+    /**
+     * In case the ExerciseAnswer found by the `where` argument doesn't exist, create a new ExerciseAnswer with this data.
+     */
+    create: XOR<ExerciseAnswerCreateInput, ExerciseAnswerUncheckedCreateInput>
+    /**
+     * In case the ExerciseAnswer was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ExerciseAnswerUpdateInput, ExerciseAnswerUncheckedUpdateInput>
+  }
+
+  /**
+   * ExerciseAnswer delete
+   */
+  export type ExerciseAnswerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExerciseAnswer
+     */
+    select?: ExerciseAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExerciseAnswer
+     */
+    omit?: ExerciseAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExerciseAnswerInclude<ExtArgs> | null
+    /**
+     * Filter which ExerciseAnswer to delete.
+     */
+    where: ExerciseAnswerWhereUniqueInput
+  }
+
+  /**
+   * ExerciseAnswer deleteMany
+   */
+  export type ExerciseAnswerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which ExerciseAnswers to delete
+     */
+    where?: ExerciseAnswerWhereInput
+    /**
+     * Limit how many ExerciseAnswers to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ExerciseAnswer findRaw
+   */
+  export type ExerciseAnswerFindRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The query predicate filter. If unspecified, then all documents in the collection will match the predicate. ${@link https://docs.mongodb.com/manual/reference/operator/query MongoDB Docs}.
+     */
+    filter?: InputJsonValue
+    /**
+     * Additional options to pass to the `find` command ${@link https://docs.mongodb.com/manual/reference/command/find/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * ExerciseAnswer aggregateRaw
+   */
+  export type ExerciseAnswerAggregateRawArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * An array of aggregation stages to process and transform the document stream via the aggregation pipeline. ${@link https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline MongoDB Docs}.
+     */
+    pipeline?: InputJsonValue[]
+    /**
+     * Additional options to pass to the `aggregate` command ${@link https://docs.mongodb.com/manual/reference/command/aggregate/#command-fields MongoDB Docs}.
+     */
+    options?: InputJsonValue
+  }
+
+  /**
+   * ExerciseAnswer without action
+   */
+  export type ExerciseAnswerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ExerciseAnswer
+     */
+    select?: ExerciseAnswerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ExerciseAnswer
+     */
+    omit?: ExerciseAnswerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ExerciseAnswerInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -8773,6 +11142,30 @@ export namespace Prisma {
   };
 
   export type ExerciseQuestionScalarFieldEnum = (typeof ExerciseQuestionScalarFieldEnum)[keyof typeof ExerciseQuestionScalarFieldEnum]
+
+
+  export const UserExerciseAttemptScalarFieldEnum: {
+    id: 'id',
+    score: 'score',
+    startedAt: 'startedAt',
+    completedAt: 'completedAt',
+    userId: 'userId',
+    exerciseId: 'exerciseId'
+  };
+
+  export type UserExerciseAttemptScalarFieldEnum = (typeof UserExerciseAttemptScalarFieldEnum)[keyof typeof UserExerciseAttemptScalarFieldEnum]
+
+
+  export const ExerciseAnswerScalarFieldEnum: {
+    id: 'id',
+    questionId: 'questionId',
+    selectedOptionIndex: 'selectedOptionIndex',
+    isCorrect: 'isCorrect',
+    submittedAt: 'submittedAt',
+    attemptId: 'attemptId'
+  };
+
+  export type ExerciseAnswerScalarFieldEnum = (typeof ExerciseAnswerScalarFieldEnum)[keyof typeof ExerciseAnswerScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -8897,6 +11290,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     refreshTokens?: RefreshTokenListRelationFilter
     examAttempts?: UserExamAttemptListRelationFilter
+    exerciseAttempts?: UserExerciseAttemptListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -8910,6 +11304,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     refreshTokens?: RefreshTokenOrderByRelationAggregateInput
     examAttempts?: UserExamAttemptOrderByRelationAggregateInput
+    exerciseAttempts?: UserExerciseAttemptOrderByRelationAggregateInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -8926,6 +11321,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"User"> | Date | string
     refreshTokens?: RefreshTokenListRelationFilter
     examAttempts?: UserExamAttemptListRelationFilter
+    exerciseAttempts?: UserExerciseAttemptListRelationFilter
   }, "id" | "username" | "phone">
 
   export type UserOrderByWithAggregationInput = {
@@ -9202,6 +11598,7 @@ export namespace Prisma {
     title?: StringFilter<"Exercise"> | string
     isFree?: BoolFilter<"Exercise"> | boolean
     questions?: ExerciseQuestionListRelationFilter
+    attempts?: UserExerciseAttemptListRelationFilter
   }
 
   export type ExerciseOrderByWithRelationInput = {
@@ -9210,6 +11607,7 @@ export namespace Prisma {
     title?: SortOrder
     isFree?: SortOrder
     questions?: ExerciseQuestionOrderByRelationAggregateInput
+    attempts?: UserExerciseAttemptOrderByRelationAggregateInput
   }
 
   export type ExerciseWhereUniqueInput = Prisma.AtLeast<{
@@ -9221,6 +11619,7 @@ export namespace Prisma {
     title?: StringFilter<"Exercise"> | string
     isFree?: BoolFilter<"Exercise"> | boolean
     questions?: ExerciseQuestionListRelationFilter
+    attempts?: UserExerciseAttemptListRelationFilter
   }, "id" | "exerciseNumber">
 
   export type ExerciseOrderByWithAggregationInput = {
@@ -9307,6 +11706,136 @@ export namespace Prisma {
     exerciseId?: StringWithAggregatesFilter<"ExerciseQuestion"> | string
   }
 
+  export type UserExerciseAttemptWhereInput = {
+    AND?: UserExerciseAttemptWhereInput | UserExerciseAttemptWhereInput[]
+    OR?: UserExerciseAttemptWhereInput[]
+    NOT?: UserExerciseAttemptWhereInput | UserExerciseAttemptWhereInput[]
+    id?: StringFilter<"UserExerciseAttempt"> | string
+    score?: IntNullableFilter<"UserExerciseAttempt"> | number | null
+    startedAt?: DateTimeFilter<"UserExerciseAttempt"> | Date | string
+    completedAt?: DateTimeNullableFilter<"UserExerciseAttempt"> | Date | string | null
+    userId?: StringFilter<"UserExerciseAttempt"> | string
+    exerciseId?: StringFilter<"UserExerciseAttempt"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    exercise?: XOR<ExerciseScalarRelationFilter, ExerciseWhereInput>
+    answers?: ExerciseAnswerListRelationFilter
+  }
+
+  export type UserExerciseAttemptOrderByWithRelationInput = {
+    id?: SortOrder
+    score?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    userId?: SortOrder
+    exerciseId?: SortOrder
+    user?: UserOrderByWithRelationInput
+    exercise?: ExerciseOrderByWithRelationInput
+    answers?: ExerciseAnswerOrderByRelationAggregateInput
+  }
+
+  export type UserExerciseAttemptWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: UserExerciseAttemptWhereInput | UserExerciseAttemptWhereInput[]
+    OR?: UserExerciseAttemptWhereInput[]
+    NOT?: UserExerciseAttemptWhereInput | UserExerciseAttemptWhereInput[]
+    score?: IntNullableFilter<"UserExerciseAttempt"> | number | null
+    startedAt?: DateTimeFilter<"UserExerciseAttempt"> | Date | string
+    completedAt?: DateTimeNullableFilter<"UserExerciseAttempt"> | Date | string | null
+    userId?: StringFilter<"UserExerciseAttempt"> | string
+    exerciseId?: StringFilter<"UserExerciseAttempt"> | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    exercise?: XOR<ExerciseScalarRelationFilter, ExerciseWhereInput>
+    answers?: ExerciseAnswerListRelationFilter
+  }, "id">
+
+  export type UserExerciseAttemptOrderByWithAggregationInput = {
+    id?: SortOrder
+    score?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    userId?: SortOrder
+    exerciseId?: SortOrder
+    _count?: UserExerciseAttemptCountOrderByAggregateInput
+    _avg?: UserExerciseAttemptAvgOrderByAggregateInput
+    _max?: UserExerciseAttemptMaxOrderByAggregateInput
+    _min?: UserExerciseAttemptMinOrderByAggregateInput
+    _sum?: UserExerciseAttemptSumOrderByAggregateInput
+  }
+
+  export type UserExerciseAttemptScalarWhereWithAggregatesInput = {
+    AND?: UserExerciseAttemptScalarWhereWithAggregatesInput | UserExerciseAttemptScalarWhereWithAggregatesInput[]
+    OR?: UserExerciseAttemptScalarWhereWithAggregatesInput[]
+    NOT?: UserExerciseAttemptScalarWhereWithAggregatesInput | UserExerciseAttemptScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"UserExerciseAttempt"> | string
+    score?: IntNullableWithAggregatesFilter<"UserExerciseAttempt"> | number | null
+    startedAt?: DateTimeWithAggregatesFilter<"UserExerciseAttempt"> | Date | string
+    completedAt?: DateTimeNullableWithAggregatesFilter<"UserExerciseAttempt"> | Date | string | null
+    userId?: StringWithAggregatesFilter<"UserExerciseAttempt"> | string
+    exerciseId?: StringWithAggregatesFilter<"UserExerciseAttempt"> | string
+  }
+
+  export type ExerciseAnswerWhereInput = {
+    AND?: ExerciseAnswerWhereInput | ExerciseAnswerWhereInput[]
+    OR?: ExerciseAnswerWhereInput[]
+    NOT?: ExerciseAnswerWhereInput | ExerciseAnswerWhereInput[]
+    id?: StringFilter<"ExerciseAnswer"> | string
+    questionId?: StringFilter<"ExerciseAnswer"> | string
+    selectedOptionIndex?: IntFilter<"ExerciseAnswer"> | number
+    isCorrect?: BoolFilter<"ExerciseAnswer"> | boolean
+    submittedAt?: DateTimeFilter<"ExerciseAnswer"> | Date | string
+    attemptId?: StringFilter<"ExerciseAnswer"> | string
+    attempt?: XOR<UserExerciseAttemptScalarRelationFilter, UserExerciseAttemptWhereInput>
+  }
+
+  export type ExerciseAnswerOrderByWithRelationInput = {
+    id?: SortOrder
+    questionId?: SortOrder
+    selectedOptionIndex?: SortOrder
+    isCorrect?: SortOrder
+    submittedAt?: SortOrder
+    attemptId?: SortOrder
+    attempt?: UserExerciseAttemptOrderByWithRelationInput
+  }
+
+  export type ExerciseAnswerWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: ExerciseAnswerWhereInput | ExerciseAnswerWhereInput[]
+    OR?: ExerciseAnswerWhereInput[]
+    NOT?: ExerciseAnswerWhereInput | ExerciseAnswerWhereInput[]
+    questionId?: StringFilter<"ExerciseAnswer"> | string
+    selectedOptionIndex?: IntFilter<"ExerciseAnswer"> | number
+    isCorrect?: BoolFilter<"ExerciseAnswer"> | boolean
+    submittedAt?: DateTimeFilter<"ExerciseAnswer"> | Date | string
+    attemptId?: StringFilter<"ExerciseAnswer"> | string
+    attempt?: XOR<UserExerciseAttemptScalarRelationFilter, UserExerciseAttemptWhereInput>
+  }, "id">
+
+  export type ExerciseAnswerOrderByWithAggregationInput = {
+    id?: SortOrder
+    questionId?: SortOrder
+    selectedOptionIndex?: SortOrder
+    isCorrect?: SortOrder
+    submittedAt?: SortOrder
+    attemptId?: SortOrder
+    _count?: ExerciseAnswerCountOrderByAggregateInput
+    _avg?: ExerciseAnswerAvgOrderByAggregateInput
+    _max?: ExerciseAnswerMaxOrderByAggregateInput
+    _min?: ExerciseAnswerMinOrderByAggregateInput
+    _sum?: ExerciseAnswerSumOrderByAggregateInput
+  }
+
+  export type ExerciseAnswerScalarWhereWithAggregatesInput = {
+    AND?: ExerciseAnswerScalarWhereWithAggregatesInput | ExerciseAnswerScalarWhereWithAggregatesInput[]
+    OR?: ExerciseAnswerScalarWhereWithAggregatesInput[]
+    NOT?: ExerciseAnswerScalarWhereWithAggregatesInput | ExerciseAnswerScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ExerciseAnswer"> | string
+    questionId?: StringWithAggregatesFilter<"ExerciseAnswer"> | string
+    selectedOptionIndex?: IntWithAggregatesFilter<"ExerciseAnswer"> | number
+    isCorrect?: BoolWithAggregatesFilter<"ExerciseAnswer"> | boolean
+    submittedAt?: DateTimeWithAggregatesFilter<"ExerciseAnswer"> | Date | string
+    attemptId?: StringWithAggregatesFilter<"ExerciseAnswer"> | string
+  }
+
   export type UserCreateInput = {
     id?: string
     username: string
@@ -9318,6 +11847,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
     examAttempts?: UserExamAttemptCreateNestedManyWithoutUserInput
+    exerciseAttempts?: UserExerciseAttemptCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -9331,6 +11861,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
     examAttempts?: UserExamAttemptUncheckedCreateNestedManyWithoutUserInput
+    exerciseAttempts?: UserExerciseAttemptUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -9343,6 +11874,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
     examAttempts?: UserExamAttemptUpdateManyWithoutUserNestedInput
+    exerciseAttempts?: UserExerciseAttemptUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -9355,6 +11887,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
     examAttempts?: UserExamAttemptUncheckedUpdateManyWithoutUserNestedInput
+    exerciseAttempts?: UserExerciseAttemptUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -9613,6 +12146,7 @@ export namespace Prisma {
     title: string
     isFree?: boolean
     questions?: ExerciseQuestionCreateNestedManyWithoutExerciseInput
+    attempts?: UserExerciseAttemptCreateNestedManyWithoutExerciseInput
   }
 
   export type ExerciseUncheckedCreateInput = {
@@ -9621,6 +12155,7 @@ export namespace Prisma {
     title: string
     isFree?: boolean
     questions?: ExerciseQuestionUncheckedCreateNestedManyWithoutExerciseInput
+    attempts?: UserExerciseAttemptUncheckedCreateNestedManyWithoutExerciseInput
   }
 
   export type ExerciseUpdateInput = {
@@ -9628,6 +12163,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     isFree?: BoolFieldUpdateOperationsInput | boolean
     questions?: ExerciseQuestionUpdateManyWithoutExerciseNestedInput
+    attempts?: UserExerciseAttemptUpdateManyWithoutExerciseNestedInput
   }
 
   export type ExerciseUncheckedUpdateInput = {
@@ -9635,6 +12171,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     isFree?: BoolFieldUpdateOperationsInput | boolean
     questions?: ExerciseQuestionUncheckedUpdateManyWithoutExerciseNestedInput
+    attempts?: UserExerciseAttemptUncheckedUpdateManyWithoutExerciseNestedInput
   }
 
   export type ExerciseCreateManyInput = {
@@ -9714,6 +12251,125 @@ export namespace Prisma {
     exerciseId?: StringFieldUpdateOperationsInput | string
   }
 
+  export type UserExerciseAttemptCreateInput = {
+    id?: string
+    score?: number | null
+    startedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutExerciseAttemptsInput
+    exercise: ExerciseCreateNestedOneWithoutAttemptsInput
+    answers?: ExerciseAnswerCreateNestedManyWithoutAttemptInput
+  }
+
+  export type UserExerciseAttemptUncheckedCreateInput = {
+    id?: string
+    score?: number | null
+    startedAt?: Date | string
+    completedAt?: Date | string | null
+    userId: string
+    exerciseId: string
+    answers?: ExerciseAnswerUncheckedCreateNestedManyWithoutAttemptInput
+  }
+
+  export type UserExerciseAttemptUpdateInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutExerciseAttemptsNestedInput
+    exercise?: ExerciseUpdateOneRequiredWithoutAttemptsNestedInput
+    answers?: ExerciseAnswerUpdateManyWithoutAttemptNestedInput
+  }
+
+  export type UserExerciseAttemptUncheckedUpdateInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    exerciseId?: StringFieldUpdateOperationsInput | string
+    answers?: ExerciseAnswerUncheckedUpdateManyWithoutAttemptNestedInput
+  }
+
+  export type UserExerciseAttemptCreateManyInput = {
+    id?: string
+    score?: number | null
+    startedAt?: Date | string
+    completedAt?: Date | string | null
+    userId: string
+    exerciseId: string
+  }
+
+  export type UserExerciseAttemptUpdateManyMutationInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type UserExerciseAttemptUncheckedUpdateManyInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    exerciseId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ExerciseAnswerCreateInput = {
+    id?: string
+    questionId: string
+    selectedOptionIndex: number
+    isCorrect: boolean
+    submittedAt?: Date | string
+    attempt: UserExerciseAttemptCreateNestedOneWithoutAnswersInput
+  }
+
+  export type ExerciseAnswerUncheckedCreateInput = {
+    id?: string
+    questionId: string
+    selectedOptionIndex: number
+    isCorrect: boolean
+    submittedAt?: Date | string
+    attemptId: string
+  }
+
+  export type ExerciseAnswerUpdateInput = {
+    questionId?: StringFieldUpdateOperationsInput | string
+    selectedOptionIndex?: IntFieldUpdateOperationsInput | number
+    isCorrect?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attempt?: UserExerciseAttemptUpdateOneRequiredWithoutAnswersNestedInput
+  }
+
+  export type ExerciseAnswerUncheckedUpdateInput = {
+    questionId?: StringFieldUpdateOperationsInput | string
+    selectedOptionIndex?: IntFieldUpdateOperationsInput | number
+    isCorrect?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attemptId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ExerciseAnswerCreateManyInput = {
+    id?: string
+    questionId: string
+    selectedOptionIndex: number
+    isCorrect: boolean
+    submittedAt?: Date | string
+    attemptId: string
+  }
+
+  export type ExerciseAnswerUpdateManyMutationInput = {
+    questionId?: StringFieldUpdateOperationsInput | string
+    selectedOptionIndex?: IntFieldUpdateOperationsInput | number
+    isCorrect?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExerciseAnswerUncheckedUpdateManyInput = {
+    questionId?: StringFieldUpdateOperationsInput | string
+    selectedOptionIndex?: IntFieldUpdateOperationsInput | number
+    isCorrect?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    attemptId?: StringFieldUpdateOperationsInput | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -9764,11 +12420,21 @@ export namespace Prisma {
     none?: UserExamAttemptWhereInput
   }
 
+  export type UserExerciseAttemptListRelationFilter = {
+    every?: UserExerciseAttemptWhereInput
+    some?: UserExerciseAttemptWhereInput
+    none?: UserExerciseAttemptWhereInput
+  }
+
   export type RefreshTokenOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type UserExamAttemptOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserExerciseAttemptOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -10222,6 +12888,91 @@ export namespace Prisma {
     isSet?: boolean
   }
 
+  export type ExerciseAnswerListRelationFilter = {
+    every?: ExerciseAnswerWhereInput
+    some?: ExerciseAnswerWhereInput
+    none?: ExerciseAnswerWhereInput
+  }
+
+  export type ExerciseAnswerOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserExerciseAttemptCountOrderByAggregateInput = {
+    id?: SortOrder
+    score?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    userId?: SortOrder
+    exerciseId?: SortOrder
+  }
+
+  export type UserExerciseAttemptAvgOrderByAggregateInput = {
+    score?: SortOrder
+  }
+
+  export type UserExerciseAttemptMaxOrderByAggregateInput = {
+    id?: SortOrder
+    score?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    userId?: SortOrder
+    exerciseId?: SortOrder
+  }
+
+  export type UserExerciseAttemptMinOrderByAggregateInput = {
+    id?: SortOrder
+    score?: SortOrder
+    startedAt?: SortOrder
+    completedAt?: SortOrder
+    userId?: SortOrder
+    exerciseId?: SortOrder
+  }
+
+  export type UserExerciseAttemptSumOrderByAggregateInput = {
+    score?: SortOrder
+  }
+
+  export type UserExerciseAttemptScalarRelationFilter = {
+    is?: UserExerciseAttemptWhereInput
+    isNot?: UserExerciseAttemptWhereInput
+  }
+
+  export type ExerciseAnswerCountOrderByAggregateInput = {
+    id?: SortOrder
+    questionId?: SortOrder
+    selectedOptionIndex?: SortOrder
+    isCorrect?: SortOrder
+    submittedAt?: SortOrder
+    attemptId?: SortOrder
+  }
+
+  export type ExerciseAnswerAvgOrderByAggregateInput = {
+    selectedOptionIndex?: SortOrder
+  }
+
+  export type ExerciseAnswerMaxOrderByAggregateInput = {
+    id?: SortOrder
+    questionId?: SortOrder
+    selectedOptionIndex?: SortOrder
+    isCorrect?: SortOrder
+    submittedAt?: SortOrder
+    attemptId?: SortOrder
+  }
+
+  export type ExerciseAnswerMinOrderByAggregateInput = {
+    id?: SortOrder
+    questionId?: SortOrder
+    selectedOptionIndex?: SortOrder
+    isCorrect?: SortOrder
+    submittedAt?: SortOrder
+    attemptId?: SortOrder
+  }
+
+  export type ExerciseAnswerSumOrderByAggregateInput = {
+    selectedOptionIndex?: SortOrder
+  }
+
   export type RefreshTokenCreateNestedManyWithoutUserInput = {
     create?: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput> | RefreshTokenCreateWithoutUserInput[] | RefreshTokenUncheckedCreateWithoutUserInput[]
     connectOrCreate?: RefreshTokenCreateOrConnectWithoutUserInput | RefreshTokenCreateOrConnectWithoutUserInput[]
@@ -10236,6 +12987,13 @@ export namespace Prisma {
     connect?: UserExamAttemptWhereUniqueInput | UserExamAttemptWhereUniqueInput[]
   }
 
+  export type UserExerciseAttemptCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserExerciseAttemptCreateWithoutUserInput, UserExerciseAttemptUncheckedCreateWithoutUserInput> | UserExerciseAttemptCreateWithoutUserInput[] | UserExerciseAttemptUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserExerciseAttemptCreateOrConnectWithoutUserInput | UserExerciseAttemptCreateOrConnectWithoutUserInput[]
+    createMany?: UserExerciseAttemptCreateManyUserInputEnvelope
+    connect?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+  }
+
   export type RefreshTokenUncheckedCreateNestedManyWithoutUserInput = {
     create?: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput> | RefreshTokenCreateWithoutUserInput[] | RefreshTokenUncheckedCreateWithoutUserInput[]
     connectOrCreate?: RefreshTokenCreateOrConnectWithoutUserInput | RefreshTokenCreateOrConnectWithoutUserInput[]
@@ -10248,6 +13006,13 @@ export namespace Prisma {
     connectOrCreate?: UserExamAttemptCreateOrConnectWithoutUserInput | UserExamAttemptCreateOrConnectWithoutUserInput[]
     createMany?: UserExamAttemptCreateManyUserInputEnvelope
     connect?: UserExamAttemptWhereUniqueInput | UserExamAttemptWhereUniqueInput[]
+  }
+
+  export type UserExerciseAttemptUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<UserExerciseAttemptCreateWithoutUserInput, UserExerciseAttemptUncheckedCreateWithoutUserInput> | UserExerciseAttemptCreateWithoutUserInput[] | UserExerciseAttemptUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserExerciseAttemptCreateOrConnectWithoutUserInput | UserExerciseAttemptCreateOrConnectWithoutUserInput[]
+    createMany?: UserExerciseAttemptCreateManyUserInputEnvelope
+    connect?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -10294,6 +13059,20 @@ export namespace Prisma {
     deleteMany?: UserExamAttemptScalarWhereInput | UserExamAttemptScalarWhereInput[]
   }
 
+  export type UserExerciseAttemptUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserExerciseAttemptCreateWithoutUserInput, UserExerciseAttemptUncheckedCreateWithoutUserInput> | UserExerciseAttemptCreateWithoutUserInput[] | UserExerciseAttemptUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserExerciseAttemptCreateOrConnectWithoutUserInput | UserExerciseAttemptCreateOrConnectWithoutUserInput[]
+    upsert?: UserExerciseAttemptUpsertWithWhereUniqueWithoutUserInput | UserExerciseAttemptUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserExerciseAttemptCreateManyUserInputEnvelope
+    set?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    disconnect?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    delete?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    connect?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    update?: UserExerciseAttemptUpdateWithWhereUniqueWithoutUserInput | UserExerciseAttemptUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserExerciseAttemptUpdateManyWithWhereWithoutUserInput | UserExerciseAttemptUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserExerciseAttemptScalarWhereInput | UserExerciseAttemptScalarWhereInput[]
+  }
+
   export type RefreshTokenUncheckedUpdateManyWithoutUserNestedInput = {
     create?: XOR<RefreshTokenCreateWithoutUserInput, RefreshTokenUncheckedCreateWithoutUserInput> | RefreshTokenCreateWithoutUserInput[] | RefreshTokenUncheckedCreateWithoutUserInput[]
     connectOrCreate?: RefreshTokenCreateOrConnectWithoutUserInput | RefreshTokenCreateOrConnectWithoutUserInput[]
@@ -10320,6 +13099,20 @@ export namespace Prisma {
     update?: UserExamAttemptUpdateWithWhereUniqueWithoutUserInput | UserExamAttemptUpdateWithWhereUniqueWithoutUserInput[]
     updateMany?: UserExamAttemptUpdateManyWithWhereWithoutUserInput | UserExamAttemptUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: UserExamAttemptScalarWhereInput | UserExamAttemptScalarWhereInput[]
+  }
+
+  export type UserExerciseAttemptUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<UserExerciseAttemptCreateWithoutUserInput, UserExerciseAttemptUncheckedCreateWithoutUserInput> | UserExerciseAttemptCreateWithoutUserInput[] | UserExerciseAttemptUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: UserExerciseAttemptCreateOrConnectWithoutUserInput | UserExerciseAttemptCreateOrConnectWithoutUserInput[]
+    upsert?: UserExerciseAttemptUpsertWithWhereUniqueWithoutUserInput | UserExerciseAttemptUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: UserExerciseAttemptCreateManyUserInputEnvelope
+    set?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    disconnect?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    delete?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    connect?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    update?: UserExerciseAttemptUpdateWithWhereUniqueWithoutUserInput | UserExerciseAttemptUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: UserExerciseAttemptUpdateManyWithWhereWithoutUserInput | UserExerciseAttemptUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: UserExerciseAttemptScalarWhereInput | UserExerciseAttemptScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutRefreshTokensInput = {
@@ -10500,11 +13293,25 @@ export namespace Prisma {
     connect?: ExerciseQuestionWhereUniqueInput | ExerciseQuestionWhereUniqueInput[]
   }
 
+  export type UserExerciseAttemptCreateNestedManyWithoutExerciseInput = {
+    create?: XOR<UserExerciseAttemptCreateWithoutExerciseInput, UserExerciseAttemptUncheckedCreateWithoutExerciseInput> | UserExerciseAttemptCreateWithoutExerciseInput[] | UserExerciseAttemptUncheckedCreateWithoutExerciseInput[]
+    connectOrCreate?: UserExerciseAttemptCreateOrConnectWithoutExerciseInput | UserExerciseAttemptCreateOrConnectWithoutExerciseInput[]
+    createMany?: UserExerciseAttemptCreateManyExerciseInputEnvelope
+    connect?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+  }
+
   export type ExerciseQuestionUncheckedCreateNestedManyWithoutExerciseInput = {
     create?: XOR<ExerciseQuestionCreateWithoutExerciseInput, ExerciseQuestionUncheckedCreateWithoutExerciseInput> | ExerciseQuestionCreateWithoutExerciseInput[] | ExerciseQuestionUncheckedCreateWithoutExerciseInput[]
     connectOrCreate?: ExerciseQuestionCreateOrConnectWithoutExerciseInput | ExerciseQuestionCreateOrConnectWithoutExerciseInput[]
     createMany?: ExerciseQuestionCreateManyExerciseInputEnvelope
     connect?: ExerciseQuestionWhereUniqueInput | ExerciseQuestionWhereUniqueInput[]
+  }
+
+  export type UserExerciseAttemptUncheckedCreateNestedManyWithoutExerciseInput = {
+    create?: XOR<UserExerciseAttemptCreateWithoutExerciseInput, UserExerciseAttemptUncheckedCreateWithoutExerciseInput> | UserExerciseAttemptCreateWithoutExerciseInput[] | UserExerciseAttemptUncheckedCreateWithoutExerciseInput[]
+    connectOrCreate?: UserExerciseAttemptCreateOrConnectWithoutExerciseInput | UserExerciseAttemptCreateOrConnectWithoutExerciseInput[]
+    createMany?: UserExerciseAttemptCreateManyExerciseInputEnvelope
+    connect?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
   }
 
   export type ExerciseQuestionUpdateManyWithoutExerciseNestedInput = {
@@ -10521,6 +13328,20 @@ export namespace Prisma {
     deleteMany?: ExerciseQuestionScalarWhereInput | ExerciseQuestionScalarWhereInput[]
   }
 
+  export type UserExerciseAttemptUpdateManyWithoutExerciseNestedInput = {
+    create?: XOR<UserExerciseAttemptCreateWithoutExerciseInput, UserExerciseAttemptUncheckedCreateWithoutExerciseInput> | UserExerciseAttemptCreateWithoutExerciseInput[] | UserExerciseAttemptUncheckedCreateWithoutExerciseInput[]
+    connectOrCreate?: UserExerciseAttemptCreateOrConnectWithoutExerciseInput | UserExerciseAttemptCreateOrConnectWithoutExerciseInput[]
+    upsert?: UserExerciseAttemptUpsertWithWhereUniqueWithoutExerciseInput | UserExerciseAttemptUpsertWithWhereUniqueWithoutExerciseInput[]
+    createMany?: UserExerciseAttemptCreateManyExerciseInputEnvelope
+    set?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    disconnect?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    delete?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    connect?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    update?: UserExerciseAttemptUpdateWithWhereUniqueWithoutExerciseInput | UserExerciseAttemptUpdateWithWhereUniqueWithoutExerciseInput[]
+    updateMany?: UserExerciseAttemptUpdateManyWithWhereWithoutExerciseInput | UserExerciseAttemptUpdateManyWithWhereWithoutExerciseInput[]
+    deleteMany?: UserExerciseAttemptScalarWhereInput | UserExerciseAttemptScalarWhereInput[]
+  }
+
   export type ExerciseQuestionUncheckedUpdateManyWithoutExerciseNestedInput = {
     create?: XOR<ExerciseQuestionCreateWithoutExerciseInput, ExerciseQuestionUncheckedCreateWithoutExerciseInput> | ExerciseQuestionCreateWithoutExerciseInput[] | ExerciseQuestionUncheckedCreateWithoutExerciseInput[]
     connectOrCreate?: ExerciseQuestionCreateOrConnectWithoutExerciseInput | ExerciseQuestionCreateOrConnectWithoutExerciseInput[]
@@ -10533,6 +13354,20 @@ export namespace Prisma {
     update?: ExerciseQuestionUpdateWithWhereUniqueWithoutExerciseInput | ExerciseQuestionUpdateWithWhereUniqueWithoutExerciseInput[]
     updateMany?: ExerciseQuestionUpdateManyWithWhereWithoutExerciseInput | ExerciseQuestionUpdateManyWithWhereWithoutExerciseInput[]
     deleteMany?: ExerciseQuestionScalarWhereInput | ExerciseQuestionScalarWhereInput[]
+  }
+
+  export type UserExerciseAttemptUncheckedUpdateManyWithoutExerciseNestedInput = {
+    create?: XOR<UserExerciseAttemptCreateWithoutExerciseInput, UserExerciseAttemptUncheckedCreateWithoutExerciseInput> | UserExerciseAttemptCreateWithoutExerciseInput[] | UserExerciseAttemptUncheckedCreateWithoutExerciseInput[]
+    connectOrCreate?: UserExerciseAttemptCreateOrConnectWithoutExerciseInput | UserExerciseAttemptCreateOrConnectWithoutExerciseInput[]
+    upsert?: UserExerciseAttemptUpsertWithWhereUniqueWithoutExerciseInput | UserExerciseAttemptUpsertWithWhereUniqueWithoutExerciseInput[]
+    createMany?: UserExerciseAttemptCreateManyExerciseInputEnvelope
+    set?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    disconnect?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    delete?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    connect?: UserExerciseAttemptWhereUniqueInput | UserExerciseAttemptWhereUniqueInput[]
+    update?: UserExerciseAttemptUpdateWithWhereUniqueWithoutExerciseInput | UserExerciseAttemptUpdateWithWhereUniqueWithoutExerciseInput[]
+    updateMany?: UserExerciseAttemptUpdateManyWithWhereWithoutExerciseInput | UserExerciseAttemptUpdateManyWithWhereWithoutExerciseInput[]
+    deleteMany?: UserExerciseAttemptScalarWhereInput | UserExerciseAttemptScalarWhereInput[]
   }
 
   export type ExerciseQuestionCreateoptionsInput = {
@@ -10561,6 +13396,90 @@ export namespace Prisma {
     upsert?: ExerciseUpsertWithoutQuestionsInput
     connect?: ExerciseWhereUniqueInput
     update?: XOR<XOR<ExerciseUpdateToOneWithWhereWithoutQuestionsInput, ExerciseUpdateWithoutQuestionsInput>, ExerciseUncheckedUpdateWithoutQuestionsInput>
+  }
+
+  export type UserCreateNestedOneWithoutExerciseAttemptsInput = {
+    create?: XOR<UserCreateWithoutExerciseAttemptsInput, UserUncheckedCreateWithoutExerciseAttemptsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutExerciseAttemptsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type ExerciseCreateNestedOneWithoutAttemptsInput = {
+    create?: XOR<ExerciseCreateWithoutAttemptsInput, ExerciseUncheckedCreateWithoutAttemptsInput>
+    connectOrCreate?: ExerciseCreateOrConnectWithoutAttemptsInput
+    connect?: ExerciseWhereUniqueInput
+  }
+
+  export type ExerciseAnswerCreateNestedManyWithoutAttemptInput = {
+    create?: XOR<ExerciseAnswerCreateWithoutAttemptInput, ExerciseAnswerUncheckedCreateWithoutAttemptInput> | ExerciseAnswerCreateWithoutAttemptInput[] | ExerciseAnswerUncheckedCreateWithoutAttemptInput[]
+    connectOrCreate?: ExerciseAnswerCreateOrConnectWithoutAttemptInput | ExerciseAnswerCreateOrConnectWithoutAttemptInput[]
+    createMany?: ExerciseAnswerCreateManyAttemptInputEnvelope
+    connect?: ExerciseAnswerWhereUniqueInput | ExerciseAnswerWhereUniqueInput[]
+  }
+
+  export type ExerciseAnswerUncheckedCreateNestedManyWithoutAttemptInput = {
+    create?: XOR<ExerciseAnswerCreateWithoutAttemptInput, ExerciseAnswerUncheckedCreateWithoutAttemptInput> | ExerciseAnswerCreateWithoutAttemptInput[] | ExerciseAnswerUncheckedCreateWithoutAttemptInput[]
+    connectOrCreate?: ExerciseAnswerCreateOrConnectWithoutAttemptInput | ExerciseAnswerCreateOrConnectWithoutAttemptInput[]
+    createMany?: ExerciseAnswerCreateManyAttemptInputEnvelope
+    connect?: ExerciseAnswerWhereUniqueInput | ExerciseAnswerWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutExerciseAttemptsNestedInput = {
+    create?: XOR<UserCreateWithoutExerciseAttemptsInput, UserUncheckedCreateWithoutExerciseAttemptsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutExerciseAttemptsInput
+    upsert?: UserUpsertWithoutExerciseAttemptsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutExerciseAttemptsInput, UserUpdateWithoutExerciseAttemptsInput>, UserUncheckedUpdateWithoutExerciseAttemptsInput>
+  }
+
+  export type ExerciseUpdateOneRequiredWithoutAttemptsNestedInput = {
+    create?: XOR<ExerciseCreateWithoutAttemptsInput, ExerciseUncheckedCreateWithoutAttemptsInput>
+    connectOrCreate?: ExerciseCreateOrConnectWithoutAttemptsInput
+    upsert?: ExerciseUpsertWithoutAttemptsInput
+    connect?: ExerciseWhereUniqueInput
+    update?: XOR<XOR<ExerciseUpdateToOneWithWhereWithoutAttemptsInput, ExerciseUpdateWithoutAttemptsInput>, ExerciseUncheckedUpdateWithoutAttemptsInput>
+  }
+
+  export type ExerciseAnswerUpdateManyWithoutAttemptNestedInput = {
+    create?: XOR<ExerciseAnswerCreateWithoutAttemptInput, ExerciseAnswerUncheckedCreateWithoutAttemptInput> | ExerciseAnswerCreateWithoutAttemptInput[] | ExerciseAnswerUncheckedCreateWithoutAttemptInput[]
+    connectOrCreate?: ExerciseAnswerCreateOrConnectWithoutAttemptInput | ExerciseAnswerCreateOrConnectWithoutAttemptInput[]
+    upsert?: ExerciseAnswerUpsertWithWhereUniqueWithoutAttemptInput | ExerciseAnswerUpsertWithWhereUniqueWithoutAttemptInput[]
+    createMany?: ExerciseAnswerCreateManyAttemptInputEnvelope
+    set?: ExerciseAnswerWhereUniqueInput | ExerciseAnswerWhereUniqueInput[]
+    disconnect?: ExerciseAnswerWhereUniqueInput | ExerciseAnswerWhereUniqueInput[]
+    delete?: ExerciseAnswerWhereUniqueInput | ExerciseAnswerWhereUniqueInput[]
+    connect?: ExerciseAnswerWhereUniqueInput | ExerciseAnswerWhereUniqueInput[]
+    update?: ExerciseAnswerUpdateWithWhereUniqueWithoutAttemptInput | ExerciseAnswerUpdateWithWhereUniqueWithoutAttemptInput[]
+    updateMany?: ExerciseAnswerUpdateManyWithWhereWithoutAttemptInput | ExerciseAnswerUpdateManyWithWhereWithoutAttemptInput[]
+    deleteMany?: ExerciseAnswerScalarWhereInput | ExerciseAnswerScalarWhereInput[]
+  }
+
+  export type ExerciseAnswerUncheckedUpdateManyWithoutAttemptNestedInput = {
+    create?: XOR<ExerciseAnswerCreateWithoutAttemptInput, ExerciseAnswerUncheckedCreateWithoutAttemptInput> | ExerciseAnswerCreateWithoutAttemptInput[] | ExerciseAnswerUncheckedCreateWithoutAttemptInput[]
+    connectOrCreate?: ExerciseAnswerCreateOrConnectWithoutAttemptInput | ExerciseAnswerCreateOrConnectWithoutAttemptInput[]
+    upsert?: ExerciseAnswerUpsertWithWhereUniqueWithoutAttemptInput | ExerciseAnswerUpsertWithWhereUniqueWithoutAttemptInput[]
+    createMany?: ExerciseAnswerCreateManyAttemptInputEnvelope
+    set?: ExerciseAnswerWhereUniqueInput | ExerciseAnswerWhereUniqueInput[]
+    disconnect?: ExerciseAnswerWhereUniqueInput | ExerciseAnswerWhereUniqueInput[]
+    delete?: ExerciseAnswerWhereUniqueInput | ExerciseAnswerWhereUniqueInput[]
+    connect?: ExerciseAnswerWhereUniqueInput | ExerciseAnswerWhereUniqueInput[]
+    update?: ExerciseAnswerUpdateWithWhereUniqueWithoutAttemptInput | ExerciseAnswerUpdateWithWhereUniqueWithoutAttemptInput[]
+    updateMany?: ExerciseAnswerUpdateManyWithWhereWithoutAttemptInput | ExerciseAnswerUpdateManyWithWhereWithoutAttemptInput[]
+    deleteMany?: ExerciseAnswerScalarWhereInput | ExerciseAnswerScalarWhereInput[]
+  }
+
+  export type UserExerciseAttemptCreateNestedOneWithoutAnswersInput = {
+    create?: XOR<UserExerciseAttemptCreateWithoutAnswersInput, UserExerciseAttemptUncheckedCreateWithoutAnswersInput>
+    connectOrCreate?: UserExerciseAttemptCreateOrConnectWithoutAnswersInput
+    connect?: UserExerciseAttemptWhereUniqueInput
+  }
+
+  export type UserExerciseAttemptUpdateOneRequiredWithoutAnswersNestedInput = {
+    create?: XOR<UserExerciseAttemptCreateWithoutAnswersInput, UserExerciseAttemptUncheckedCreateWithoutAnswersInput>
+    connectOrCreate?: UserExerciseAttemptCreateOrConnectWithoutAnswersInput
+    upsert?: UserExerciseAttemptUpsertWithoutAnswersInput
+    connect?: UserExerciseAttemptWhereUniqueInput
+    update?: XOR<XOR<UserExerciseAttemptUpdateToOneWithWhereWithoutAnswersInput, UserExerciseAttemptUpdateWithoutAnswersInput>, UserExerciseAttemptUncheckedUpdateWithoutAnswersInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -10849,6 +13768,33 @@ export namespace Prisma {
     data: UserExamAttemptCreateManyUserInput | UserExamAttemptCreateManyUserInput[]
   }
 
+  export type UserExerciseAttemptCreateWithoutUserInput = {
+    id?: string
+    score?: number | null
+    startedAt?: Date | string
+    completedAt?: Date | string | null
+    exercise: ExerciseCreateNestedOneWithoutAttemptsInput
+    answers?: ExerciseAnswerCreateNestedManyWithoutAttemptInput
+  }
+
+  export type UserExerciseAttemptUncheckedCreateWithoutUserInput = {
+    id?: string
+    score?: number | null
+    startedAt?: Date | string
+    completedAt?: Date | string | null
+    exerciseId: string
+    answers?: ExerciseAnswerUncheckedCreateNestedManyWithoutAttemptInput
+  }
+
+  export type UserExerciseAttemptCreateOrConnectWithoutUserInput = {
+    where: UserExerciseAttemptWhereUniqueInput
+    create: XOR<UserExerciseAttemptCreateWithoutUserInput, UserExerciseAttemptUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserExerciseAttemptCreateManyUserInputEnvelope = {
+    data: UserExerciseAttemptCreateManyUserInput | UserExerciseAttemptCreateManyUserInput[]
+  }
+
   export type RefreshTokenUpsertWithWhereUniqueWithoutUserInput = {
     where: RefreshTokenWhereUniqueInput
     update: XOR<RefreshTokenUpdateWithoutUserInput, RefreshTokenUncheckedUpdateWithoutUserInput>
@@ -10905,6 +13851,34 @@ export namespace Prisma {
     answers?: JsonFilter<"UserExamAttempt">
   }
 
+  export type UserExerciseAttemptUpsertWithWhereUniqueWithoutUserInput = {
+    where: UserExerciseAttemptWhereUniqueInput
+    update: XOR<UserExerciseAttemptUpdateWithoutUserInput, UserExerciseAttemptUncheckedUpdateWithoutUserInput>
+    create: XOR<UserExerciseAttemptCreateWithoutUserInput, UserExerciseAttemptUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserExerciseAttemptUpdateWithWhereUniqueWithoutUserInput = {
+    where: UserExerciseAttemptWhereUniqueInput
+    data: XOR<UserExerciseAttemptUpdateWithoutUserInput, UserExerciseAttemptUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserExerciseAttemptUpdateManyWithWhereWithoutUserInput = {
+    where: UserExerciseAttemptScalarWhereInput
+    data: XOR<UserExerciseAttemptUpdateManyMutationInput, UserExerciseAttemptUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type UserExerciseAttemptScalarWhereInput = {
+    AND?: UserExerciseAttemptScalarWhereInput | UserExerciseAttemptScalarWhereInput[]
+    OR?: UserExerciseAttemptScalarWhereInput[]
+    NOT?: UserExerciseAttemptScalarWhereInput | UserExerciseAttemptScalarWhereInput[]
+    id?: StringFilter<"UserExerciseAttempt"> | string
+    score?: IntNullableFilter<"UserExerciseAttempt"> | number | null
+    startedAt?: DateTimeFilter<"UserExerciseAttempt"> | Date | string
+    completedAt?: DateTimeNullableFilter<"UserExerciseAttempt"> | Date | string | null
+    userId?: StringFilter<"UserExerciseAttempt"> | string
+    exerciseId?: StringFilter<"UserExerciseAttempt"> | string
+  }
+
   export type UserCreateWithoutRefreshTokensInput = {
     id?: string
     username: string
@@ -10915,6 +13889,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     examAttempts?: UserExamAttemptCreateNestedManyWithoutUserInput
+    exerciseAttempts?: UserExerciseAttemptCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRefreshTokensInput = {
@@ -10927,6 +13902,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     examAttempts?: UserExamAttemptUncheckedCreateNestedManyWithoutUserInput
+    exerciseAttempts?: UserExerciseAttemptUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRefreshTokensInput = {
@@ -10954,6 +13930,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     examAttempts?: UserExamAttemptUpdateManyWithoutUserNestedInput
+    exerciseAttempts?: UserExerciseAttemptUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRefreshTokensInput = {
@@ -10965,6 +13942,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     examAttempts?: UserExamAttemptUncheckedUpdateManyWithoutUserNestedInput
+    exerciseAttempts?: UserExerciseAttemptUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type QuestionCreateWithoutExamInput = {
@@ -11116,6 +14094,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    exerciseAttempts?: UserExerciseAttemptCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutExamAttemptsInput = {
@@ -11128,6 +14107,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    exerciseAttempts?: UserExerciseAttemptUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutExamAttemptsInput = {
@@ -11176,6 +14156,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    exerciseAttempts?: UserExerciseAttemptUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutExamAttemptsInput = {
@@ -11187,6 +14168,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    exerciseAttempts?: UserExerciseAttemptUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ExamUpsertWithoutAttemptsInput = {
@@ -11239,6 +14221,33 @@ export namespace Prisma {
     data: ExerciseQuestionCreateManyExerciseInput | ExerciseQuestionCreateManyExerciseInput[]
   }
 
+  export type UserExerciseAttemptCreateWithoutExerciseInput = {
+    id?: string
+    score?: number | null
+    startedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutExerciseAttemptsInput
+    answers?: ExerciseAnswerCreateNestedManyWithoutAttemptInput
+  }
+
+  export type UserExerciseAttemptUncheckedCreateWithoutExerciseInput = {
+    id?: string
+    score?: number | null
+    startedAt?: Date | string
+    completedAt?: Date | string | null
+    userId: string
+    answers?: ExerciseAnswerUncheckedCreateNestedManyWithoutAttemptInput
+  }
+
+  export type UserExerciseAttemptCreateOrConnectWithoutExerciseInput = {
+    where: UserExerciseAttemptWhereUniqueInput
+    create: XOR<UserExerciseAttemptCreateWithoutExerciseInput, UserExerciseAttemptUncheckedCreateWithoutExerciseInput>
+  }
+
+  export type UserExerciseAttemptCreateManyExerciseInputEnvelope = {
+    data: UserExerciseAttemptCreateManyExerciseInput | UserExerciseAttemptCreateManyExerciseInput[]
+  }
+
   export type ExerciseQuestionUpsertWithWhereUniqueWithoutExerciseInput = {
     where: ExerciseQuestionWhereUniqueInput
     update: XOR<ExerciseQuestionUpdateWithoutExerciseInput, ExerciseQuestionUncheckedUpdateWithoutExerciseInput>
@@ -11267,11 +14276,28 @@ export namespace Prisma {
     exerciseId?: StringFilter<"ExerciseQuestion"> | string
   }
 
+  export type UserExerciseAttemptUpsertWithWhereUniqueWithoutExerciseInput = {
+    where: UserExerciseAttemptWhereUniqueInput
+    update: XOR<UserExerciseAttemptUpdateWithoutExerciseInput, UserExerciseAttemptUncheckedUpdateWithoutExerciseInput>
+    create: XOR<UserExerciseAttemptCreateWithoutExerciseInput, UserExerciseAttemptUncheckedCreateWithoutExerciseInput>
+  }
+
+  export type UserExerciseAttemptUpdateWithWhereUniqueWithoutExerciseInput = {
+    where: UserExerciseAttemptWhereUniqueInput
+    data: XOR<UserExerciseAttemptUpdateWithoutExerciseInput, UserExerciseAttemptUncheckedUpdateWithoutExerciseInput>
+  }
+
+  export type UserExerciseAttemptUpdateManyWithWhereWithoutExerciseInput = {
+    where: UserExerciseAttemptScalarWhereInput
+    data: XOR<UserExerciseAttemptUpdateManyMutationInput, UserExerciseAttemptUncheckedUpdateManyWithoutExerciseInput>
+  }
+
   export type ExerciseCreateWithoutQuestionsInput = {
     id?: string
     exerciseNumber: number
     title: string
     isFree?: boolean
+    attempts?: UserExerciseAttemptCreateNestedManyWithoutExerciseInput
   }
 
   export type ExerciseUncheckedCreateWithoutQuestionsInput = {
@@ -11279,6 +14305,7 @@ export namespace Prisma {
     exerciseNumber: number
     title: string
     isFree?: boolean
+    attempts?: UserExerciseAttemptUncheckedCreateNestedManyWithoutExerciseInput
   }
 
   export type ExerciseCreateOrConnectWithoutQuestionsInput = {
@@ -11301,12 +14328,229 @@ export namespace Prisma {
     exerciseNumber?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     isFree?: BoolFieldUpdateOperationsInput | boolean
+    attempts?: UserExerciseAttemptUpdateManyWithoutExerciseNestedInput
   }
 
   export type ExerciseUncheckedUpdateWithoutQuestionsInput = {
     exerciseNumber?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
     isFree?: BoolFieldUpdateOperationsInput | boolean
+    attempts?: UserExerciseAttemptUncheckedUpdateManyWithoutExerciseNestedInput
+  }
+
+  export type UserCreateWithoutExerciseAttemptsInput = {
+    id?: string
+    username: string
+    phone: string
+    hashedPassword: string
+    role?: $Enums.Role
+    isPaid?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    refreshTokens?: RefreshTokenCreateNestedManyWithoutUserInput
+    examAttempts?: UserExamAttemptCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutExerciseAttemptsInput = {
+    id?: string
+    username: string
+    phone: string
+    hashedPassword: string
+    role?: $Enums.Role
+    isPaid?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    refreshTokens?: RefreshTokenUncheckedCreateNestedManyWithoutUserInput
+    examAttempts?: UserExamAttemptUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutExerciseAttemptsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutExerciseAttemptsInput, UserUncheckedCreateWithoutExerciseAttemptsInput>
+  }
+
+  export type ExerciseCreateWithoutAttemptsInput = {
+    id?: string
+    exerciseNumber: number
+    title: string
+    isFree?: boolean
+    questions?: ExerciseQuestionCreateNestedManyWithoutExerciseInput
+  }
+
+  export type ExerciseUncheckedCreateWithoutAttemptsInput = {
+    id?: string
+    exerciseNumber: number
+    title: string
+    isFree?: boolean
+    questions?: ExerciseQuestionUncheckedCreateNestedManyWithoutExerciseInput
+  }
+
+  export type ExerciseCreateOrConnectWithoutAttemptsInput = {
+    where: ExerciseWhereUniqueInput
+    create: XOR<ExerciseCreateWithoutAttemptsInput, ExerciseUncheckedCreateWithoutAttemptsInput>
+  }
+
+  export type ExerciseAnswerCreateWithoutAttemptInput = {
+    id?: string
+    questionId: string
+    selectedOptionIndex: number
+    isCorrect: boolean
+    submittedAt?: Date | string
+  }
+
+  export type ExerciseAnswerUncheckedCreateWithoutAttemptInput = {
+    id?: string
+    questionId: string
+    selectedOptionIndex: number
+    isCorrect: boolean
+    submittedAt?: Date | string
+  }
+
+  export type ExerciseAnswerCreateOrConnectWithoutAttemptInput = {
+    where: ExerciseAnswerWhereUniqueInput
+    create: XOR<ExerciseAnswerCreateWithoutAttemptInput, ExerciseAnswerUncheckedCreateWithoutAttemptInput>
+  }
+
+  export type ExerciseAnswerCreateManyAttemptInputEnvelope = {
+    data: ExerciseAnswerCreateManyAttemptInput | ExerciseAnswerCreateManyAttemptInput[]
+  }
+
+  export type UserUpsertWithoutExerciseAttemptsInput = {
+    update: XOR<UserUpdateWithoutExerciseAttemptsInput, UserUncheckedUpdateWithoutExerciseAttemptsInput>
+    create: XOR<UserCreateWithoutExerciseAttemptsInput, UserUncheckedCreateWithoutExerciseAttemptsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutExerciseAttemptsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutExerciseAttemptsInput, UserUncheckedUpdateWithoutExerciseAttemptsInput>
+  }
+
+  export type UserUpdateWithoutExerciseAttemptsInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    hashedPassword?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    refreshTokens?: RefreshTokenUpdateManyWithoutUserNestedInput
+    examAttempts?: UserExamAttemptUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutExerciseAttemptsInput = {
+    username?: StringFieldUpdateOperationsInput | string
+    phone?: StringFieldUpdateOperationsInput | string
+    hashedPassword?: StringFieldUpdateOperationsInput | string
+    role?: EnumRoleFieldUpdateOperationsInput | $Enums.Role
+    isPaid?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    refreshTokens?: RefreshTokenUncheckedUpdateManyWithoutUserNestedInput
+    examAttempts?: UserExamAttemptUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ExerciseUpsertWithoutAttemptsInput = {
+    update: XOR<ExerciseUpdateWithoutAttemptsInput, ExerciseUncheckedUpdateWithoutAttemptsInput>
+    create: XOR<ExerciseCreateWithoutAttemptsInput, ExerciseUncheckedCreateWithoutAttemptsInput>
+    where?: ExerciseWhereInput
+  }
+
+  export type ExerciseUpdateToOneWithWhereWithoutAttemptsInput = {
+    where?: ExerciseWhereInput
+    data: XOR<ExerciseUpdateWithoutAttemptsInput, ExerciseUncheckedUpdateWithoutAttemptsInput>
+  }
+
+  export type ExerciseUpdateWithoutAttemptsInput = {
+    exerciseNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    questions?: ExerciseQuestionUpdateManyWithoutExerciseNestedInput
+  }
+
+  export type ExerciseUncheckedUpdateWithoutAttemptsInput = {
+    exerciseNumber?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    isFree?: BoolFieldUpdateOperationsInput | boolean
+    questions?: ExerciseQuestionUncheckedUpdateManyWithoutExerciseNestedInput
+  }
+
+  export type ExerciseAnswerUpsertWithWhereUniqueWithoutAttemptInput = {
+    where: ExerciseAnswerWhereUniqueInput
+    update: XOR<ExerciseAnswerUpdateWithoutAttemptInput, ExerciseAnswerUncheckedUpdateWithoutAttemptInput>
+    create: XOR<ExerciseAnswerCreateWithoutAttemptInput, ExerciseAnswerUncheckedCreateWithoutAttemptInput>
+  }
+
+  export type ExerciseAnswerUpdateWithWhereUniqueWithoutAttemptInput = {
+    where: ExerciseAnswerWhereUniqueInput
+    data: XOR<ExerciseAnswerUpdateWithoutAttemptInput, ExerciseAnswerUncheckedUpdateWithoutAttemptInput>
+  }
+
+  export type ExerciseAnswerUpdateManyWithWhereWithoutAttemptInput = {
+    where: ExerciseAnswerScalarWhereInput
+    data: XOR<ExerciseAnswerUpdateManyMutationInput, ExerciseAnswerUncheckedUpdateManyWithoutAttemptInput>
+  }
+
+  export type ExerciseAnswerScalarWhereInput = {
+    AND?: ExerciseAnswerScalarWhereInput | ExerciseAnswerScalarWhereInput[]
+    OR?: ExerciseAnswerScalarWhereInput[]
+    NOT?: ExerciseAnswerScalarWhereInput | ExerciseAnswerScalarWhereInput[]
+    id?: StringFilter<"ExerciseAnswer"> | string
+    questionId?: StringFilter<"ExerciseAnswer"> | string
+    selectedOptionIndex?: IntFilter<"ExerciseAnswer"> | number
+    isCorrect?: BoolFilter<"ExerciseAnswer"> | boolean
+    submittedAt?: DateTimeFilter<"ExerciseAnswer"> | Date | string
+    attemptId?: StringFilter<"ExerciseAnswer"> | string
+  }
+
+  export type UserExerciseAttemptCreateWithoutAnswersInput = {
+    id?: string
+    score?: number | null
+    startedAt?: Date | string
+    completedAt?: Date | string | null
+    user: UserCreateNestedOneWithoutExerciseAttemptsInput
+    exercise: ExerciseCreateNestedOneWithoutAttemptsInput
+  }
+
+  export type UserExerciseAttemptUncheckedCreateWithoutAnswersInput = {
+    id?: string
+    score?: number | null
+    startedAt?: Date | string
+    completedAt?: Date | string | null
+    userId: string
+    exerciseId: string
+  }
+
+  export type UserExerciseAttemptCreateOrConnectWithoutAnswersInput = {
+    where: UserExerciseAttemptWhereUniqueInput
+    create: XOR<UserExerciseAttemptCreateWithoutAnswersInput, UserExerciseAttemptUncheckedCreateWithoutAnswersInput>
+  }
+
+  export type UserExerciseAttemptUpsertWithoutAnswersInput = {
+    update: XOR<UserExerciseAttemptUpdateWithoutAnswersInput, UserExerciseAttemptUncheckedUpdateWithoutAnswersInput>
+    create: XOR<UserExerciseAttemptCreateWithoutAnswersInput, UserExerciseAttemptUncheckedCreateWithoutAnswersInput>
+    where?: UserExerciseAttemptWhereInput
+  }
+
+  export type UserExerciseAttemptUpdateToOneWithWhereWithoutAnswersInput = {
+    where?: UserExerciseAttemptWhereInput
+    data: XOR<UserExerciseAttemptUpdateWithoutAnswersInput, UserExerciseAttemptUncheckedUpdateWithoutAnswersInput>
+  }
+
+  export type UserExerciseAttemptUpdateWithoutAnswersInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutExerciseAttemptsNestedInput
+    exercise?: ExerciseUpdateOneRequiredWithoutAttemptsNestedInput
+  }
+
+  export type UserExerciseAttemptUncheckedUpdateWithoutAnswersInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    exerciseId?: StringFieldUpdateOperationsInput | string
   }
 
   export type RefreshTokenCreateManyUserInput = {
@@ -11323,6 +14567,14 @@ export namespace Prisma {
     completedAt?: Date | string | null
     examId: string
     answers: InputJsonValue
+  }
+
+  export type UserExerciseAttemptCreateManyUserInput = {
+    id?: string
+    score?: number | null
+    startedAt?: Date | string
+    completedAt?: Date | string | null
+    exerciseId: string
   }
 
   export type RefreshTokenUpdateWithoutUserInput = {
@@ -11365,6 +14617,29 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     examId?: StringFieldUpdateOperationsInput | string
     answers?: InputJsonValue | InputJsonValue
+  }
+
+  export type UserExerciseAttemptUpdateWithoutUserInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exercise?: ExerciseUpdateOneRequiredWithoutAttemptsNestedInput
+    answers?: ExerciseAnswerUpdateManyWithoutAttemptNestedInput
+  }
+
+  export type UserExerciseAttemptUncheckedUpdateWithoutUserInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exerciseId?: StringFieldUpdateOperationsInput | string
+    answers?: ExerciseAnswerUncheckedUpdateManyWithoutAttemptNestedInput
+  }
+
+  export type UserExerciseAttemptUncheckedUpdateManyWithoutUserInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    exerciseId?: StringFieldUpdateOperationsInput | string
   }
 
   export type QuestionCreateManyExamInput = {
@@ -11433,6 +14708,14 @@ export namespace Prisma {
     hint?: string | null
   }
 
+  export type UserExerciseAttemptCreateManyExerciseInput = {
+    id?: string
+    score?: number | null
+    startedAt?: Date | string
+    completedAt?: Date | string | null
+    userId: string
+  }
+
   export type ExerciseQuestionUpdateWithoutExerciseInput = {
     text?: StringFieldUpdateOperationsInput | string
     options?: ExerciseQuestionUpdateoptionsInput | string[]
@@ -11452,6 +14735,58 @@ export namespace Prisma {
     options?: ExerciseQuestionUpdateoptionsInput | string[]
     correctAnswerIndex?: IntFieldUpdateOperationsInput | number
     hint?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type UserExerciseAttemptUpdateWithoutExerciseInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user?: UserUpdateOneRequiredWithoutExerciseAttemptsNestedInput
+    answers?: ExerciseAnswerUpdateManyWithoutAttemptNestedInput
+  }
+
+  export type UserExerciseAttemptUncheckedUpdateWithoutExerciseInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+    answers?: ExerciseAnswerUncheckedUpdateManyWithoutAttemptNestedInput
+  }
+
+  export type UserExerciseAttemptUncheckedUpdateManyWithoutExerciseInput = {
+    score?: NullableIntFieldUpdateOperationsInput | number | null
+    startedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type ExerciseAnswerCreateManyAttemptInput = {
+    id?: string
+    questionId: string
+    selectedOptionIndex: number
+    isCorrect: boolean
+    submittedAt?: Date | string
+  }
+
+  export type ExerciseAnswerUpdateWithoutAttemptInput = {
+    questionId?: StringFieldUpdateOperationsInput | string
+    selectedOptionIndex?: IntFieldUpdateOperationsInput | number
+    isCorrect?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExerciseAnswerUncheckedUpdateWithoutAttemptInput = {
+    questionId?: StringFieldUpdateOperationsInput | string
+    selectedOptionIndex?: IntFieldUpdateOperationsInput | number
+    isCorrect?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ExerciseAnswerUncheckedUpdateManyWithoutAttemptInput = {
+    questionId?: StringFieldUpdateOperationsInput | string
+    selectedOptionIndex?: IntFieldUpdateOperationsInput | number
+    isCorrect?: BoolFieldUpdateOperationsInput | boolean
+    submittedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

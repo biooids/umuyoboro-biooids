@@ -4,11 +4,6 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../../middleware/asyncHandler.js";
 import { examService } from "./exam.service.js";
 
-/**
- * The ExamController handles the HTTP layer for exam-related requests.
- * It receives requests, calls the appropriate service method to perform
- * the business logic, and formats the JSON response.
- */
 class ExamController {
   /**
    * Handles the request to get a list of all exams.
@@ -23,8 +18,6 @@ class ExamController {
    */
   startExam = asyncHandler(async (req: Request, res: Response) => {
     const { id: examId } = req.params;
-    // The user object is guaranteed to be on the request object because
-    // the `authenticate({ required: true })` middleware has already run.
     const userId = req.user!.id;
     const userIsPaid = req.user!.isPaid;
 
@@ -41,6 +34,25 @@ class ExamController {
 
     const result = await examService.submitExam(attemptId, req.body, userId);
     res.status(200).json({ status: "success", data: result });
+  });
+
+  /**
+   * Handles the request to get the current user's exam history.
+   */
+  getExamHistory = asyncHandler(async (req: Request, res: Response) => {
+    const userId = req.user!.id;
+    const history = await examService.getExamHistory(userId);
+    res.status(200).json({ status: "success", data: history });
+  });
+
+  /**
+   * Handles the request to get the details of a single past exam attempt.
+   */
+  getExamReview = asyncHandler(async (req: Request, res: Response) => {
+    const { attemptId } = req.params;
+    const userId = req.user!.id;
+    const reviewData = await examService.getExamReview(attemptId, userId);
+    res.status(200).json({ status: "success", data: reviewData });
   });
 }
 

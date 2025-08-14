@@ -1,21 +1,14 @@
 // src/lib/features/exercises/exerciseTypes.ts
 
-// --- Data shapes returned by the backend ---
+// --- Data shapes from the backend ---
 
-/**
- * Represents a single question within an exercise, including the answer and hint.
- */
 export interface ExerciseQuestion {
   id: string;
   text: string;
   options: string[];
-  correctAnswerIndex: number;
   hint: string | null;
 }
 
-/**
- * Represents the basic details of a single exercise, typically for a list view.
- */
 export interface Exercise {
   id: string;
   exerciseNumber: number;
@@ -23,22 +16,72 @@ export interface Exercise {
   isFree: boolean;
 }
 
-// --- API Response Shapes ---
+// --- API Response/Input Shapes for the Stateful Flow ---
 
-/**
- * The expected shape of the API response when fetching all exercises.
- */
 export interface AllExercisesApiResponse {
   status: string;
   data: Exercise[];
 }
 
-/**
- * The expected shape of the API response when fetching a single exercise.
- */
-export interface SingleExerciseApiResponse {
+export interface StartExerciseApiResponse {
   status: string;
-  data: Exercise & {
-    questions: ExerciseQuestion[];
+  data: {
+    exercise: Exercise & { questions: ExerciseQuestion[] };
+    attemptId: string;
+  };
+}
+
+export interface SubmitAnswerInputDto {
+  questionId: string;
+  selectedOptionIndex: number;
+}
+
+export interface SubmitAnswerApiResponse {
+  status: string;
+  data: {
+    isCorrect: boolean;
+    correctAnswerIndex: number;
+  };
+}
+
+export interface FinalizeExerciseApiResponse {
+  status: string;
+  data: {
+    score: number;
+  };
+}
+
+// --- Types for Exercise History ---
+
+export interface ExerciseHistoryApiResponse {
+  status: string;
+  data: {
+    id: string;
+    score: number | null;
+    completedAt: string;
+    exercise: {
+      title: string;
+      _count: {
+        questions: number;
+      };
+    };
+  }[];
+}
+
+export interface ExerciseReviewApiResponse {
+  status: string;
+  data: {
+    id: string;
+    score: number | null;
+    completedAt: string;
+    exercise: {
+      title: string;
+      questions: (ExerciseQuestion & { correctAnswerIndex: number })[];
+    };
+    answers: {
+      questionId: string;
+      selectedOptionIndex: number;
+      isCorrect: boolean;
+    }[];
   };
 }

@@ -173,6 +173,24 @@ exports.Prisma.ExerciseQuestionScalarFieldEnum = {
   exerciseId: 'exerciseId'
 };
 
+exports.Prisma.UserExerciseAttemptScalarFieldEnum = {
+  id: 'id',
+  score: 'score',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  userId: 'userId',
+  exerciseId: 'exerciseId'
+};
+
+exports.Prisma.ExerciseAnswerScalarFieldEnum = {
+  id: 'id',
+  questionId: 'questionId',
+  selectedOptionIndex: 'selectedOptionIndex',
+  isCorrect: 'isCorrect',
+  submittedAt: 'submittedAt',
+  attemptId: 'attemptId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -195,7 +213,9 @@ exports.Prisma.ModelName = {
   Question: 'Question',
   UserExamAttempt: 'UserExamAttempt',
   Exercise: 'Exercise',
-  ExerciseQuestion: 'ExerciseQuestion'
+  ExerciseQuestion: 'ExerciseQuestion',
+  UserExerciseAttempt: 'UserExerciseAttempt',
+  ExerciseAnswer: 'ExerciseAnswer'
 };
 
 /**

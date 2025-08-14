@@ -16,15 +16,13 @@ import {
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { getApiErrorMessage } from "@/lib/utils/utils";
+import { Button } from "@/components/ui/button"; // Import Button
 
 interface DeleteAccountDialogProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-/**
- * A confirmation dialog to prevent accidental account deletion.
- */
 export default function DeleteAccountDialog({
   isOpen,
   onClose,
@@ -35,8 +33,6 @@ export default function DeleteAccountDialog({
     try {
       await deleteAccount().unwrap();
       toast.success("Account deleted successfully.");
-      // The user will be automatically logged out by the logic in the userApiSlice.
-      // No need to redirect here, as a protected route guard will handle it.
       onClose();
     } catch (err) {
       toast.error(getApiErrorMessage(err));
@@ -55,10 +51,15 @@ export default function DeleteAccountDialog({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete} disabled={isLoading}>
+          {/* Use the Button component with a destructive variant for the action */}
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={isLoading}
+          >
             {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Continue
-          </AlertDialogAction>
+            Delete Account
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
