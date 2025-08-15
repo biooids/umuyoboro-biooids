@@ -1,5 +1,3 @@
-// src/components/pages/exercises/ExerciseCard.tsx
-
 "use client";
 
 import Link from "next/link";

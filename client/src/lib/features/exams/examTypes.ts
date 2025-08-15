@@ -1,5 +1,3 @@
-// src/lib/features/exams/examTypes.ts
-
 // --- Data shapes from the backend ---
 
 interface ExamQuestion {
@@ -29,6 +27,7 @@ export interface StartExamApiResponse {
       questions: ExamQuestion[];
     };
     attemptId: string;
+    startedAt: string; // The official ISO date string from the server
   };
 }
 
@@ -41,11 +40,6 @@ export interface SubmitExamApiResponse {
   };
 }
 
-// --- NEW TYPES FOR EXAM HISTORY ---
-
-/**
- * Represents the shape of the API response when fetching the user's exam history.
- */
 export interface ExamHistoryApiResponse {
   status: string;
   data: {
@@ -61,9 +55,6 @@ export interface ExamHistoryApiResponse {
   }[];
 }
 
-/**
- * Represents the shape of the API response when fetching a single exam attempt for review.
- */
 export interface ExamReviewApiResponse {
   status: string;
   data: {

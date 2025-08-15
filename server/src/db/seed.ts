@@ -1,5 +1,3 @@
-// src/db/seed.ts
-
 import prisma from "./prisma.js";
 
 const examsToSeed = [
@@ -104,8 +102,15 @@ async function main() {
   console.log(`Start seeding ...`);
 
   // --- Seed Exams ---
-  await prisma.question.deleteMany({});
-  await prisma.exam.deleteMany();
+  console.log("Seeding exams...");
+  // Clear old exam-related data in a transaction for safety
+  await prisma.$transaction([
+    prisma.userExamAnswer.deleteMany(),
+    prisma.userExamAttempt.deleteMany(),
+    prisma.question.deleteMany(),
+    prisma.exam.deleteMany(),
+  ]);
+
   for (const examData of examsToSeed) {
     await prisma.exam.create({
       data: {
@@ -125,8 +130,13 @@ async function main() {
   console.log("✅ Seeded exams.");
 
   // --- Seed Exercises ---
-  await prisma.exerciseQuestion.deleteMany();
-  await prisma.exercise.deleteMany();
+  console.log("Seeding exercises...");
+  // Clear old exercise-related data in a transaction for safety
+  await prisma.$transaction([
+    prisma.exerciseQuestion.deleteMany(),
+    prisma.exercise.deleteMany(),
+  ]);
+
   for (const exerciseData of exercisesToSeed) {
     await prisma.exercise.create({
       data: {

@@ -1,12 +1,10 @@
-// src/lib/features/exams/examApiSlice.ts
-
 import { apiSlice } from "../../api/apiSlice";
 import {
   AllExamsApiResponse,
   StartExamApiResponse,
   SubmitExamApiResponse,
-  ExamHistoryApiResponse, // NEW
-  ExamReviewApiResponse, // NEW
+  ExamHistoryApiResponse,
+  ExamReviewApiResponse,
 } from "./examTypes";
 
 export const examApiSlice = apiSlice.injectEndpoints({
@@ -22,6 +20,19 @@ export const examApiSlice = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
+
+    // NEW: Add the lockAttempt mutation. This is a lightweight call
+    // that marks the official end time on the server before submitting answers.
+    lockAttempt: builder.mutation<
+      { status: string; message: string },
+      { attemptId: string }
+    >({
+      query: ({ attemptId }) => ({
+        url: `/exams/attempts/${attemptId}/lock`,
+        method: "POST",
+      }),
+    }),
+
     submitExam: builder.mutation<
       SubmitExamApiResponse,
       { attemptId: string; answers: Record<string, number> }
@@ -35,33 +46,26 @@ export const examApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: ["HistoryList"],
     }),
 
-    // --- NEW HISTORY & REVIEW ENDPOINTS ---
-
-    /**
-     * A "query" endpoint to fetch the list of the user's past exam attempts.
-     */
+    // --- History & Review Endpoints ---
     getExamHistory: builder.query<ExamHistoryApiResponse, void>({
       query: () => "/exams/history",
-      providesTags: ["HistoryList"], // This query provides the 'HistoryList' tag.
+      providesTags: ["HistoryList"],
     }),
-
-    /**
-     * A "query" endpoint to fetch the detailed results of a single past attempt.
-     */
     getExamReview: builder.query<ExamReviewApiResponse, { attemptId: string }>({
       query: ({ attemptId }) => `/exams/history/${attemptId}`,
-      providesTags: (result, error, { attemptId }) => [
+      providesTags: (_result, _error, { attemptId }) => [
         { type: "HistoryAttempt", id: attemptId },
       ],
     }),
   }),
 });
 
-// Export the new hooks alongside the existing ones.
+// Export the new hook alongside the existing ones.
 export const {
   useGetAllExamsQuery,
   useStartExamMutation,
+  useLockAttemptMutation, // NEW: Export the hook for the lock mutation
   useSubmitExamMutation,
-  useGetExamHistoryQuery, // NEW
-  useGetExamReviewQuery, // NEW
+  useGetExamHistoryQuery,
+  useGetExamReviewQuery,
 } = examApiSlice;

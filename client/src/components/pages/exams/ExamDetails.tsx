@@ -1,67 +1,127 @@
-// src/components/pages/exams/ExamDetails.tsx
-
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useReducer, useEffect, useCallback, useRef } from "react";
+import Link from "next/link";
 import {
+  useLockAttemptMutation,
   useStartExamMutation,
   useSubmitExamMutation,
 } from "@/lib/features/exams/examApiSlice";
+import {
+  StartExamApiResponse,
+  SubmitExamApiResponse,
+} from "@/lib/features/exams/examTypes";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, AlertCircle, Check, X } from "lucide-react";
 import { cn, getApiErrorMessage } from "@/lib/utils/utils";
-import {
-  StartExamApiResponse,
-  SubmitExamApiResponse,
-} from "@/lib/features/exams/examTypes";
-import Link from "next/link";
 
+// --- Type Definitions ---
 type ExamData = StartExamApiResponse["data"]["exam"];
 type ResultsData = SubmitExamApiResponse["data"];
-// NEW: A type for our dynamic feedback object.
-type Feedback = {
-  message: string;
-  color: string; // Tailwind CSS color class (e.g., 'text-green-500')
-  emoji: string;
+type Feedback = { message: string; color: string; emoji: string };
+
+// --- State and Action Types for the Reducer ---
+type State = {
+  status:
+    | "loading"
+    | "starting"
+    | "in_progress"
+    | "submitting"
+    | "finished"
+    | "error";
+  examData: ExamData | null;
+  attemptId: string | null;
+  startTime: number | null;
+  selectedAnswers: Record<string, number>;
+  results: ResultsData | null;
+  timer: number;
+  error: any | null;
 };
 
-interface ExamDetailsProps {
-  examId: string;
+type Action =
+  | { type: "START_SUCCESS"; payload: StartExamApiResponse["data"] }
+  | { type: "START_FAILURE"; payload: any }
+  | { type: "SELECT_ANSWER"; payload: { questionId: string; index: number } }
+  | { type: "TIMER_TICK"; payload: number }
+  | { type: "SUBMIT" }
+  | { type: "SUBMIT_SUCCESS"; payload: ResultsData }
+  | { type: "SUBMIT_FAILURE"; payload: any }
+  | { type: "RESET" };
+
+// --- Initial State ---
+const initialState: State = {
+  status: "loading",
+  examData: null,
+  attemptId: null,
+  startTime: null,
+  selectedAnswers: {},
+  results: null,
+  timer: 0,
+  error: null,
+};
+
+// --- Reducer function ---
+function examReducer(state: State, action: Action): State {
+  switch (action.type) {
+    case "START_SUCCESS":
+      const durationSeconds = action.payload.exam.questions.length * 60;
+      return {
+        ...initialState,
+        status: "in_progress",
+        examData: action.payload.exam,
+        attemptId: action.payload.attemptId,
+        startTime: Date.parse(action.payload.startedAt),
+        timer: durationSeconds,
+      };
+    case "START_FAILURE":
+      return { ...state, status: "error", error: action.payload };
+    case "SELECT_ANSWER":
+      if (state.status !== "in_progress") return state;
+      return {
+        ...state,
+        selectedAnswers: {
+          ...state.selectedAnswers,
+          [action.payload.questionId]: action.payload.index,
+        },
+      };
+    case "TIMER_TICK":
+      return { ...state, timer: action.payload };
+    case "SUBMIT":
+      return { ...state, status: "submitting" };
+    case "SUBMIT_SUCCESS":
+      return { ...state, status: "finished", results: action.payload };
+    case "SUBMIT_FAILURE":
+      return { ...state, status: "in_progress", error: action.payload };
+    case "RESET":
+      return { ...initialState, status: "starting" };
+    default:
+      return state;
+  }
 }
 
-// NEW: A helper function to determine feedback based on score percentage.
+// --- Helper Functions ---
 const getFeedbackForScore = (score: number, total: number): Feedback => {
-  if (total === 0)
-    return {
-      message: "No questions?",
-      color: "text-muted-foreground",
-      emoji: "🤔",
-    };
-  const percentage = (score / total) * 100;
-
-  if (percentage >= 90) {
+  const percentage = total > 0 ? (score / total) * 100 : 0;
+  if (percentage >= 90)
     return {
       message: "Excellent! You're ready!",
       color: "text-green-500",
       emoji: "🏆",
     };
-  }
-  if (percentage >= 70) {
+  if (percentage >= 70)
     return {
       message: "Great Job! Almost perfect.",
       color: "text-blue-500",
       emoji: "🎉",
     };
-  }
-  if (percentage >= 50) {
+  if (percentage >= 50)
     return {
       message: "Good Effort! Keep practicing.",
       color: "text-yellow-500",
       emoji: "👍",
     };
-  }
   return {
     message: "Keep Trying! You'll get there.",
     color: "text-red-500",
@@ -69,132 +129,111 @@ const getFeedbackForScore = (score: number, total: number): Feedback => {
   };
 };
 
-export default function ExamDetails({ examId }: ExamDetailsProps) {
-  const [startExam, { isLoading: isStarting, error: startError }] =
-    useStartExamMutation();
-  const [submitExam, { isLoading: isSubmitting, error: submitError }] =
-    useSubmitExamMutation();
+const formatTime = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+};
 
-  // --- Component State Management ---
-  const [examData, setExamData] = useState<ExamData | null>(null);
-  const [attemptId, setAttemptId] = useState<string | null>(null);
-  const [selectedAnswers, setSelectedAnswers] = useState<
-    Record<string, number>
-  >({});
-  const [results, setResults] = useState<ResultsData | null>(null);
-  const [timer, setTimer] = useState(0);
-  const [isTimeUp, setIsTimeUp] = useState(false);
-  // NEW: State for the dynamic feedback and for the "Try Again" loading state.
-  const [feedback, setFeedback] = useState<Feedback | null>(null);
-  const [isResetting, setIsResetting] = useState(false);
+// --- Component Definition ---
+export default function ExamDetails({ examId }: { examId: string }) {
+  const [state, dispatch] = useReducer(examReducer, initialState);
+  const {
+    status,
+    examData,
+    attemptId,
+    startTime,
+    selectedAnswers,
+    results,
+    timer,
+    error,
+  } = state;
+
+  const [startExam] = useStartExamMutation();
+  const [lockAttempt] = useLockAttemptMutation();
+  const [submitExam] = useSubmitExamMutation();
 
   const startNewExam = useCallback(async () => {
     try {
       const response = await startExam({ examId }).unwrap();
-      setExamData(response.data.exam);
-      setAttemptId(response.data.attemptId);
-      setTimer(response.data.exam.questions.length * 60);
+      dispatch({ type: "START_SUCCESS", payload: response.data });
     } catch (err) {
-      console.error("Failed to start exam:", err);
+      dispatch({ type: "START_FAILURE", payload: err });
     }
   }, [startExam, examId]);
 
-  useEffect(() => {
-    startNewExam();
-  }, [startNewExam]);
-
+  // UPDATED: This is now the one and only submission function.
+  // It is called directly by the button click or the timer.
   const handleSubmit = useCallback(async () => {
-    if (!attemptId || isSubmitting || results) return;
+    // A guard to prevent multiple submissions
+    if (status !== "in_progress") return;
+
+    dispatch({ type: "SUBMIT" });
     try {
+      await lockAttempt({ attemptId: attemptId! }).unwrap();
       const response = await submitExam({
-        attemptId,
+        attemptId: attemptId!,
         answers: selectedAnswers,
       }).unwrap();
-      const resultData = response.data;
-      setResults(resultData);
-      // NEW: Set the dynamic feedback based on the score.
-      setFeedback(
-        getFeedbackForScore(resultData.score, resultData.totalQuestions)
-      );
+      dispatch({ type: "SUBMIT_SUCCESS", payload: response.data });
     } catch (err) {
       console.error("Failed to submit exam:", err);
+      dispatch({ type: "SUBMIT_FAILURE", payload: err });
     }
-  }, [attemptId, selectedAnswers, submitExam, isSubmitting, results]);
+  }, [attemptId, selectedAnswers, lockAttempt, submitExam, status]);
 
-  // --- SEPARATED EFFECTS for robust timer and submission logic ---
   useEffect(() => {
-    if (!examData || results) return;
+    if (status === "loading" || status === "starting") {
+      startNewExam();
+    }
+  }, [status, startNewExam]);
+
+  // UPDATED: The timer now calls handleSubmit directly, eliminating the race condition.
+  useEffect(() => {
+    if (!startTime || !examData || status !== "in_progress") return;
+
+    const totalDurationMillis = examData.questions.length * 60 * 1000;
     const interval = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          setIsTimeUp(true);
-          return 0;
-        }
-        return prev - 1;
-      });
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(
+        0,
+        Math.round((totalDurationMillis - elapsed) / 1000)
+      );
+      dispatch({ type: "TIMER_TICK", payload: remaining });
+      if (remaining <= 0) {
+        handleSubmit(); // Call submission logic directly
+        clearInterval(interval);
+      }
     }, 1000);
     return () => clearInterval(interval);
-  }, [examData, results]);
+  }, [startTime, examData, status, handleSubmit]);
 
-  useEffect(() => {
-    if (isTimeUp && !results) {
-      handleSubmit();
-    }
-  }, [isTimeUp, results, handleSubmit]);
+  // REMOVED: The complex useEffect that watched the 'submitting' status is now gone.
 
-  const handleSelectAnswer = (questionId: string, optionIndex: number) => {
-    if (results || isTimeUp) return;
-    setSelectedAnswers((prev) => ({ ...prev, [questionId]: optionIndex }));
-  };
+  const feedback = results
+    ? getFeedbackForScore(results.score, results.totalQuestions)
+    : null;
+  const isExamActive = status === "in_progress" || status === "submitting";
 
-  // CHANGE: The "Try Again" button now has fully working logic.
-  const handleReset = async () => {
-    setIsResetting(true);
-    // Reset all state variables to their initial values.
-    setExamData(null);
-    setAttemptId(null);
-    setSelectedAnswers({});
-    setResults(null);
-    setTimer(0);
-    setIsTimeUp(false);
-    setFeedback(null);
-    // Fetch a completely new exam attempt.
-    await startNewExam();
-    setIsResetting(false);
-  };
-
-  const formatTime = (seconds: number) => {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(
-      2,
-      "0"
-    )}`;
-  };
-
-  // --- Render Logic ---
-  if (isStarting) {
+  if (status === "loading" || status === "starting") {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
-        <p className="ml-4">Preparing your exam...</p>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <p className="ml-4 text-muted-foreground">Preparing your exam...</p>
       </div>
     );
   }
 
-  if (startError) {
+  if (status === "error") {
     return (
-      <Alert variant="destructive" className="mt-8">
+      <Alert variant="destructive" className="mt-8 max-w-3xl mx-auto">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>{getApiErrorMessage(startError)}</AlertDescription>
+        <AlertDescription>{getApiErrorMessage(error)}</AlertDescription>
       </Alert>
     );
   }
 
-  if (!examData) {
-    return null;
-  }
+  if (!examData) return null;
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
@@ -205,22 +244,23 @@ export default function ExamDetails({ examId }: ExamDetailsProps) {
             <div
               className={cn(
                 "text-lg font-mono font-semibold",
-                isTimeUp && "text-destructive"
+                timer < 60 && isExamActive && "text-yellow-500",
+                timer <= 0 && isExamActive && "text-destructive"
               )}
             >
-              {isTimeUp ? "Time's Up!" : formatTime(timer)}
+              {timer <= 0 && isExamActive ? "Time's Up!" : formatTime(timer)}
             </div>
           </div>
         </CardHeader>
         <CardContent className="pt-6 space-y-8">
-          {/* NEW: Completely redesigned results card with dynamic feedback */}
-          {results && feedback && (
+          {status === "finished" && results && feedback && (
             <div
               className={cn(
-                "text-center p-6 border-b rounded-lg",
+                "text-center p-6 border rounded-lg",
                 feedback.color
                   .replace("text-", "bg-")
-                  .replace("-500", "-500/10")
+                  .replace("-500", "-500/10"),
+                feedback.color.replace("text-", "border-")
               )}
             >
               <h2 className={`text-3xl font-bold ${feedback.color}`}>
@@ -230,8 +270,11 @@ export default function ExamDetails({ examId }: ExamDetailsProps) {
                 Your Score: {results.score} / {results.totalQuestions}
               </p>
               <div className="flex justify-center gap-4">
-                <Button onClick={handleReset} disabled={isResetting}>
-                  {isResetting && (
+                <Button
+                  onClick={() => dispatch({ type: "RESET" })}
+                  disabled={status === "starting"}
+                >
+                  {status === "starting" && (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   )}
                   Try Again
@@ -254,30 +297,36 @@ export default function ExamDetails({ examId }: ExamDetailsProps) {
                   const isCorrect =
                     results?.correctAnswers[q.id] === optionIndex;
                   const isWrong = isSelected && !isCorrect;
-
                   return (
                     <Button
                       key={optionIndex}
                       variant="outline"
                       className={cn(
                         "w-full justify-start h-auto py-3 whitespace-normal text-left",
-                        isSelected && !results && "ring-2 ring-primary",
-                        results &&
+                        isSelected &&
+                          status === "in_progress" &&
+                          "ring-2 ring-primary",
+                        status === "finished" &&
                           isCorrect &&
-                          "bg-green-500/20 border-green-500 text-green-800 dark:text-green-300 hover:bg-green-500/30",
-                        results &&
+                          "bg-green-500/20 border-green-500",
+                        status === "finished" &&
                           isWrong &&
-                          "bg-red-500/20 border-red-500 text-red-800 dark:text-red-300 hover:bg-red-500/30"
+                          "bg-red-500/20 border-red-500"
                       )}
-                      onClick={() => handleSelectAnswer(q.id, optionIndex)}
-                      disabled={!!results || isTimeUp}
+                      onClick={() =>
+                        dispatch({
+                          type: "SELECT_ANSWER",
+                          payload: { questionId: q.id, index: optionIndex },
+                        })
+                      }
+                      disabled={status !== "in_progress"}
                     >
                       <div className="flex items-center w-full">
                         <span className="flex-1">{option}</span>
-                        {results && isCorrect && (
+                        {status === "finished" && isCorrect && (
                           <Check className="h-5 w-5 text-green-600 ml-2" />
                         )}
-                        {results && isWrong && (
+                        {status === "finished" && isWrong && (
                           <X className="h-5 w-5 text-red-600 ml-2" />
                         )}
                       </div>
@@ -288,14 +337,17 @@ export default function ExamDetails({ examId }: ExamDetailsProps) {
             </div>
           ))}
 
-          {!results && (
+          {isExamActive && (
             <div className="pt-6 border-t">
               <Button
                 onClick={handleSubmit}
-                disabled={isSubmitting || isTimeUp}
+                disabled={
+                  status !== "in_progress" ||
+                  Object.keys(selectedAnswers).length === 0
+                }
                 className="w-full"
               >
-                {isSubmitting ? (
+                {status === "submitting" ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />{" "}
                     Submitting...
@@ -304,9 +356,9 @@ export default function ExamDetails({ examId }: ExamDetailsProps) {
                   "Submit Exam"
                 )}
               </Button>
-              {submitError && (
-                <p className="text-destructive text-sm mt-2">
-                  {getApiErrorMessage(submitError)}
+              {error && status === "in_progress" && (
+                <p className="text-destructive text-sm mt-2 text-center">
+                  {getApiErrorMessage(error)}
                 </p>
               )}
             </div>

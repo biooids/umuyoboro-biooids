@@ -1,15 +1,17 @@
-// src/components/pages/exercises/ExerciseDetails.tsx
-
 "use client";
 
-import { useState, useEffect } from "react";
-import {
-  useStartExerciseMutation,
-  useSubmitAnswerMutation,
-  useFinalizeExerciseMutation,
-} from "@/lib/features/exercises/exerciseApiSlice";
+import { useReducer, useEffect, useCallback } from "react";
+import Link from "next/link";
+import { useGetExerciseByIdQuery } from "@/lib/features/exercises/exerciseApiSlice";
+import { ExerciseQuestion } from "@/lib/features/exercises/exerciseTypes";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Loader2,
@@ -18,13 +20,61 @@ import {
   Check,
   X,
   ArrowRight,
+  BookOpen,
 } from "lucide-react";
-import { cn, getApiErrorMessage } from "@/lib/utils/utils";
 import { Progress } from "@/components/ui/progress";
-import Link from "next/link";
-import { ExerciseQuestion } from "@/lib/features/exercises/exerciseTypes";
+import { cn, getApiErrorMessage } from "@/lib/utils/utils";
 
+// --- Type Definitions ---
+type AnswerInfo = {
+  selected: number;
+  isCorrect: boolean;
+  correctAnswer: number;
+};
 type Feedback = { message: string; color: string; emoji: string };
+
+// --- State and Action types for the reducer ---
+type State = {
+  status: "loading" | "active" | "finished" | "error";
+  title: string;
+  questions: ExerciseQuestion[];
+  currentIndex: number;
+  userAnswers: Record<string, AnswerInfo>;
+  score: number;
+  timer: number;
+  showHint: boolean;
+  feedback: Feedback | null;
+  error: any | null;
+};
+
+type Action =
+  | {
+      type: "FETCH_SUCCESS";
+      payload: { title: string; questions: ExerciseQuestion[] };
+    }
+  | { type: "FETCH_FAILURE"; payload: any }
+  | { type: "SELECT_ANSWER"; payload: { selectedIndex: number } }
+  | { type: "TIMER_TICK" }
+  | { type: "NEXT_QUESTION" }
+  | { type: "FINISH_EXERCISE" }
+  | { type: "TOGGLE_HINT" }
+  | { type: "RESTART" };
+
+// --- Initial State ---
+const initialState: State = {
+  status: "loading",
+  title: "",
+  questions: [],
+  currentIndex: 0,
+  userAnswers: {},
+  score: 0,
+  timer: 60,
+  showHint: false,
+  feedback: null,
+  error: null,
+};
+
+// --- Helper Functions ---
 const getFeedbackForScore = (score: number, total: number): Feedback => {
   if (total === 0)
     return {
@@ -58,170 +108,229 @@ const getFeedbackForScore = (score: number, total: number): Feedback => {
   };
 };
 
-interface ExerciseDetailsProps {
-  exerciseId: string;
+// --- Reducer function ---
+function exerciseReducer(state: State, action: Action): State {
+  const currentQuestion = state.questions[state.currentIndex];
+
+  switch (action.type) {
+    case "FETCH_SUCCESS":
+      return { ...initialState, status: "active", ...action.payload };
+    case "FETCH_FAILURE":
+      return { ...initialState, status: "error", error: action.payload };
+    case "SELECT_ANSWER": {
+      if (!currentQuestion || state.userAnswers[currentQuestion.id])
+        return state;
+      const { selectedIndex } = action.payload;
+      const isCorrect = selectedIndex === currentQuestion.correctAnswerIndex;
+      return {
+        ...state,
+        score: isCorrect ? state.score + 1 : state.score,
+        userAnswers: {
+          ...state.userAnswers,
+          [currentQuestion.id]: {
+            selected: selectedIndex,
+            isCorrect: isCorrect,
+            correctAnswer: currentQuestion.correctAnswerIndex,
+          },
+        },
+      };
+    }
+    case "TIMER_TICK":
+      return { ...state, timer: state.timer - 1 };
+    case "NEXT_QUESTION":
+      return {
+        ...state,
+        currentIndex: state.currentIndex + 1,
+        timer: 60,
+        showHint: false,
+      };
+    case "FINISH_EXERCISE":
+      return {
+        ...state,
+        status: "finished",
+        feedback: getFeedbackForScore(state.score, state.questions.length),
+      };
+    case "TOGGLE_HINT":
+      return { ...state, showHint: !state.showHint };
+    case "RESTART":
+      return {
+        ...initialState,
+        title: state.title,
+        questions: state.questions,
+        status: "active",
+      };
+    default:
+      return state;
+  }
 }
 
-export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
-  const [startExercise, { isLoading: isStarting, error: startError }] =
-    useStartExerciseMutation();
-  const [submitAnswer, { isLoading: isSubmitting }] = useSubmitAnswerMutation();
-  const [finalizeExercise] = useFinalizeExerciseMutation();
+// --- Component Definition ---
+export default function ExerciseDetails({
+  exerciseId,
+}: {
+  exerciseId: string;
+}) {
+  const [state, dispatch] = useReducer(exerciseReducer, initialState);
+  const {
+    status,
+    title,
+    questions,
+    currentIndex,
+    userAnswers,
+    score,
+    timer,
+    showHint,
+    feedback,
+    error,
+  } = state;
 
-  const [attemptId, setAttemptId] = useState<string | null>(null);
-  const [exerciseData, setExerciseData] = useState<{
-    title: string;
-    questions: ExerciseQuestion[];
-  } | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [userAnswers, setUserAnswers] = useState<
-    Record<
-      string,
-      { selected: number; isCorrect: boolean; correctAnswer: number }
-    >
-  >({});
-  const [showHint, setShowHint] = useState(false);
-  const [score, setScore] = useState(0);
-  const [feedback, setFeedback] = useState<Feedback | null>(null);
-  const [timer, setTimer] = useState(60);
-  const [apiError, setApiError] = useState<string | null>(null);
-
-  const questions = exerciseData?.questions ?? [];
-  const currentQuestion = questions[currentIndex];
-  const isAnswered = userAnswers[currentQuestion?.id] !== undefined;
-
-  useEffect(() => {
-    const beginExercise = async () => {
-      try {
-        const response = await startExercise({ exerciseId }).unwrap();
-        setAttemptId(response.data.attemptId);
-        setExerciseData(response.data.exercise);
-      } catch (err) {
-        setApiError(getApiErrorMessage(err));
-      }
-    };
-    beginExercise();
-  }, [exerciseId, startExercise]);
+  const {
+    data: response,
+    isLoading,
+    isError,
+    error: fetchError,
+  } = useGetExerciseByIdQuery({ exerciseId });
 
   useEffect(() => {
-    if (isAnswered || feedback) return;
-    setTimer(60);
-    const interval = setInterval(() => {
-      setTimer((prev) => {
-        if (prev <= 1) {
-          clearInterval(interval);
-          handleSelectAnswer(-1);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [currentIndex, isAnswered, feedback]);
-
-  const handleSelectAnswer = async (selectedOptionIndex: number) => {
-    if (isAnswered || !attemptId || !currentQuestion) return;
-    setApiError(null);
-    try {
-      const response = await submitAnswer({
-        attemptId,
-        answerData: { questionId: currentQuestion.id, selectedOptionIndex },
-      }).unwrap();
-
-      const { isCorrect, correctAnswerIndex } = response.data;
-      if (isCorrect) {
-        setScore((prev) => prev + 1);
-      }
-      setUserAnswers((prev) => ({
-        ...prev,
-        [currentQuestion.id]: {
-          selected: selectedOptionIndex,
-          isCorrect,
-          correctAnswer: correctAnswerIndex,
+    if (response) {
+      dispatch({
+        type: "FETCH_SUCCESS",
+        payload: {
+          title: response.data.title,
+          questions: response.data.questions,
         },
-      }));
-    } catch (err: any) {
-      if (err.status === 408) {
-        // Handle server-side timeout
-        const correctAnswer = parseInt(err.data.message.match(/\d+$/)[0]) - 1;
-        setUserAnswers((prev) => ({
-          ...prev,
-          [currentQuestion.id]: {
-            selected: -1,
-            isCorrect: false,
-            correctAnswer,
-          },
-        }));
-      }
-      setApiError(getApiErrorMessage(err));
+      });
+    } else if (isError && fetchError) {
+      dispatch({ type: "FETCH_FAILURE", payload: fetchError });
     }
-  };
+  }, [response, isError, fetchError]);
 
-  const handleNext = async () => {
-    if (currentIndex < questions.length - 1) {
-      setCurrentIndex((prev) => prev + 1);
-      setShowHint(false);
-    } else {
-      if (attemptId) {
-        const finalData = await finalizeExercise({ attemptId }).unwrap();
-        const finalScore = finalData.data.score;
-        setFeedback(getFeedbackForScore(finalScore, questions.length));
+  const currentQuestion = questions[currentIndex];
+  const isAnswered = currentQuestion
+    ? userAnswers[currentQuestion.id] !== undefined
+    : false;
+
+  useEffect(() => {
+    if (status === "active" && !isAnswered) {
+      if (timer <= 0) {
+        dispatch({ type: "SELECT_ANSWER", payload: { selectedIndex: -1 } });
+        return;
       }
+      const interval = setInterval(
+        () => dispatch({ type: "TIMER_TICK" }),
+        1000
+      );
+      return () => clearInterval(interval);
     }
-  };
+  }, [status, isAnswered, timer]);
 
-  const handleReset = () => window.location.reload();
-
-  const effectiveError = apiError || getApiErrorMessage(startError);
-
-  if (isStarting)
+  // --- Render Logic ---
+  if (isLoading || status === "loading") {
     return (
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center min-h-[60vh]">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
-  if (effectiveError)
+  }
+
+  if (status === "error") {
     return (
-      <Alert variant="destructive" className="m-4">
+      <Alert variant="destructive" className="m-4 max-w-2xl mx-auto">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>{effectiveError}</AlertDescription>
+        <AlertDescription>{getApiErrorMessage(error)}</AlertDescription>
       </Alert>
     );
-  if (!exerciseData || !currentQuestion)
-    return (
-      <p className="text-center mt-8">
-        Exercise not found or has no questions.
-      </p>
-    );
+  }
 
-  if (feedback) {
+  if (status === "finished" && feedback) {
     return (
-      <Card
-        className={cn(
-          "max-w-2xl mx-auto my-8 border-2",
-          feedback.color.replace("text-", "border-")
-        )}
-      >
-        <CardHeader className="text-center">
-          <div className={`text-6xl mx-auto mb-4`}>{feedback.emoji}</div>
-          <CardTitle className={`text-3xl font-bold ${feedback.color}`}>
-            {feedback.message}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="text-center space-y-4">
-          <p className="text-4xl font-bold my-4">
-            Your Final Score: {score} / {questions.length}
-          </p>
-          <div className="flex gap-4 justify-center">
-            <Button onClick={handleReset}>Try Again</Button>
-            <Button variant="outline" asChild>
-              <Link href="/exercises">Back to Exercises</Link>
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="max-w-3xl mx-auto py-8 px-4 space-y-8">
+        <Card
+          className={cn(
+            "text-center",
+            feedback.color.replace("text-", "border-")
+          )}
+        >
+          <CardHeader>
+            <div className={`text-6xl mx-auto mb-4`}>{feedback.emoji}</div>
+            <CardTitle className={`text-3xl font-bold ${feedback.color}`}>
+              {feedback.message}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-4xl font-bold">
+              Your Final Score: {score} / {questions.length}
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Button onClick={() => dispatch({ type: "RESTART" })}>
+                Try Again
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/exercises">Back to Exercises</Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Answer Review</CardTitle>
+            <CardDescription>A breakdown of your answers.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-8">
+            {questions.map((q, index) => {
+              const answerInfo = userAnswers[q.id];
+              return (
+                <div
+                  key={q.id}
+                  className="border-t pt-6 first:border-t-0 first:pt-0"
+                >
+                  <p className="font-semibold mb-4">
+                    {index + 1}. {q.text}
+                  </p>
+                  <div className="space-y-2">
+                    {q.options.map((option, optionIndex) => {
+                      const isSelected = answerInfo?.selected === optionIndex;
+                      const isCorrectAnswer =
+                        q.correctAnswerIndex === optionIndex;
+                      return (
+                        <div
+                          key={optionIndex}
+                          className={cn(
+                            "flex items-center w-full justify-start h-auto p-3 rounded-md border text-left",
+                            isCorrectAnswer &&
+                              "bg-green-500/20 border-green-500",
+                            isSelected &&
+                              !isCorrectAnswer &&
+                              "bg-red-500/20 border-red-500"
+                          )}
+                        >
+                          <span className="flex-1">{option}</span>
+                          {isSelected &&
+                            (isCorrectAnswer ? (
+                              <Check className="h-5 w-5 text-green-600 ml-2" />
+                            ) : (
+                              <X className="h-5 w-5 text-red-600 ml-2" />
+                            ))}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </CardContent>
+        </Card>
+      </div>
     );
   }
+
+  if (!currentQuestion) {
+    return <p className="text-center mt-8">Exercise has no questions.</p>;
+  }
+
+  const answerInfo = userAnswers[currentQuestion.id];
+  const isLastQuestion = currentIndex >= questions.length - 1;
 
   return (
     <div className="max-w-3xl mx-auto py-8 px-4">
@@ -237,22 +346,24 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
       <Card>
         <CardHeader>
           <div className="flex justify-between items-center">
-            <CardTitle>{exerciseData.title}</CardTitle>
-            <div className="text-lg font-mono font-semibold">{timer}s</div>
+            <CardTitle>{title}</CardTitle>
+            <div
+              className={cn(
+                "text-lg font-mono font-semibold",
+                !isAnswered && timer <= 10 && "text-destructive"
+              )}
+            >
+              {/* --- THIS IS THE FIX --- */}
+              {/* It no longer shows "Answered!", just the frozen timer value. */}
+              {`${timer}s`}
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          {apiError && (
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>{apiError}</AlertDescription>
-            </Alert>
-          )}
           <div>
             <p className="font-semibold text-lg mb-4">{currentQuestion.text}</p>
             <div className="space-y-2">
               {currentQuestion.options.map((option, optionIndex) => {
-                const answerInfo = userAnswers[currentQuestion.id];
                 const isSelected = answerInfo?.selected === optionIndex;
                 const isCorrectAnswer =
                   answerInfo?.correctAnswer === optionIndex;
@@ -265,23 +376,25 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
                       isAnswered &&
                         isCorrectAnswer &&
                         "bg-green-500/20 border-green-500 text-green-800 dark:text-green-300",
-                      isSelected &&
-                        answerInfo &&
+                      isAnswered &&
+                        isSelected &&
                         !answerInfo.isCorrect &&
                         "bg-red-500/20 border-red-500 text-red-800 dark:text-red-300"
                     )}
-                    onClick={() => handleSelectAnswer(optionIndex)}
-                    disabled={isAnswered || isSubmitting}
+                    onClick={() =>
+                      dispatch({
+                        type: "SELECT_ANSWER",
+                        payload: { selectedIndex: optionIndex },
+                      })
+                    }
+                    disabled={isAnswered}
                   >
                     <div className="flex items-center w-full">
                       <span className="flex-1">{option}</span>
-                      {isSubmitting && isSelected && (
-                        <Loader2 className="h-5 w-5 ml-2 animate-spin" />
-                      )}
                       {isAnswered && isCorrectAnswer && (
                         <Check className="h-5 w-5 text-green-600 ml-2" />
                       )}
-                      {isSelected && answerInfo && !answerInfo.isCorrect && (
+                      {isAnswered && isSelected && !answerInfo.isCorrect && (
                         <X className="h-5 w-5 text-red-600 ml-2" />
                       )}
                     </div>
@@ -295,7 +408,7 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => setShowHint(!showHint)}
+                onClick={() => dispatch({ type: "TOGGLE_HINT" })}
               >
                 <Lightbulb className="mr-2 h-4 w-4" />
                 {showHint ? "Hide" : "Show"} Hint
@@ -307,13 +420,18 @@ export default function ExerciseDetails({ exerciseId }: ExerciseDetailsProps) {
               )}
             </div>
           )}
+
           {isAnswered && (
             <div className="flex justify-end pt-6 border-t">
-              <Button onClick={handleNext}>
-                {currentIndex === questions.length - 1
-                  ? "Finish Exercise"
-                  : "Next Question"}
-                <ArrowRight className="ml-2 h-4 w-4" />
+              <Button
+                onClick={() =>
+                  dispatch({
+                    type: isLastQuestion ? "FINISH_EXERCISE" : "NEXT_QUESTION",
+                  })
+                }
+              >
+                {isLastQuestion ? "Finish Exercise" : "Next Question"}
+                {!isLastQuestion && <ArrowRight className="ml-2 h-4 w-4" />}
               </Button>
             </div>
           )}

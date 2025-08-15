@@ -1,14 +1,8 @@
-// src/features/exams/exam.service.ts
-
 import prisma from "../../db/prisma.js";
 import { createHttpError } from "../../utils/error.factory.js";
 import { SubmitExamInputDto } from "./exam.types.js";
 
 class ExamService {
-  /**
-   * Retrieves a list of all exams, selecting only the fields
-   * necessary for a public listing to keep the payload small.
-   */
   async getAllExams() {
     return prisma.exam.findMany({
       orderBy: { examNumber: "asc" },
@@ -16,15 +10,6 @@ class ExamService {
     });
   }
 
-  /**
-   * Initiates an exam for a user. This involves verifying access rights,
-   * creating a new attempt record in the database, and returning the questions
-   * for the exam *without* the correct answers to prevent cheating.
-   *
-   * @param examId The ID of the exam to start.
-   * @param userId The ID of the user starting the exam.
-   * @param userIsPaid The payment status of the user.
-   */
   async startExam(examId: string, userId: string, userIsPaid: boolean) {
     const exam = await prisma.exam.findUnique({
       where: { id: examId },
@@ -35,74 +20,81 @@ class ExamService {
       },
     });
 
-    if (!exam) {
-      throw createHttpError(404, "Exam not found.");
-    }
-
+    if (!exam) throw createHttpError(404, "Exam not found.");
     if (!exam.isFree && !userIsPaid) {
       throw createHttpError(403, "Payment is required to access this exam.");
     }
 
     const attempt = await prisma.userExamAttempt.create({
-      data: {
-        userId,
-        examId,
-        answers: {},
-      },
+      data: { userId, examId, answers: {} },
     });
 
-    return { exam, attemptId: attempt.id };
+    return {
+      exam,
+      attemptId: attempt.id,
+      startedAt: attempt.startedAt,
+    };
   }
 
-  /**
-   * Submits a user's answers for a given attempt. It validates the attempt,
-   * calculates the score, saves the results, and returns the final score
-   * along with the correct answers for review.
-   *
-   * @param attemptId The ID of the exam attempt to submit.
-   * @param input The user's submitted answers.
-   * @param userId The ID of the user submitting the attempt for ownership verification.
-   */
+  async lockAttempt(attemptId: string, userId: string) {
+    const attempt = await prisma.userExamAttempt.findUnique({
+      where: { id: attemptId },
+    });
+
+    if (!attempt || attempt.userId !== userId) {
+      throw createHttpError(
+        403,
+        "You are not authorized to lock this attempt."
+      );
+    }
+    if (!attempt.lockedAt && !attempt.completedAt) {
+      await prisma.userExamAttempt.update({
+        where: { id: attemptId },
+        data: { lockedAt: new Date() },
+      });
+    }
+    return;
+  }
+
   async submitExam(
     attemptId: string,
     input: SubmitExamInputDto,
     userId: string
   ) {
+    // 1. Find the attempt and include related questions for scoring
     const attempt = await prisma.userExamAttempt.findUnique({
       where: { id: attemptId },
       include: {
-        exam: {
-          include: {
-            _count: {
-              select: { questions: true },
-            },
-          },
-        },
+        exam: { include: { questions: true } },
       },
     });
 
+    // 2. Perform validation and ownership checks
     if (!attempt || attempt.userId !== userId) {
       throw createHttpError(
         403,
         "You are not authorized to submit this attempt."
       );
     }
-
     if (attempt.completedAt) {
       throw createHttpError(400, "This exam has already been submitted.");
     }
 
-    const questionCount = attempt.exam._count.questions;
+    // 3. Securely determine the official end time
+    const officialEndTime = attempt.lockedAt ?? new Date();
+    const timeElapsed = officialEndTime.getTime() - attempt.startedAt.getTime();
+    const questionCount = attempt.exam.questions.length;
     const allowedDurationMillis = questionCount * 60 * 1000;
-    const timeElapsed = new Date().getTime() - attempt.startedAt.getTime();
+    const GRACE_PERIOD_MILLIS = 5000;
 
-    if (timeElapsed > allowedDurationMillis) {
+    // 4. Check if the submission is late (with a grace period)
+    if (timeElapsed > allowedDurationMillis + GRACE_PERIOD_MILLIS) {
       await prisma.userExamAttempt.update({
         where: { id: attemptId },
         data: {
           score: 0,
           completedAt: new Date(),
-          answers: input.answers,
+          lockedAt: officialEndTime,
         },
       });
       throw createHttpError(
@@ -111,101 +103,113 @@ class ExamService {
       );
     }
 
-    const questions = await prisma.question.findMany({
-      where: { examId: attempt.examId },
-    });
-
+    // 5. Calculate score and prepare answer records
     let score = 0;
     const correctAnswers: Record<string, number> = {};
+    const answersToCreate = [];
 
-    for (const question of questions) {
+    for (const question of attempt.exam.questions) {
       correctAnswers[question.id] = question.correctAnswerIndex;
-      if (input.answers[question.id] === question.correctAnswerIndex) {
-        score++;
+      const userAnswerIndex = input.answers[question.id];
+
+      if (userAnswerIndex !== undefined) {
+        if (userAnswerIndex === question.correctAnswerIndex) {
+          score++;
+        }
+        answersToCreate.push({
+          attemptId: attemptId,
+          questionId: question.id,
+          selectedOptionIndex: userAnswerIndex,
+        });
       }
     }
 
-    const updatedAttempt = await prisma.userExamAttempt.update({
-      where: { id: attemptId },
-      data: {
-        score,
-        completedAt: new Date(),
-        answers: input.answers,
-      },
-    });
+    // --- THIS IS THE FIX ---
+    // We build the transaction dynamically to prevent errors with empty arrays.
+    const transactionOperations = [];
+
+    // Always update the attempt with the score and completion status.
+    transactionOperations.push(
+      prisma.userExamAttempt.update({
+        where: { id: attemptId },
+        data: {
+          score,
+          completedAt: new Date(),
+          lockedAt: officialEndTime,
+        },
+      })
+    );
+
+    // Only add the createMany operation if there are answers to create.
+    if (answersToCreate.length > 0) {
+      transactionOperations.push(
+        prisma.userExamAnswer.createMany({
+          data: answersToCreate,
+        })
+      );
+    }
+
+    // Execute the transaction. This will no longer fail if no answers were submitted.
+    await prisma.$transaction(transactionOperations);
 
     return {
-      score: updatedAttempt.score,
-      totalQuestions: questions.length,
+      score,
+      totalQuestions: questionCount,
       correctAnswers,
     };
   }
-
-  /**
-   * Retrieves a summary list of all completed exam attempts for a specific user.
-   * @param userId The ID of the user whose history is being requested.
-   */
   async getExamHistory(userId: string) {
-    const attempts = await prisma.userExamAttempt.findMany({
-      where: {
-        userId: userId,
-        completedAt: { not: null },
-      },
+    return prisma.userExamAttempt.findMany({
+      where: { userId, completedAt: { not: null } },
       select: {
         id: true,
         score: true,
         completedAt: true,
         exam: {
-          select: {
-            title: true,
-            _count: {
-              select: { questions: true },
-            },
-          },
+          select: { title: true, _count: { select: { questions: true } } },
         },
       },
-      orderBy: {
-        completedAt: "desc",
-      },
+      orderBy: { completedAt: "desc" },
     });
-    return attempts;
   }
 
-  /**
-   * Retrieves the detailed data for a single exam attempt for review.
-   * Includes a critical security check to ensure the user owns the attempt.
-   * @param attemptId The ID of the exam attempt to review.
-   * @param userId The ID of the user requesting the review.
-   */
   async getExamReview(attemptId: string, userId: string) {
-    const attempt = await prisma.userExamAttempt.findUnique({
-      where: { id: attemptId },
+    const attempt = await prisma.userExamAttempt.findFirst({
+      where: { id: attemptId, userId },
+      // --- CHANGE: Include the new answers relation ---
       include: {
-        exam: {
-          include: {
-            questions: true,
+        exam: { include: { questions: true } },
+        answers: {
+          select: {
+            questionId: true,
+            selectedOptionIndex: true,
           },
         },
       },
     });
 
-    if (!attempt || attempt.userId !== userId) {
+    if (!attempt) {
       throw createHttpError(
-        403,
-        "You are not authorized to view this exam result."
+        404,
+        "Attempt not found or you are not authorized to view it."
       );
     }
-
     if (!attempt.completedAt) {
       throw createHttpError(400, "This exam has not been completed yet.");
     }
+
+    // Transform the answers array into the simple key-value object the frontend expects
+    const userAnswersMap = attempt.answers.reduce((acc, answer) => {
+      acc[answer.questionId] = answer.selectedOptionIndex;
+      return acc;
+    }, {} as Record<string, number>);
 
     return {
       attempt: {
         id: attempt.id,
         score: attempt.score,
         completedAt: attempt.completedAt,
-        answers: attempt.answers,
+        answers: userAnswersMap, // Return the transformed map
       },
       exam: {
         title: attempt.exam.title,

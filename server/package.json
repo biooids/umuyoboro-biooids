@@ -10,12 +10,10 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
+    "seed": "tsx --require dotenv/config src/db/seed.ts",
     "test": "dotenv -e .env.test -- vitest run",
     "test:watch": "dotenv -e .env.test -- vitest",
     "prisma:reset": "tsx --require dotenv/config src/db/reset.ts"
-  },
-  "prisma": {
-    "seed": "tsx --require dotenv/config src/db/seed.ts"
   },
   "keywords": [],
   "author": "",

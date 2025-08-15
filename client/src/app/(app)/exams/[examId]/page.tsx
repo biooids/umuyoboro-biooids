@@ -1,12 +1,17 @@
 //src/app/(app)/exams/[examId]/page.tsx
-"use client";
 
 import ExamDetails from "@/components/pages/exams/ExamDetails";
 
-export default function ExamTakingPage({
+export default async function ExamTakingPage({
   params,
 }: {
-  params: { examId: string };
+  params: Promise<{ examId: string }>;
 }) {
-  return <ExamDetails examId={params.examId} />;
+  const { examId } = await params;
+
+  return (
+    <div>
+      <ExamDetails examId={examId} />;
+    </div>
+  );
 }

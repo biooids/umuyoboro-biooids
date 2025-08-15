@@ -1,11 +1,19 @@
-//src/app/(app)/exercises/[exerciseId]/page.tsx
-
 import ExerciseDetails from "@/components/pages/exercises/ExerciseDetails";
 
-export default function ExerciseTakingPage({
+// The page is now an async function
+export default async function ExerciseTakingPage({
   params,
 }: {
-  params: { exerciseId: string };
+  // The params prop is a Promise
+  params: Promise<{ exerciseId: string }>;
 }) {
-  return <ExerciseDetails exerciseId={params.exerciseId} />;
+  // We await the promise to get the actual ID
+  const { exerciseId } = await params;
+
+  // Then we pass the clean string prop to our client component
+  return (
+    <div>
+      <ExerciseDetails exerciseId={exerciseId} />
+    </div>
+  );
 }

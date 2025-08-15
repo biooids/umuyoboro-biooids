@@ -1,5 +1,3 @@
-// src/features/exams/exam.controller.ts
-
 import { Request, Response } from "express";
 import { asyncHandler } from "../../middleware/asyncHandler.js";
 import { examService } from "./exam.service.js";
@@ -23,6 +21,16 @@ class ExamController {
 
     const result = await examService.startExam(examId, userId, userIsPaid);
     res.status(200).json({ status: "success", data: result });
+  });
+
+  /**
+   * Handles the request to lock an exam attempt, marking the official end time.
+   */
+  lockAttempt = asyncHandler(async (req: Request, res: Response) => {
+    const { attemptId } = req.params;
+    const userId = req.user!.id;
+    await examService.lockAttempt(attemptId, userId);
+    res.status(200).json({ status: "success", message: "Attempt locked." });
   });
 
   /**

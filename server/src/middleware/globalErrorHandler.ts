@@ -18,6 +18,8 @@ export const globalErrorHandler: ErrorRequestHandler = (
   res: Response,
   _next: NextFunction // Although _next is unused, it's required for Express to recognize this as an error handler.
 ): void => {
+  console.error("--- GLOBAL ERROR HANDLER CAUGHT ---", err);
+
   let statusCode = 500;
   let message = "An internal server error occurred.";
   let status = "error";
