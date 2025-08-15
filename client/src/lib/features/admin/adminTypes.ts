@@ -1,5 +1,3 @@
-// src/lib/features/admin/adminTypes.ts
-
 import { Role } from "@/types/role.enum";
 
 // --- Data Shapes ---
@@ -12,17 +10,17 @@ export interface AdminUserRow {
   username: string;
   phone: string;
   role: Role;
-
   createdAt: string; // ISO date string
 }
 
 // --- API Query Arguments ---
+// UPDATED: All optional fields now explicitly allow 'undefined' for stricter type safety.
 export interface AdminApiQuery {
-  page?: number;
-  limit?: number;
-  q?: string;
-  sortBy?: "username" | "createdAt";
-  order?: "asc" | "desc";
+  page?: number | undefined;
+  limit?: number | undefined;
+  q?: string | undefined;
+  sortBy?: "username" | "createdAt" | undefined;
+  order?: "asc" | "desc" | undefined;
 }
 
 // --- Full API Response Shapes ---

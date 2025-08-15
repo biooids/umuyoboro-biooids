@@ -1,5 +1,3 @@
-// src/components/layouts/sidebar/MobileSidebar.tsx
-
 "use client";
 
 import Link from "next/link";
@@ -13,17 +11,16 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-
 import { cn } from "@/lib/utils/utils";
 import { navLinks } from "@/components/shared/nav-links";
+import { useAuth } from "@/lib/hooks/useAuth"; // Import the useAuth hook
 
 /**
- * A slide-out ("sheet") sidebar for mobile screens, triggered by a hamburger menu icon.
- * To avoid redundancy, consider using this for secondary navigation (e.g., settings, profile)
- * while the MobileBottomBar handles primary navigation.
+ * A slide-out ("sheet") sidebar for mobile screens.
  */
 export default function MobileSidebar() {
   const pathname = usePathname();
+  const { user } = useAuth(); // Get the current user
 
   return (
     <Sheet>
@@ -45,7 +42,14 @@ export default function MobileSidebar() {
         <div className="flex-1 mt-4">
           <nav className="grid gap-2 text-base font-medium">
             {navLinks.map((link) => {
-              // CHANGE: Corrected logic to prevent the "Home" link from always being active.
+              // NEW: Check for required role
+              if (
+                link.requiredRole &&
+                (!user || !link.requiredRole.includes(user.role))
+              ) {
+                return null;
+              }
+
               const isActive =
                 link.href === "/"
                   ? pathname === link.href

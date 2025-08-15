@@ -1,6 +1,5 @@
-// src/lib/nav-links.ts
-
-import { Home, Compass, Book, Pen, History } from "lucide-react"; // CHANGE: Import History icon
+import { Home, Compass, Book, Pen, History, ShieldCheck } from "lucide-react";
+import { Role } from "@/types/role.enum"; // Import your Role enum
 
 /**
  * A centralized array of navigation link objects.
@@ -26,10 +25,17 @@ export const navLinks = [
     label: "Exercises",
     icon: Pen,
   },
-  // CHANGE: Add a link to the new exam history page.
   {
     href: "/exams/history",
     label: "History",
     icon: History,
+  },
+  // NEW: Add the link to the admin panel
+  {
+    href: "/admin",
+    label: "Admin",
+    icon: ShieldCheck,
+    // This link will only be shown to users with these roles
+    requiredRole: [Role.SUPER_ADMIN, Role.DEVELOPER],
   },
 ];

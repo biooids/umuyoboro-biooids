@@ -1,30 +1,15 @@
-// src/features/admin/admin.types.ts
+// Query parameters for the admin user list endpoint
+export interface AdminApiQuery {
+  // UPDATED: All optional fields now explicitly allow 'undefined'
+  // This makes the type compatible with the output from your Zod schema.
+  page?: number | undefined;
+  limit?: number | undefined;
+  q?: string | undefined;
+  sortBy?: "username" | "createdAt" | undefined;
+  order?: "asc" | "desc" | undefined;
+}
 
 // The basic stats for the admin dashboard
 export interface AdminDashboardStats {
   totalUsers: number;
-}
-
-// The shape of a user object as returned by the admin API
-export interface AdminUserRow {
-  id: string;
-  username: string;
-  phone: string;
-  createdAt: Date;
-}
-
-// Query parameters for the admin user list endpoint
-export interface AdminApiQuery {
-  page?: number;
-  limit?: number;
-  q?: string; // for searching
-  sortBy?: "username" | "createdAt";
-  order?: "asc" | "desc";
-}
-
-// The shape of the pagination object returned by the API
-export interface PaginationInfo {
-  totalItems: number;
-  totalPages: number;
-  currentPage: number;
 }

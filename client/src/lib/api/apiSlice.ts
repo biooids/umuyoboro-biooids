@@ -1,12 +1,10 @@
-// src/lib/api/apiSlice.ts
-
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithReauth } from "./baseQueryWithReauth";
 
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: baseQueryWithReauth,
-  // CHANGE: Add the new tags for exercise history.
+  // UPDATED: Added tags for the admin feature
   tagTypes: [
     "User",
     "Exam",
@@ -15,6 +13,8 @@ export const apiSlice = createApi({
     "HistoryAttempt",
     "ExerciseHistoryList",
     "ExerciseHistoryAttempt",
+    "AdminStats", // NEW
+    "AdminUsers", // NEW
   ],
   endpoints: (builder) => ({}),
 });

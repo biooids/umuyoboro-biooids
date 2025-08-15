@@ -1,16 +1,12 @@
-// src/lib/features/admin/adminApiSlice.ts
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithReauth } from "../../api/baseQueryWithReauth";
+import { apiSlice } from "../../api/apiSlice"; // <-- Import the main apiSlice
 import {
   AdminApiQuery,
   GetAdminStatsResponse,
   GetAdminUsersResponse,
 } from "./adminTypes";
 
-export const adminApiSlice = createApi({
-  reducerPath: "adminApi",
-  baseQuery: baseQueryWithReauth,
-  tagTypes: ["AdminStats", "AdminUsers"],
+// UPDATED: Changed from 'createApi' to 'apiSlice.injectEndpoints'
+export const adminApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getDashboardStats: builder.query<GetAdminStatsResponse, void>({
       query: () => "/admin/stats",
@@ -19,8 +15,11 @@ export const adminApiSlice = createApi({
     getAdminUsers: builder.query<GetAdminUsersResponse, AdminApiQuery>({
       query: (args) => {
         const params = new URLSearchParams();
+        // This logic correctly handles optional/undefined values
         Object.entries(args).forEach(([key, value]) => {
-          if (value) params.append(key, String(value));
+          if (value !== undefined && value !== null) {
+            params.append(key, String(value));
+          }
         });
         return `/admin/users?${params.toString()}`;
       },
@@ -35,8 +34,9 @@ export const adminApiSlice = createApi({
             ]
           : [{ type: "AdminUsers", id: "LIST" }],
     }),
-    deleteUser: builder.mutation<{ success: boolean; id: string }, string>({
+    deleteUser: builder.mutation<void, string>({
       query: (userId) => ({ url: `/admin/users/${userId}`, method: "DELETE" }),
+      // Correctly invalidates both tags to trigger refetches
       invalidatesTags: ["AdminUsers", "AdminStats"],
     }),
   }),

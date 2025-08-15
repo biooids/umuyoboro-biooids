@@ -1,26 +1,32 @@
-// src/components/layouts/sidebar/Sidebar.tsx
-
 "use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils/utils";
+import { useAuth } from "@/lib/hooks/useAuth"; // Import the useAuth hook
 import { navLinks } from "@/components/shared/nav-links";
 
 /**
  * The main sidebar navigation for desktop screens.
- * It is hidden on mobile.
  */
 export default function Sidebar() {
   const pathname = usePathname();
+  const { user } = useAuth(); // Get the current user from your auth state
 
   return (
     <aside className="hidden h-full w-64 flex-col border-r bg-background md:flex">
-      {/* CHANGE: The header/logo section has been removed and unified into the main Header.tsx */}
       <div className="flex-1 overflow-auto py-4">
         <nav className="grid items-start px-2 text-sm font-medium lg:px-4">
           {navLinks.map((link) => {
-            // This logic correctly handles the active state for the root path.
+            // NEW: Check if the link requires a specific role
+            if (
+              link.requiredRole &&
+              (!user || !link.requiredRole.includes(user.role))
+            ) {
+              // If the role is required but the user doesn't have it, don't render the link
+              return null;
+            }
+
             const isActive =
               link.href === "/"
                 ? pathname === link.href

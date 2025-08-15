@@ -1,10 +1,8 @@
-// src/components/pages/admin/users/UserManagement.tsx
 "use client";
 
 import React, { useState } from "react";
 import { format } from "date-fns";
 import toast from "react-hot-toast";
-
 import { useDebounce } from "@/lib/hooks/useDebounce";
 import {
   useGetAdminUsersQuery,
@@ -24,6 +22,8 @@ import { Input } from "@/components/ui/input";
 import ManagementPageLayout from "../layouts/ManagementPageLayout";
 import PaginationControls from "@/components/shared/PaginationControls";
 import { DeleteConfirmationDialog } from "@/components/shared/DeleteConfirmationDialog";
+import { Badge } from "@/components/ui/badge";
+import { Role } from "@/types/role.enum";
 
 // --- Actions Component for each table row ---
 function UserActions({ user }: { user: AdminUserRow }) {
@@ -69,7 +69,7 @@ export default function UserManagement() {
   return (
     <ManagementPageLayout
       title="User Management"
-      description="View, search, and delete user accounts."
+      description="View, search, and manage user accounts."
       itemCount={pagination?.totalItems ?? 0}
       controls={
         <Input
@@ -86,6 +86,8 @@ export default function UserManagement() {
             <TableRow>
               <TableHead>Username</TableHead>
               <TableHead>Phone Number</TableHead>
+              {/* NEW: Added Role column */}
+              <TableHead>Role</TableHead>
               <TableHead>Date Created</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -93,14 +95,14 @@ export default function UserManagement() {
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center h-24">
+                <TableCell colSpan={5} className="text-center h-24">
                   Loading users...
                 </TableCell>
               </TableRow>
             ) : isError ? (
               <TableRow>
                 <TableCell
-                  colSpan={4}
+                  colSpan={5}
                   className="text-center h-24 text-destructive"
                 >
                   Failed to load users.
@@ -108,7 +110,7 @@ export default function UserManagement() {
               </TableRow>
             ) : users.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center h-24">
+                <TableCell colSpan={5} className="text-center h-24">
                   No users found.
                 </TableCell>
               </TableRow>
@@ -119,6 +121,19 @@ export default function UserManagement() {
                     @{user.username}
                   </TableCell>
                   <TableCell>{user.phone}</TableCell>
+                  {/* NEW: Display the user's role */}
+                  <TableCell>
+                    <Badge
+                      variant={
+                        user.role === Role.SUPER_ADMIN ||
+                        user.role === Role.DEVELOPER
+                          ? "default"
+                          : "secondary"
+                      }
+                    >
+                      {user.role}
+                    </Badge>
+                  </TableCell>
                   <TableCell>
                     {format(new Date(user.createdAt), "PP")}
                   </TableCell>

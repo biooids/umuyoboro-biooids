@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { useSession } from "next-auth/react";
-import { SystemRole } from "@/lib/features/user/userTypes";
+import { useAuth } from "@/lib/hooks/useAuth"; // UPDATED: Using your custom useAuth hook
+import { Role } from "@/types/role.enum"; // UPDATED: Using your app's Role enum
 import AdminSidebar from "@/components/pages/admin/layouts/AdminSidebar";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { PanelLeft, Loader2, ShieldAlert, LogIn } from "lucide-react";
+import { PanelLeft, ShieldAlert, LogIn } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminLayout({
@@ -20,23 +20,14 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { data: session, status } = useSession();
+  const { user } = useAuth(); // UPDATED: Get the user from your Redux state via the hook
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  // Show a loading state while session is being fetched
-  if (status === "loading") {
-    return (
-      <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-
-  // --- THIS IS THE FIX ---
+  // The AuthInitializer component already handles the initial loading state for the whole app,
+  // so we just need to check if the user object exists.
 
   // 1. Handle users who are not logged in at all.
-  if (status === "unauthenticated") {
-    // Instead of an instant redirect, show a clear message and a login button.
+  if (!user) {
     return (
       <div className="flex h-screen items-center justify-center bg-background p-4">
         <Card className="w-full max-w-md text-center">
@@ -63,12 +54,11 @@ export default function AdminLayout({
     );
   }
 
-  const userRole = session?.user?.systemRole;
-  const isAuthorized = userRole && userRole !== SystemRole.USER;
-
   // 2. Handle logged-in users who are not authorized.
+  const isAuthorized =
+    user.role === Role.SUPER_ADMIN || user.role === Role.DEVELOPER;
+
   if (!isAuthorized) {
-    // Show a helpful message for the developer.
     return (
       <div className="flex h-screen items-center justify-center bg-background p-4">
         <Card className="w-full max-w-md text-center">
@@ -78,18 +68,11 @@ export default function AdminLayout({
             </div>
             <CardTitle className="mt-4 text-2xl">Access Denied</CardTitle>
             <CardDescription>
-              Your current role ({userRole}) does not have permission to access
+              Your current role ({user.role}) does not have permission to access
               the admin panel.
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="rounded-lg border bg-muted p-4 text-sm text-muted-foreground">
-              <p className="font-semibold">Developer Instructions:</p>
-              <p>
-                To gain access, update your user role in the database to
-                'DEVELOPER' or 'SUPER_ADMIN' and then log in again.
-              </p>
-            </div>
+          <CardContent>
             <Button asChild variant="outline">
               <Link href="/">Go to Homepage</Link>
             </Button>
@@ -103,7 +86,7 @@ export default function AdminLayout({
   return (
     <div className="flex min-h-screen w-full bg-muted/40">
       <AdminSidebar
-        userRole={userRole}
+        userRole={user.role}
         isMobileOpen={isSidebarOpen}
         setIsMobileOpen={setIsSidebarOpen}
       />
