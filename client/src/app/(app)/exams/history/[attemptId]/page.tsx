@@ -4,10 +4,15 @@
 
 import ExamReview from "@/components/pages/exams/ExamReview";
 
-export default function ExamReviewPage({
+export default async function ExamReviewPage({
   params,
 }: {
-  params: { attemptId: string };
+  params: Promise<{ attemptId: string }>;
 }) {
-  return <ExamReview attemptId={params.attemptId} />;
+  const { attemptId } = await params;
+  return (
+    <div>
+      <ExamReview attemptId={attemptId} />;
+    </div>
+  );
 }

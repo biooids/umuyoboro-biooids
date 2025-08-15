@@ -12,6 +12,7 @@ import { AuthModal } from "@/components/pages/auth/AuthModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
+  subsets: ["latin"], // <-- ADD THIS LINE
 });
 
 export const metadata = {
@@ -41,7 +42,7 @@ export default function RootLayout({
                 disableTransitionOnChange
               >
                 <Toaster position="top-center" />
-                <AuthModal /> {/* <-- ADD AuthModal here */}
+                <AuthModal />
                 {children}
               </ThemeProvider>
             </SocketProvider>

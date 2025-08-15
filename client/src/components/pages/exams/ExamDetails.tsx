@@ -270,13 +270,8 @@ export default function ExamDetails({ examId }: { examId: string }) {
                 Your Score: {results.score} / {results.totalQuestions}
               </p>
               <div className="flex justify-center gap-4">
-                <Button
-                  onClick={() => dispatch({ type: "RESET" })}
-                  disabled={status === "starting"}
-                >
-                  {status === "starting" && (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )}
+                {/* --- FIX: Removed the impossible conditions --- */}
+                <Button onClick={() => dispatch({ type: "RESET" })}>
                   Try Again
                 </Button>
                 <Button variant="outline" asChild>
