@@ -33,11 +33,12 @@ function UserActions({ user }: { user: AdminUserRow }) {
     try {
       await deleteUser(user.id).unwrap();
       toast.success(`User @${user.username} has been deleted.`);
-    } catch (error) {
-      toast.error("Failed to delete user.");
+    } catch (error: any) {
+      const errorMessage =
+        error.data?.message || "An unexpected error occurred.";
+      toast.error(errorMessage);
     }
   };
-
   return (
     <DeleteConfirmationDialog
       onConfirm={handleDelete}
@@ -55,11 +56,14 @@ function UserActions({ user }: { user: AdminUserRow }) {
 // --- Main Page Component ---
 export default function UserManagement() {
   const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10); // NEW: Add limit to the component's state
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
+  // UPDATED: Pass the 'limit' parameter to the query hook
   const { data, isLoading, isError } = useGetAdminUsersQuery({
     page,
+    limit,
     q: debouncedSearchTerm,
   });
 
@@ -86,7 +90,6 @@ export default function UserManagement() {
             <TableRow>
               <TableHead>Username</TableHead>
               <TableHead>Phone Number</TableHead>
-              {/* NEW: Added Role column */}
               <TableHead>Role</TableHead>
               <TableHead>Date Created</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -121,7 +124,6 @@ export default function UserManagement() {
                     @{user.username}
                   </TableCell>
                   <TableCell>{user.phone}</TableCell>
-                  {/* NEW: Display the user's role */}
                   <TableCell>
                     <Badge
                       variant={

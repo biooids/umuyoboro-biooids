@@ -1,8 +1,10 @@
-import { z } from "zod";
+// src/features/admin/admin.validators.ts
+
+import { z, ZodError } from "zod";
 import { Request, Response, NextFunction } from "express";
 import { createHttpError } from "../../utils/error.factory.js";
 
-// Zod schema to validate and parse the query parameters for the user list
+// The Zod schema defines the validation rules.
 export const getUsersQuerySchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
   limit: z.coerce.number().int().min(1).max(100).default(10),
@@ -11,24 +13,35 @@ export const getUsersQuerySchema = z.object({
   order: z.enum(["asc", "desc"]).default("desc"),
 });
 
+// Infer the TypeScript type from the schema for our type assertion.
+type ValidatedQuery = z.infer<typeof getUsersQuerySchema>;
+
 /**
- * A generic validation middleware that uses a Zod schema.
- * @param schema The Zod schema to validate against.
+ * A validation middleware that targets req.query.
  */
-export const validate =
+export const validateQuery =
   (schema: z.AnyZodObject) =>
-  async (req: Request, _res: Response, next: NextFunction) => {
+  (req: Request, _res: Response, next: NextFunction) => {
     try {
-      await schema.parseAsync({
-        body: req.body,
-        query: req.query,
-        params: req.params,
-      });
-      // Replace req.query with the parsed and defaulted values
-      req.query = schema.shape.query.parse(req.query);
+      const parsedQuery = schema.parse(req.query);
+
+      // THE FIX: Use a type assertion 'as ValidatedQuery' to resolve the error.
+      req.validatedData = parsedQuery as ValidatedQuery;
+
       next();
     } catch (error: any) {
-      const message = error.errors?.[0]?.message || "Invalid input provided.";
-      next(createHttpError(400, message));
+      if (error instanceof ZodError) {
+        console.error("Zod Validation Failed:", {
+          query: req.query,
+          errors: error.flatten(),
+        });
+        const message = error.errors?.[0]?.message || "Invalid input provided.";
+        return next(createHttpError(400, message));
+      }
+
+      console.error("An unexpected error occurred in validation:", error);
+      return next(
+        createHttpError(500, "An internal error occurred during validation.")
+      );
     }
   };

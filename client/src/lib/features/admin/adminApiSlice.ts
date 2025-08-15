@@ -1,11 +1,10 @@
-import { apiSlice } from "../../api/apiSlice"; // <-- Import the main apiSlice
+import { apiSlice } from "../../api/apiSlice";
 import {
   AdminApiQuery,
   GetAdminStatsResponse,
   GetAdminUsersResponse,
 } from "./adminTypes";
 
-// UPDATED: Changed from 'createApi' to 'apiSlice.injectEndpoints'
 export const adminApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getDashboardStats: builder.query<GetAdminStatsResponse, void>({
@@ -15,9 +14,10 @@ export const adminApiSlice = apiSlice.injectEndpoints({
     getAdminUsers: builder.query<GetAdminUsersResponse, AdminApiQuery>({
       query: (args) => {
         const params = new URLSearchParams();
-        // This logic correctly handles optional/undefined values
         Object.entries(args).forEach(([key, value]) => {
-          if (value !== undefined && value !== null) {
+          // THIS IS THE FIX: Add a check for empty strings (value !== '')
+          // This ensures the 'q' param is only added if it has a real value.
+          if (value !== undefined && value !== null && value !== "") {
             params.append(key, String(value));
           }
         });
@@ -36,7 +36,6 @@ export const adminApiSlice = apiSlice.injectEndpoints({
     }),
     deleteUser: builder.mutation<void, string>({
       query: (userId) => ({ url: `/admin/users/${userId}`, method: "DELETE" }),
-      // Correctly invalidates both tags to trigger refetches
       invalidatesTags: ["AdminUsers", "AdminStats"],
     }),
   }),

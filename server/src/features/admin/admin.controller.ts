@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { asyncHandler } from "../../middleware/asyncHandler.js";
 import { adminService } from "./admin.service.js";
 import { createHttpError } from "../../utils/error.factory.js";
-import { getUsersQuerySchema } from "./admin.validators.js";
 
 class AdminController {
   // GET /admin/stats
@@ -13,12 +12,13 @@ class AdminController {
 
   // GET /admin/users
   getAllUsers = asyncHandler(async (req: Request, res: Response) => {
-    // This line correctly parses the incoming query and gives it strong types.
-    const validatedQuery = getUsersQuerySchema.parse(req.query);
+    // --- THIS IS THE FIX ---
+    // Read from the type-safe req.validatedData property provided by the middleware.
+    // No more type casting is needed! ✨
+    const query = req.validatedData!;
 
-    const { users, total } = await adminService.getAllUsers(validatedQuery);
-
-    const { page, limit } = validatedQuery;
+    const { users, total } = await adminService.getAllUsers(query);
+    const { page, limit } = query;
 
     res.status(200).json({
       status: "success",
