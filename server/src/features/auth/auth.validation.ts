@@ -22,10 +22,12 @@ export const signupSchema = z.object({
       .string()
       .regex(
         /^(07[2389])\d{7}$/,
-        "Please enter a valid Rwandan phone number (e.g., 078...)."
+        "Shyiramo number zemewe zomurwanda (e.g., 078...)."
       ),
     // Password must be at least 8 characters long.
-    password: z.string().min(8, "Password must be at least 8 characters long."),
+    password: z
+      .string()
+      .min(8, "Password igomba kuba inyuguti umunani byibura."),
   }),
 });
 
