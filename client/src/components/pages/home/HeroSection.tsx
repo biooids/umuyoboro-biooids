@@ -48,8 +48,7 @@ function HeroSection() {
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
           Toranya imyitozo ikurikira maze utagingire{" "}
           <span className="font-bold text-primary">umuyoboro</span> wogutsinda
-          ikizamini cya perime. Kanda kumyimitozo cyangwa ukanda kukizamin gisa
-          neza nuko babaza mukizamini cya perime,{" "}
+          ikizamini cya perime{" "}
           <span className="font-bold text-primary">KUBUNTU</span>.
         </p>
 
