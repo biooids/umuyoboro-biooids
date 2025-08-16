@@ -69,15 +69,15 @@ const LoginForm = () => {
       <Card className="w-full max-w-md bg-card border-border shadow-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl sm:text-3xl font-bold">
-            Welcome Back!
+            Urakza neza k'Umuyoboro!
           </CardTitle>
           <CardDescription>
-            Don't have an account yet?{" "}
+            Niba uri mushya ahangaha, kanda aha <br />
             <Link
               href="/auth/signup"
               className="text-primary hover:underline focus:outline-none focus:ring-1 focus:ring-ring rounded-sm"
             >
-              Sign Up
+              👉 Sign Up
             </Link>
           </CardDescription>
         </CardHeader>

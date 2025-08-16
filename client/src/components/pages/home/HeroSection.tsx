@@ -1,6 +1,8 @@
-// src/components/HeroSection.tsx
+"use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // 1. Import the router
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,17 +12,36 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowRight, BookOpen, PenSquare } from "lucide-react";
+import { ArrowRight, BookOpen, PenSquare, Loader2 } from "lucide-react";
+import { useAuth } from "@/lib/hooks/useAuth";
 
-/**
- * A modern hero section featuring two distinct cards that serve as the
- * primary calls to action for the application's main features.
- */
 function HeroSection() {
+  const { user } = useAuth();
+  const router = useRouter(); // 2. Get the router instance
+
+  // 3. Add a useEffect to handle the redirect
+  useEffect(() => {
+    // When the user state is confirmed to be null (not logged in),
+    // redirect to the login page.
+    if (user === null) {
+      router.push("/auth/signup");
+    }
+  }, [user, router]);
+
+  // 4. While the user state is being checked, show a loading indicator.
+  // This prevents the page from flashing before the redirect happens.
+  if (!user) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
+
+  // 5. If the user exists, render the full hero section content.
   return (
     <section className="bg-background text-foreground">
       <div className="container mx-auto flex flex-col items-center px-4 py-16 text-center md:py-24">
-        {/* --- Main Heading and Subtitle --- */}
         <h1 className="text-4xl font-bold leading-tight tracking-tighter sm:text-5xl md:text-6xl">
           Tsinnda neza ikizamini cya perime
         </h1>
@@ -32,9 +53,8 @@ function HeroSection() {
           <span className="font-bold text-primary">KUBUNTU</span>.
         </p>
 
-        {/* --- Cards Container --- */}
         <div className="mt-12 grid w-full max-w-4xl grid-cols-1 gap-8 md:grid-cols-2">
-          {/* === Exams Card === */}
+          {/* Exams Card */}
           <Card className="flex transform flex-col text-left transition-transform hover:scale-105 hover:shadow-xl">
             <CardHeader>
               <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -42,7 +62,7 @@ function HeroSection() {
               </div>
               <CardTitle className="text-2xl font-bold">Ikizamini</CardTitle>
               <CardDescription>
-                Itoze neza kugirango utsinde nkikizamini cyemewe.{" "}
+                Itoze neza kugirango utsinde nkikizamini cyemewe.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-1">
@@ -61,7 +81,7 @@ function HeroSection() {
             </CardFooter>
           </Card>
 
-          {/* === Exercises Card === */}
+          {/* Exercises Card */}
           <Card className="flex transform flex-col text-left transition-transform hover:scale-105 hover:shadow-xl">
             <CardHeader>
               <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -69,7 +89,7 @@ function HeroSection() {
               </div>
               <CardTitle className="text-2xl font-bold">Imyitozo</CardTitle>
               <CardDescription>
-                Hano imyitozo igufasha gurekereza vuba wimenyereza neza.{" "}
+                Hano imyitozo igufasha gurekereza vuba wimenyereza neza.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex-1">
