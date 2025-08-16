@@ -9,12 +9,24 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, ChevronRight } from "lucide-react";
 import { format } from "date-fns";
+import { useAuth } from "@/lib/hooks/useAuth";
+import PleaseLogin from "@/components/shared/PleaseLogin";
 
 /**
  * A component that fetches and displays a list of the user's completed exam attempts.
  */
 export default function ExamHistory() {
   const { data: response, isLoading, isError } = useGetExamHistoryQuery();
+  const { user } = useAuth(); // UPDATED: Get the user from your Redux state via the hook
+
+  if (!user) {
+    return (
+      <PleaseLogin
+        message="You must be logged in to access the exam history."
+        callbackUrl="/exams/history"
+      />
+    );
+  }
 
   if (isLoading) {
     return (

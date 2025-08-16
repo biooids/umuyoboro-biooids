@@ -7,6 +7,8 @@ import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import ExerciseCard from "./ExerciseCard";
+import { useAuth } from "@/lib/hooks/useAuth";
+import PleaseLogin from "@/components/shared/PleaseLogin";
 
 /**
  * A page component that displays a list of all available practice exercises.
@@ -14,6 +16,16 @@ import ExerciseCard from "./ExerciseCard";
  */
 export default function Exercises() {
   const { data: response, isLoading, isError } = useGetAllExercisesQuery();
+  const { user } = useAuth(); // UPDATED: Get the user from your Redux state via the hook
+
+  if (!user) {
+    return (
+      <PleaseLogin
+        message="You must be logged in to access the exercise panel."
+        callbackUrl="/exercises"
+      />
+    );
+  }
 
   if (isLoading) {
     return (

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/card";
 import { PanelLeft, ShieldAlert, LogIn } from "lucide-react";
 import Link from "next/link";
+import PleaseLogin from "@/components/shared/PleaseLogin";
 
 export default function AdminLayout({
   children,
@@ -29,28 +30,10 @@ export default function AdminLayout({
   // 1. Handle users who are not logged in at all.
   if (!user) {
     return (
-      <div className="flex h-screen items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md text-center">
-          <CardHeader>
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-              <LogIn className="h-8 w-8 text-primary" />
-            </div>
-            <CardTitle className="mt-4 text-2xl">
-              Authentication Required
-            </CardTitle>
-            <CardDescription>
-              You must be logged in to access the admin panel.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild>
-              <Link href="/auth/login?callbackUrl=/admin">
-                Proceed to Login
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+      <PleaseLogin
+        message="You must be logged in to access the admin panel."
+        callbackUrl="/admin"
+      />
     );
   }
 

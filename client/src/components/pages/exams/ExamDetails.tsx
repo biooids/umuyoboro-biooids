@@ -16,6 +16,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, AlertCircle, Check, X } from "lucide-react";
 import { cn, getApiErrorMessage } from "@/lib/utils/utils";
+import PleaseLogin from "@/components/shared/PleaseLogin";
+import { useAuth } from "@/lib/hooks/useAuth";
 
 // --- Type Definitions ---
 type ExamData = StartExamApiResponse["data"]["exam"];
@@ -152,6 +154,16 @@ export default function ExamDetails({ examId }: { examId: string }) {
   const [startExam] = useStartExamMutation();
   const [lockAttempt] = useLockAttemptMutation();
   const [submitExam] = useSubmitExamMutation();
+  const { user } = useAuth(); // UPDATED: Get the user from your Redux state via the hook
+
+  if (!user) {
+    return (
+      <PleaseLogin
+        message="You must be logged in to access the exam panel."
+        callbackUrl="/exams"
+      />
+    );
+  }
 
   const startNewExam = useCallback(async () => {
     try {

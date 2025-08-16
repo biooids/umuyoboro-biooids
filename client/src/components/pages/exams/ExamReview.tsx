@@ -16,6 +16,8 @@ import { AlertCircle, Check, X } from "lucide-react";
 import { getApiErrorMessage } from "@/lib/utils/utils";
 import { cn } from "@/lib/utils/utils";
 import { format } from "date-fns";
+import { useAuth } from "@/lib/hooks/useAuth";
+import PleaseLogin from "@/components/shared/PleaseLogin";
 
 interface ExamReviewProps {
   attemptId: string;
@@ -32,6 +34,17 @@ export default function ExamReview({ attemptId }: ExamReviewProps) {
     isError,
     error,
   } = useGetExamReviewQuery({ attemptId });
+
+  const { user } = useAuth(); // UPDATED: Get the user from your Redux state via the hook
+
+  if (!user) {
+    return (
+      <PleaseLogin
+        message="You must be logged in to access the exam hist review panel."
+        callbackUrl="/exams/history"
+      />
+    );
+  }
 
   if (isLoading) {
     return (

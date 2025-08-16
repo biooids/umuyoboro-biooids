@@ -24,6 +24,8 @@ import {
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { cn, getApiErrorMessage } from "@/lib/utils/utils";
+import { useAuth } from "@/lib/hooks/useAuth";
+import PleaseLogin from "@/components/shared/PleaseLogin";
 
 // --- Type Definitions ---
 type AnswerInfo = {
@@ -190,6 +192,16 @@ export default function ExerciseDetails({
     isError,
     error: fetchError,
   } = useGetExerciseByIdQuery({ exerciseId });
+  const { user } = useAuth(); // UPDATED: Get the user from your Redux state via the hook
+
+  if (!user) {
+    return (
+      <PleaseLogin
+        message="You must be logged in to access the exercises panel."
+        callbackUrl="/exercises"
+      />
+    );
+  }
 
   useEffect(() => {
     if (response) {

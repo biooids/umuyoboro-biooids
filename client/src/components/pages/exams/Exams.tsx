@@ -9,6 +9,8 @@ import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import ExamCard from "./ExamCard";
+import { useAuth } from "@/lib/hooks/useAuth";
+import PleaseLogin from "@/components/shared/PleaseLogin";
 
 /**
  * A page component that displays a list of all available exams.
@@ -18,6 +20,16 @@ export default function Exams() {
   // Use the RTK Query hook to fetch the list of exams.
   // It automatically handles caching, loading, and error states.
   const { data: response, isLoading, isError } = useGetAllExamsQuery();
+  const { user } = useAuth(); // UPDATED: Get the user from your Redux state via the hook
+
+  if (!user) {
+    return (
+      <PleaseLogin
+        message="You must be logged in to access the exam panel."
+        callbackUrl="/exams"
+      />
+    );
+  }
 
   // Display a skeleton loader while the data is being fetched.
   if (isLoading) {
