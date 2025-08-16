@@ -19,7 +19,7 @@ const geistSans = Geist({
 // This is the core of your app's SEO.
 export const metadata: Metadata = {
   // TODO: Replace with your actual production domain name.
-  metadataBase: new URL("https://www.umuyoboro.rw"),
+  metadataBase: new URL("https://umuyoboro-biooids.vercel.app"),
 
   // The title template allows child pages to set their own title.
   // For example, a page with `title: "About"` will become "About | UMUYOBORO".
