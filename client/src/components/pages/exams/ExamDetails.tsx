@@ -162,10 +162,7 @@ export default function ExamDetails({ examId }: { examId: string }) {
     }
   }, [startExam, examId]);
 
-  // UPDATED: This is now the one and only submission function.
-  // It is called directly by the button click or the timer.
   const handleSubmit = useCallback(async () => {
-    // A guard to prevent multiple submissions
     if (status !== "in_progress") return;
 
     dispatch({ type: "SUBMIT" });
@@ -182,13 +179,22 @@ export default function ExamDetails({ examId }: { examId: string }) {
     }
   }, [attemptId, selectedAnswers, lockAttempt, submitExam, status]);
 
+  // Create a ref to hold the latest version of handleSubmit
+  const handleSubmitRef = useRef(handleSubmit);
+
+  // Keep the ref updated with the latest handleSubmit function on every render
+  useEffect(() => {
+    handleSubmitRef.current = handleSubmit;
+  }, [handleSubmit]);
+
+  // Effect to start the exam initially or on reset
   useEffect(() => {
     if (status === "loading" || status === "starting") {
       startNewExam();
     }
   }, [status, startNewExam]);
 
-  // UPDATED: The timer now calls handleSubmit directly, eliminating the race condition.
+  // Effect for the timer logic
   useEffect(() => {
     if (!startTime || !examData || status !== "in_progress") return;
 
@@ -200,15 +206,17 @@ export default function ExamDetails({ examId }: { examId: string }) {
         Math.round((totalDurationMillis - elapsed) / 1000)
       );
       dispatch({ type: "TIMER_TICK", payload: remaining });
+
       if (remaining <= 0) {
-        handleSubmit(); // Call submission logic directly
+        // Call the up-to-date function from the ref
+        handleSubmitRef.current();
         clearInterval(interval);
       }
     }, 1000);
-    return () => clearInterval(interval);
-  }, [startTime, examData, status, handleSubmit]);
 
-  // REMOVED: The complex useEffect that watched the 'submitting' status is now gone.
+    return () => clearInterval(interval);
+    // This effect now only re-runs when the exam starts, not on every click
+  }, [startTime, examData, status]);
 
   const feedback = results
     ? getFeedbackForScore(results.score, results.totalQuestions)
@@ -270,7 +278,6 @@ export default function ExamDetails({ examId }: { examId: string }) {
                 Your Score: {results.score} / {results.totalQuestions}
               </p>
               <div className="flex justify-center gap-4">
-                {/* --- FIX: Removed the impossible conditions --- */}
                 <Button onClick={() => dispatch({ type: "RESET" })}>
                   Try Again
                 </Button>
@@ -303,10 +310,10 @@ export default function ExamDetails({ examId }: { examId: string }) {
                           "ring-2 ring-primary",
                         status === "finished" &&
                           isCorrect &&
-                          "bg-green-500/20 border-green-500",
+                          "bg-green-500/20 border-green-500 dark:bg-green-900/30 dark:border-green-700 dark:text-green-300",
                         status === "finished" &&
                           isWrong &&
-                          "bg-red-500/20 border-red-500"
+                          "bg-red-500/20 border-red-500 dark:bg-red-900/30 dark:border-red-700 dark:text-red-300"
                       )}
                       onClick={() =>
                         dispatch({

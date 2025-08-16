@@ -7,6 +7,7 @@ import { useAuth } from "@/lib/hooks/useAuth";
 import ThemeToggler from "./ThemeToggler";
 import { UserAccountNav } from "./UserAccountNav";
 import MobileSidebar from "../sidebar/MobileSidebar";
+import Logo from "@/components/shared/Logo";
 
 /**
  * The main application header. It is responsive and adapts its content
@@ -16,7 +17,7 @@ export default function Header() {
   const { user } = useAuth();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/80 shadow-sm backdrop-blur-lg">
+    <header className="sticky top-0 z-40 w-full border-b bg-background/80 shadow-sm backdrop-blur-lg p-3">
       <div className="container flex h-16 items-center justify-between">
         {/* === Left Side: App Logo and Mobile Nav Trigger === */}
         <div className="flex items-center gap-4">
@@ -27,7 +28,7 @@ export default function Header() {
             href="/"
             className="hidden items-center gap-2 font-semibold md:flex"
           >
-            <span className="text-lg">MyApp</span>
+            <Logo />{" "}
           </Link>
         </div>
 

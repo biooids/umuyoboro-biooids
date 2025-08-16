@@ -37,9 +37,7 @@ export default function Exercises() {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>
-          Failed to load exercises. Please try again later.
-        </AlertDescription>
+        <AlertDescription>Byanze, ugerageza mukanya </AlertDescription>
       </Alert>
     );
   }
@@ -49,11 +47,9 @@ export default function Exercises() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">
-          Practice Exercises
-        </h1>
+        <h1 className="text-3xl font-bold tracking-tight">Kora imyitozo</h1>
         <p className="text-muted-foreground">
-          Select an exercise to practice your skills.
+          Toranya imyitozo utangire ukore.
         </p>
       </div>
       {exercises.length === 0 ? (

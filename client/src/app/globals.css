@@ -45,117 +45,121 @@
 }
 
 /* ==========================================================================
-  Synthwave Theme - Light Mode
+  Traffic Cone Theme - Light Mode (Zinc & Orange)
 ==========================================================================
 */
 :root {
   --radius: 0.75rem;
 
-  /* Base */
-  --background: oklch(0.98 0.003 240); /* Very light, slightly cool gray */
-  --foreground: oklch(0.15 0.01 260); /* Dark, slightly purplish gray */
+  /* Base (Zinc) */
+  --background: oklch(0.985 0.005 240); /* Almost white, very light gray */
+  --foreground: oklch(0.12 0.02 250); /* Dark, slightly cool slate for text */
 
   /* Cards & Popovers */
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.15 0.01 260);
+  --card-foreground: oklch(0.12 0.02 250);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.15 0.01 260);
+  --popover-foreground: oklch(0.12 0.02 250);
 
-  /* Primary (Cyan) */
-  --primary: oklch(0.6 0.18 195); /* Bright, saturated cyan */
-  --primary-foreground: oklch(0.1 0.01 260); /* Dark text for contrast */
+  /* Primary (Orange) */
+  --primary: oklch(0.7 0.19 50); /* Bright, accessible orange */
+  --primary-foreground: oklch(
+    0.1 0.02 50
+  ); /* Dark, high-contrast text for orange buttons */
 
-  /* Secondary (Purple) */
-  --secondary: oklch(0.92 0.04 280); /* Light pastel purple */
-  --secondary-foreground: oklch(0.4 0.1 275); /* Readable purple text */
+  /* Secondary (Zinc) */
+  --secondary: oklch(0.94 0.01 240); /* Light gray for secondary elements */
+  --secondary-foreground: oklch(
+    0.2 0.02 250
+  ); /* Dark gray text on secondary elements */
 
-  /* Muted & Accent */
-  --muted: oklch(0.95 0.02 270); /* Very light purple-gray */
-  --muted-foreground: oklch(0.5 0.02 265); /* Muted purple-gray text */
-  --accent: oklch(0.92 0.04 280);
-  --accent-foreground: oklch(0.4 0.1 275);
+  /* Muted & Accent (Zinc) */
+  --muted: oklch(0.94 0.01 240);
+  --muted-foreground: oklch(0.45 0.02 250); /* Softer gray text */
+  --accent: oklch(0.94 0.01 240);
+  --accent-foreground: oklch(0.2 0.02 250);
 
-  /* Destructive (Pink) */
-  --destructive: oklch(0.65 0.22 340); /* Strong, vibrant pink */
-  --destructive-foreground: oklch(1 0 0);
+  /* Destructive (Red) */
+  --destructive: oklch(0.65 0.22 25); /* Clear, unambiguous red */
+  --destructive-foreground: oklch(0.98 0.01 25); /* Light text on red */
 
   /* Other UI Elements */
-  --border: oklch(0.9 0.01 270);
-  --input: oklch(0.9 0.01 270);
-  --ring: oklch(0.6 0.18 195 / 0.6); /* Cyan focus ring */
+  --border: oklch(0.9 0.01 240);
+  --input: oklch(0.9 0.01 240);
+  --ring: oklch(0.7 0.19 50 / 0.6); /* Orange focus ring */
 
   /* Charts - A vibrant, distinct palette */
-  --chart-1: oklch(0.7 0.18 190); /* Cyan */
-  --chart-2: oklch(0.7 0.15 275); /* Purple */
+  --chart-1: oklch(0.7 0.19 50); /* Orange */
+  --chart-2: oklch(0.6 0.18 195); /* Blue */
   --chart-3: oklch(0.7 0.2 345); /* Pink */
-  --chart-4: oklch(0.8 0.2 140); /* Lime Green */
-  --chart-5: oklch(0.75 0.2 50); /* Orange */
+  --chart-4: oklch(0.75 0.2 150); /* Green */
+  --chart-5: oklch(0.7 0.15 275); /* Purple */
 
-  /* Sidebar (uses a slightly different scheme for distinction) */
-  --sidebar: oklch(0.98 0.003 240);
-  --sidebar-foreground: oklch(0.4 0.02 265);
-  --sidebar-primary: oklch(0.6 0.18 195);
-  --sidebar-primary-foreground: oklch(0.1 0.01 260);
-  --sidebar-accent: oklch(0.92 0.04 280);
-  --sidebar-accent-foreground: oklch(0.4 0.1 275);
-  --sidebar-border: oklch(0.9 0.01 270);
-  --sidebar-ring: oklch(0.6 0.18 195 / 0.6);
+  /* Sidebar (consistent with main theme) */
+  --sidebar: oklch(0.985 0.005 240);
+  --sidebar-foreground: oklch(0.45 0.02 250);
+  --sidebar-primary: oklch(0.7 0.19 50);
+  --sidebar-primary-foreground: oklch(0.1 0.02 50);
+  --sidebar-accent: oklch(0.94 0.01 240);
+  --sidebar-accent-foreground: oklch(0.2 0.02 250);
+  --sidebar-border: oklch(0.9 0.01 240);
+  --sidebar-ring: oklch(0.7 0.19 50 / 0.6);
 }
 
 /* ==========================================================================
-  Synthwave Theme - Dark Mode
+  Traffic Cone Theme - Dark Mode (Zinc & Orange)
 ==========================================================================
 */
 .dark {
-  /* Base */
-  --background: oklch(0.12 0.02 265); /* Deep, dark indigo */
-  --foreground: oklch(0.95 0.01 240); /* Light, cool gray text */
+  /* Base (Zinc) */
+  --background: oklch(0.1 0.015 240); /* Very dark, cool gray (like zinc-950) */
+  --foreground: oklch(0.95 0.01 240); /* Light gray text */
 
   /* Cards & Popovers */
-  --card: oklch(0.16 0.025 268); /* Slightly lighter indigo for cards */
+  --card: oklch(0.12 0.02 240); /* Slightly lighter gray for cards (zinc-900) */
   --card-foreground: oklch(0.95 0.01 240);
-  --popover: oklch(0.14 0.02 266);
+  --popover: oklch(0.11 0.015 240);
   --popover-foreground: oklch(0.95 0.01 240);
 
-  /* Primary (Cyan) */
-  --primary: oklch(0.75 0.19 195); /* Bright, glowing cyan */
-  --primary-foreground: oklch(0.1 0.02 260); /* Dark text for high contrast */
+  /* Primary (Orange) */
+  --primary: oklch(0.75 0.2 55); /* Brighter orange to pop in dark mode */
+  --primary-foreground: oklch(0.15 0.03 55); /* Dark, high-contrast text */
 
-  /* Secondary (Purple) */
-  --secondary: oklch(0.25 0.05 275); /* Deep, muted purple */
+  /* Secondary (Zinc) */
+  --secondary: oklch(0.2 0.02 240); /* Dark gray for secondary elements */
   --secondary-foreground: oklch(0.95 0.01 240);
 
-  /* Muted & Accent */
-  --muted: oklch(0.25 0.05 275 / 0.7);
-  --muted-foreground: oklch(0.65 0.03 260); /* Lighter gray for muted text */
-  --accent: oklch(0.25 0.05 275);
+  /* Muted & Accent (Zinc) */
+  --muted: oklch(0.2 0.02 240);
+  --muted-foreground: oklch(0.6 0.01 240); /* Lighter gray for muted text */
+  --accent: oklch(0.2 0.02 240);
   --accent-foreground: oklch(0.95 0.01 240);
 
-  /* Destructive (Pink) */
-  --destructive: oklch(0.65 0.25 350); /* Bright, neon-like pink */
-  --destructive-foreground: oklch(0.1 0.01 260);
+  /* Destructive (Red) */
+  --destructive: oklch(0.7 0.24 25); /* Bright red for dark mode */
+  --destructive-foreground: oklch(0.1 0.01 25); /* Dark text for contrast */
 
   /* Other UI Elements */
-  --border: oklch(0.95 0.01 240 / 0.15);
+  --border: oklch(0.95 0.01 240 / 0.15); /* Semi-transparent border */
   --input: oklch(0.95 0.01 240 / 0.1);
-  --ring: oklch(0.75 0.19 195 / 0.7); /* Cyan focus ring */
+  --ring: oklch(0.75 0.2 55 / 0.7); /* Orange focus ring */
 
   /* Charts - A vibrant, distinct palette for dark mode */
-  --chart-1: oklch(0.75 0.19 195); /* Cyan */
-  --chart-2: oklch(0.65 0.18 275); /* Purple */
+  --chart-1: oklch(0.75 0.2 55); /* Orange */
+  --chart-2: oklch(0.65 0.2 195); /* Blue */
   --chart-3: oklch(0.7 0.25 350); /* Pink */
-  --chart-4: oklch(0.8 0.22 140); /* Lime Green */
-  --chart-5: oklch(0.75 0.22 50); /* Orange */
+  --chart-4: oklch(0.8 0.22 150); /* Green */
+  --chart-5: oklch(0.65 0.18 275); /* Purple */
 
   /* Sidebar */
-  --sidebar: oklch(0.14 0.02 266);
-  --sidebar-foreground: oklch(0.7 0.03 260);
-  --sidebar-primary: oklch(0.75 0.19 195);
-  --sidebar-primary-foreground: oklch(0.1 0.02 260);
-  --sidebar-accent: oklch(0.25 0.05 275);
+  --sidebar: oklch(0.11 0.015 240);
+  --sidebar-foreground: oklch(0.6 0.01 240);
+  --sidebar-primary: oklch(0.75 0.2 55);
+  --sidebar-primary-foreground: oklch(0.15 0.03 55);
+  --sidebar-accent: oklch(0.2 0.02 240);
   --sidebar-accent-foreground: oklch(0.95 0.01 240);
   --sidebar-border: oklch(0.95 0.01 240 / 0.15);
-  --sidebar-ring: oklch(0.75 0.19 195 / 0.7);
+  --sidebar-ring: oklch(0.75 0.2 55 / 0.7);
 }
 
 @layer base {

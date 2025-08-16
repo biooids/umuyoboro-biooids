@@ -33,13 +33,15 @@ export default function ExamCard({ exam }: ExamCardProps) {
           <BookOpen className="h-6 w-6 text-primary" />
           <span>{exam.title}</span>
         </CardTitle>
-        <CardDescription>Exam Number: {exam.examNumber}</CardDescription>
+        <CardDescription>
+          Numero y'ikizamini : {exam.examNumber}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {/* The `asChild` prop allows the Button to render the Link component,
             combining the button's styles with the link's navigation behavior. */}
         <Button asChild className="w-full">
-          <Link href={`/exams/${exam.id}`}>Start Exam</Link>
+          <Link href={`/exams/${exam.id}`}>Tangira ikizamini</Link>
         </Button>
       </CardContent>
     </Card>

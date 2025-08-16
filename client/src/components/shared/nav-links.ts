@@ -1,3 +1,4 @@
+//src/components/shared/nav-links.ts
 import { Home, Compass, Book, Pen, History, ShieldCheck } from "lucide-react";
 import { Role } from "@/types/role.enum"; // Import your Role enum
 

@@ -32,12 +32,12 @@ export default function ExerciseCard({ exercise }: ExerciseCardProps) {
           <span>{exercise.title}</span>
         </CardTitle>
         <CardDescription>
-          Exercise Number: {exercise.exerciseNumber}
+          Numero yimyitozo: {exercise.exerciseNumber}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Button asChild className="w-full">
-          <Link href={`/exercises/${exercise.id}`}>Start Exercise</Link>
+          <Link href={`/exercises/${exercise.id}`}>Tangira imyitozo</Link>
         </Button>
       </CardContent>
     </Card>

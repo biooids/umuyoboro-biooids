@@ -12,7 +12,7 @@ import { AuthModal } from "@/components/pages/auth/AuthModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"], // <-- ADD THIS LINE
+  subsets: ["latin"],
 });
 
 export const metadata = {

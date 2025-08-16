@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils/utils";
 
 export default function Logo({ isCollapsed }: { isCollapsed?: boolean }) {
   return (
-    <div className="inline-flex items-center gap-2 text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm">
+    <div className="inline-flex items-center gap-2 text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-sm">
       {/* Change the 'src' prop to a string path */}
       <Image
         src="/logo.png" // This path points to public/logo.png
@@ -17,11 +17,11 @@ export default function Logo({ isCollapsed }: { isCollapsed?: boolean }) {
 
       <span
         className={cn(
-          "text-lg font-bold tracking-tighter",
+          "text-lg font-bold tracking-tighter  ",
           isCollapsed && "hidden"
         )}
       >
-        Do_It_Your_Self
+        Umuyoboro
       </span>
     </div>
   );

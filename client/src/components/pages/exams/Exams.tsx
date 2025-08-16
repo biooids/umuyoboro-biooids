@@ -43,9 +43,7 @@ export default function Exams() {
     return (
       <Alert variant="destructive">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>
-          Failed to load exams. Please try again later.
-        </AlertDescription>
+        <AlertDescription>Byanze, ugerageza mukanya.</AlertDescription>
       </Alert>
     );
   }
@@ -56,7 +54,9 @@ export default function Exams() {
     <div>
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">Available Exams</h1>
-        <p className="text-muted-foreground">Choose an exam to begin.</p>
+        <p className="text-muted-foreground">
+          Toranya ikizamini utangire ukore.
+        </p>
       </div>
       {exams.length === 0 ? (
         <p>No exams are available at the moment.</p>

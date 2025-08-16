@@ -1,7 +1,5 @@
 // src/app/(app)/exams/history/[attemptId]/page.tsx
 
-"use client";
-
 import ExamReview from "@/components/pages/exams/ExamReview";
 
 export default async function ExamReviewPage({
