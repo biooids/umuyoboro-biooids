@@ -35,7 +35,7 @@ export const signUpSchema = z
   })
   // This rule ensures that the password and confirm password fields match.
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match.",
+    message: "Password ntago zisa, iyambere niyakabiri bigomba kuba bisa .",
     path: ["confirmPassword"], // Apply the error to the `confirmPassword` field.
   });
 

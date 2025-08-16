@@ -132,7 +132,7 @@ const SignUpForm = () => {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Password utazibagirwa</Label>
               <div className="relative">
                 <Input
                   id="password"
@@ -165,7 +165,9 @@ const SignUpForm = () => {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Label htmlFor="confirmPassword">
+                Ongera wandike Password utazayibagirwa
+              </Label>
               <div className="relative">
                 <Input
                   id="confirmPassword"
