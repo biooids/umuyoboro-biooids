@@ -7,8 +7,8 @@ import { z } from "zod";
  */
 export const loginSchema = z.object({
   // CHANGE: Login now uses `phone` instead of `username`.
-  phone: z.string().min(1, "Phone number is required."),
-  password: z.string().min(1, "Password is required."),
+  phone: z.string().min(1, "Numero ya Phone iracynewe (urugero 07909...)"),
+  password: z.string().min(1, "Password iracyenewe."),
 });
 
 /**
@@ -20,8 +20,14 @@ export const signUpSchema = z
     // CHANGE: Username validation now matches the backend's stricter rules.
     username: z
       .string()
-      .min(3, "Username must be at least 3 characters.")
-      .max(20, "Username must be no more than 20 characters.")
+      .min(
+        3,
+        "Izina rigomba kuba kuva kunyuguti eshatu 3 kugera kuri makumyabiri 20."
+      )
+      .max(
+        20,
+        "Izina rigomba kuba kuva kunyuguti eshatu 3 kugera kuri makumyabiri 20."
+      )
       .regex(
         /^[a-zA-Z0-9_]+$/,
         "Username can only contain letters, numbers, and underscores."
@@ -29,8 +35,11 @@ export const signUpSchema = z
     // CHANGE: Phone validation now matches the backend's specific format.
     phone: z
       .string()
-      .regex(/^(07[2389])\d{7}$/, "Please enter a valid Rwandan phone number."),
-    password: z.string().min(8, "Password must be at least 8 characters."),
+      .regex(
+        /^(07[2389])\d{7}$/,
+        "Shyiramo numero zo murwanda (urugero 07909...)."
+      ),
+    password: z.string().min(8, "Password Igomba kuba inyuguti umunani 8."),
     confirmPassword: z.string(),
   })
   // This rule ensures that the password and confirm password fields match.

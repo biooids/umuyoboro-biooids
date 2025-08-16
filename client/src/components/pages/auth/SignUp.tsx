@@ -96,7 +96,7 @@ const SignUpForm = () => {
             )}
 
             <div className="space-y-1.5">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username">Izina ryawe</Label>
               <Input
                 id="username"
                 type="text"
@@ -114,7 +114,7 @@ const SignUpForm = () => {
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="phone">Phone Number</Label>
+              <Label htmlFor="phone">Numero ya phone</Label>
               <Input
                 id="phone"
                 type="tel"

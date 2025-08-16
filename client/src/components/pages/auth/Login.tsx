@@ -93,7 +93,7 @@ const LoginForm = () => {
 
             {/* --- CHANGE: The login field is now 'phone' instead of 'username' --- */}
             <div className="space-y-1.5">
-              <Label htmlFor="phone">Phone Number</Label>
+              <Label htmlFor="phone">Numero ya Phone </Label>
               <Input
                 id="phone"
                 type="tel"
