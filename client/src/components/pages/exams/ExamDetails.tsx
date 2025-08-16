@@ -156,15 +156,6 @@ export default function ExamDetails({ examId }: { examId: string }) {
   const [submitExam] = useSubmitExamMutation();
   const { user } = useAuth(); // UPDATED: Get the user from your Redux state via the hook
 
-  if (!user) {
-    return (
-      <PleaseLogin
-        message="You must be logged in to access the exam panel."
-        callbackUrl="/exams"
-      />
-    );
-  }
-
   const startNewExam = useCallback(async () => {
     try {
       const response = await startExam({ examId }).unwrap();
@@ -229,6 +220,15 @@ export default function ExamDetails({ examId }: { examId: string }) {
     return () => clearInterval(interval);
     // This effect now only re-runs when the exam starts, not on every click
   }, [startTime, examData, status]);
+
+  if (!user) {
+    return (
+      <PleaseLogin
+        message="You must be logged in to access the exam panel."
+        callbackUrl="/exams"
+      />
+    );
+  }
 
   const feedback = results
     ? getFeedbackForScore(results.score, results.totalQuestions)

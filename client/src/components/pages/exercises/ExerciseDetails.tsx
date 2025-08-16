@@ -194,15 +194,6 @@ export default function ExerciseDetails({
   } = useGetExerciseByIdQuery({ exerciseId });
   const { user } = useAuth(); // UPDATED: Get the user from your Redux state via the hook
 
-  if (!user) {
-    return (
-      <PleaseLogin
-        message="You must be logged in to access the exercises panel."
-        callbackUrl="/exercises"
-      />
-    );
-  }
-
   useEffect(() => {
     if (response) {
       dispatch({
@@ -235,6 +226,15 @@ export default function ExerciseDetails({
       return () => clearInterval(interval);
     }
   }, [status, isAnswered, timer]);
+
+  if (!user) {
+    return (
+      <PleaseLogin
+        message="You must be logged in to access the exercises panel."
+        callbackUrl="/exercises"
+      />
+    );
+  }
 
   // --- Render Logic ---
   if (isLoading || status === "loading") {
