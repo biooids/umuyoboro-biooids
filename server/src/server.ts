@@ -6,6 +6,7 @@ import { config } from "./config/index.js";
 import { disconnectPrisma, connectPrisma } from "./db/prisma.js";
 import { logger } from "./config/logger.js";
 import { socketManager } from "./websockets/socketManager.js";
+import { startTokenCleanupJob } from "./jobs/tokenCleanup.js";
 
 const PORT = config.port;
 const httpServer = http.createServer(app);
@@ -28,6 +29,7 @@ async function startServer() {
       logger.info(
         `🚀 Server (HTTP + WebSocket) listening on http://localhost:${PORT}`
       );
+      startTokenCleanupJob(); // <-- Start the scheduled job
     });
   } catch (error) {
     // If the initial DB connection fails after all retries, it's a fatal error.
