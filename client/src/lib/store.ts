@@ -7,6 +7,7 @@ import persistenceMiddleware from "./middleware/persistenceMiddleware";
 // --- Reducer Imports ---
 import authReducer from "./features/auth/authSlice";
 import uiReducer from "./features/ui/uiSlice";
+import audioReducer from "./features/audio/audioSlice"; // <-- STEP 1: Import the new reducer
 
 // --- API Slice Import ---
 // CHANGE: Import only the single, central apiSlice.
@@ -17,6 +18,7 @@ export const store = configureStore({
     // Regular Redux slices
     auth: authReducer,
     ui: uiReducer,
+    audio: audioReducer,
 
     // CHANGE: Add only the single reducer from the central apiSlice.
     // All injected endpoints will be handled by this one reducer.

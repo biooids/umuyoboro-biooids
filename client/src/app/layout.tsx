@@ -10,6 +10,7 @@ import AuthInitializer from "@/components/layouts/AuthInitializer";
 import ReduxProvider from "@/components/layouts/ReduxProvider";
 import { AuthModal } from "@/components/pages/auth/AuthModal";
 import SessionManager from "@/components/layouts/SessionManager";
+import AudioPlayer from "@/components/layouts/AudioPlayer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -106,6 +107,7 @@ export default function RootLayout({
                 enableSystem
                 disableTransitionOnChange
               >
+                <AudioPlayer />
                 <Toaster position="top-center" />
                 <AuthModal />
                 <SessionManager />

@@ -9,7 +9,9 @@ import { UserAccountNav } from "./UserAccountNav";
 import MobileSidebar from "../sidebar/MobileSidebar";
 import Logo from "@/components/shared/Logo";
 import { Button } from "@/components/ui/button";
-import { CircleQuestionMark } from "lucide-react";
+import { CircleQuestionMark, Volume2, VolumeX } from "lucide-react";
+import { useAppSelector, useAppDispatch } from "@/lib/hooks/hooks";
+import { toggleAudio } from "@/lib/features/audio/audioSlice";
 
 /**
  * The main application header. It is responsive and adapts its content
@@ -17,7 +19,8 @@ import { CircleQuestionMark } from "lucide-react";
  */
 export default function Header() {
   const { user } = useAuth();
-
+  const { isPlaying } = useAppSelector((state) => state.audio);
+  const dispatch = useAppDispatch();
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 shadow-sm backdrop-blur-lg p-3">
       <div className="container flex h-16 items-center justify-between">
@@ -46,6 +49,18 @@ export default function Header() {
 
         {/* === Right Side: Theme and User Account Buttons === */}
         <div className="flex items-center gap-2 md:gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => dispatch(toggleAudio())}
+            aria-label={isPlaying ? "Pause music" : "Play music"}
+          >
+            {isPlaying ? (
+              <Volume2 className="h-5 w-5" />
+            ) : (
+              <VolumeX className="h-5 w-5" />
+            )}
+          </Button>
           <Button variant="ghost" size="sm" asChild>
             <Link href="/help" className="text-primary">
               <CircleQuestionMark className="mr-2 h-4 w-4" />
