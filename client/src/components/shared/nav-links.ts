@@ -18,12 +18,12 @@ export const navLinks = [
   },
   {
     href: "/exercises",
-    label: "Exercises",
+    label: "Imyitozo",
     icon: Pen,
   },
   {
     href: "/exams",
-    label: "Exams",
+    label: "Ikizamini",
     icon: Book,
   },
 
