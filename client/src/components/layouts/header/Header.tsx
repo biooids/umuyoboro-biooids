@@ -8,6 +8,8 @@ import ThemeToggler from "./ThemeToggler";
 import { UserAccountNav } from "./UserAccountNav";
 import MobileSidebar from "../sidebar/MobileSidebar";
 import Logo from "@/components/shared/Logo";
+import { Button } from "@/components/ui/button";
+import { CircleQuestionMark } from "lucide-react";
 
 /**
  * The main application header. It is responsive and adapts its content
@@ -44,6 +46,12 @@ export default function Header() {
 
         {/* === Right Side: Theme and User Account Buttons === */}
         <div className="flex items-center gap-2 md:gap-4">
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/help" className="text-primary">
+              <CircleQuestionMark className="mr-2 h-4 w-4" />
+              Ubufasha
+            </Link>
+          </Button>{" "}
           <ThemeToggler />
           <UserAccountNav />
         </div>

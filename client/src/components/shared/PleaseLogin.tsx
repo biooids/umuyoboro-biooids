@@ -35,12 +35,8 @@ export default function PleaseLogin({
         <CardContent>
           <Button asChild>
             {/* STEP 2: Make the Link's href dynamic using the prop */}
-            <Link
-              href={`/auth/login?callbackUrl=${encodeURIComponent(
-                callbackUrl
-              )}`}
-            >
-              Proceed to Login
+            <Link href={`/auth?callbackUrl=${encodeURIComponent(callbackUrl)}`}>
+              Kanda winjire
             </Link>
           </Button>
         </CardContent>

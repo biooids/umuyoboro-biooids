@@ -40,7 +40,7 @@ export function UserAccountNav() {
   if (!user) {
     return (
       <Button asChild>
-        <Link href="/auth/login">Log In</Link>
+        <Link href="/auth">Log In</Link>
       </Button>
     );
   }

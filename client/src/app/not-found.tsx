@@ -63,12 +63,6 @@ export default function NotFound() {
               Go back to Homepage
             </Link>
           </Button>
-          <Button asChild variant="outline" size="lg">
-            <Link href="/posts">
-              <Search className="mr-2 h-5 w-5" />
-              Explore Posts
-            </Link>
-          </Button>
         </div>
       </div>
     </main>

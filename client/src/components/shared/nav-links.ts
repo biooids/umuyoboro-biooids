@@ -17,15 +17,16 @@ export const navLinks = [
     icon: Compass,
   },
   {
-    href: "/exams",
-    label: "Exams",
-    icon: Book,
-  },
-  {
-    href: "/exercises",
+    href: "/Imyitozo",
     label: "Exercises",
     icon: Pen,
   },
+  {
+    href: "/Ikizami",
+    label: "Exams",
+    icon: Book,
+  },
+
   {
     href: "/exams/history",
     label: "History",

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
-import { getApiErrorMessage } from "@/lib/utils/utils";
+import { getApiErrorMessage } from "@/lib/utils";
 import { Button } from "@/components/ui/button"; // Import Button
 
 interface DeleteAccountDialogProps {

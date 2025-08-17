@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/hooks/useAuth"; // Import the useAuth hook
 import { navLinks } from "@/components/shared/nav-links";
 

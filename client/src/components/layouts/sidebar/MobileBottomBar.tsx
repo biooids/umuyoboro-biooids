@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navLinks } from "@/components/shared/nav-links";
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import { useAuth } from "@/lib/hooks/useAuth";
 
 export default function MobileBottomBar() {

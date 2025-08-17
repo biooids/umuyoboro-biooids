@@ -9,6 +9,7 @@ import SocketProvider from "@/components/layouts/SocketProvider";
 import AuthInitializer from "@/components/layouts/AuthInitializer";
 import ReduxProvider from "@/components/layouts/ReduxProvider";
 import { AuthModal } from "@/components/pages/auth/AuthModal";
+import SessionManager from "@/components/layouts/SessionManager";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -107,6 +108,7 @@ export default function RootLayout({
               >
                 <Toaster position="top-center" />
                 <AuthModal />
+                <SessionManager />
                 {children}
               </ThemeProvider>
             </SocketProvider>

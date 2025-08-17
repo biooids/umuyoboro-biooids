@@ -23,7 +23,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { cn, getApiErrorMessage } from "@/lib/utils/utils";
+import { cn, getApiErrorMessage } from "@/lib/utils";
 import { useAuth } from "@/lib/hooks/useAuth";
 import PleaseLogin from "@/components/shared/PleaseLogin";
 
@@ -271,7 +271,7 @@ export default function ExerciseDetails({
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-4xl font-bold">
-              Your Final Score: {score} / {questions.length}
+              Wabonye amanota: <br /> {score} / {questions.length}
             </p>
             <div className="flex gap-4 justify-center">
               <Button onClick={() => dispatch({ type: "RESTART" })}>

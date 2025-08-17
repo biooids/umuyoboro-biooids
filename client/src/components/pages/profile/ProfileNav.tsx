@@ -2,7 +2,7 @@
 
 "use client";
 
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import { User, Shield } from "lucide-react";
 
 const navItems = [

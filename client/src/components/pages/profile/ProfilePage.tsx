@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useGetProfileQuery } from "@/lib/features/user/userApiSlice";
 import { Loader2, AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { getApiErrorMessage } from "@/lib/utils/utils";
+import { getApiErrorMessage } from "@/lib/utils";
 import ProfileNav from "./ProfileNav";
 import ProfileDetails from "./ProfileDetails";
 import ProfileEditForm from "./ProfileEditForm";

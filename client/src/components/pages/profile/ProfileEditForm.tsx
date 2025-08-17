@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, AlertCircle } from "lucide-react";
-import { getApiErrorMessage } from "@/lib/utils/utils";
+import { getApiErrorMessage } from "@/lib/utils";
 import { useFocusOnError } from "@/lib/hooks/useFocusOnError";
 
 interface ProfileEditFormProps {

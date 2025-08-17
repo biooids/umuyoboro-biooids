@@ -21,7 +21,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { cn, getApiErrorMessage } from "@/lib/utils/utils";
+import { cn, getApiErrorMessage } from "@/lib/utils";
 import { useFocusOnError } from "@/lib/hooks/useFocusOnError";
 import { useLoginMutation } from "@/lib/features/auth/authApiSlice";
 import { useAppDispatch } from "@/lib/hooks/hooks";
@@ -69,10 +69,10 @@ const LoginForm = () => {
       <Card className="w-full max-w-md bg-card border-border shadow-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl sm:text-3xl font-bold">
-            Urakza neza k'Umuyoboro!
+            Urakoze kugaruka urakaza neza!
           </CardTitle>
           <CardDescription>
-            Niba uri mushya ahangaha, kanda aha <br />
+            Niba uri mushya, kanda aha <br />
             <Link
               href="/auth/signup"
               className="text-primary hover:underline focus:outline-none focus:ring-1 focus:ring-ring rounded-sm"

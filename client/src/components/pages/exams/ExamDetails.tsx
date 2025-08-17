@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, AlertCircle, Check, X } from "lucide-react";
-import { cn, getApiErrorMessage } from "@/lib/utils/utils";
+import { cn, getApiErrorMessage } from "@/lib/utils";
 import PleaseLogin from "@/components/shared/PleaseLogin";
 import { useAuth } from "@/lib/hooks/useAuth";
 
@@ -287,7 +287,8 @@ export default function ExamDetails({ examId }: { examId: string }) {
                 {feedback.emoji} {feedback.message}
               </h2>
               <p className="text-4xl font-bold my-4">
-                Your Score: {results.score} / {results.totalQuestions}
+                Wabonye amanota: <br /> {results.score} /{" "}
+                {results.totalQuestions}
               </p>
               <div className="flex justify-center gap-4">
                 <Button onClick={() => dispatch({ type: "RESET" })}>

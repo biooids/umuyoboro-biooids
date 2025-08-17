@@ -1,7 +1,7 @@
 // FILE: src/components/shared/Logo.tsx
 
 import Image from "next/image"; // Keep this import
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 // REMOVE THIS LINE: import logo from "@/public/logo.png";
 
 export default function Logo({ isCollapsed }: { isCollapsed?: boolean }) {

@@ -13,8 +13,8 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Check, X } from "lucide-react";
-import { getApiErrorMessage } from "@/lib/utils/utils";
-import { cn } from "@/lib/utils/utils";
+import { getApiErrorMessage } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { useAuth } from "@/lib/hooks/useAuth";
 import PleaseLogin from "@/components/shared/PleaseLogin";

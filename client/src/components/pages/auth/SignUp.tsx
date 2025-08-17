@@ -24,7 +24,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { cn, getApiErrorMessage } from "@/lib/utils/utils";
+import { cn, getApiErrorMessage } from "@/lib/utils";
 import { useFocusOnError } from "@/lib/hooks/useFocusOnError";
 import { useSignupMutation } from "@/lib/features/auth/authApiSlice";
 import { useAppDispatch } from "@/lib/hooks/hooks";
@@ -73,7 +73,7 @@ const SignUpForm = () => {
       <Card className="w-full max-w-md bg-card border-border shadow-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl sm:text-3xl font-bold">
-            Urakaza neza K'Umuyoboro{" "}
+            Iyandikishe niba uri mushya{" "}
           </CardTitle>
           <CardDescription>
             Niba utari mushya, kanda aha <br />

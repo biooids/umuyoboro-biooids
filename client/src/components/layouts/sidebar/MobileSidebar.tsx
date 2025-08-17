@@ -12,7 +12,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils/utils";
+import { cn } from "@/lib/utils";
 import { navLinks } from "@/components/shared/nav-links";
 import { useAuth } from "@/lib/hooks/useAuth"; // Import the useAuth hook
 
