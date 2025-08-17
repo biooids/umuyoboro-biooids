@@ -166,7 +166,7 @@ const SignUpForm = () => {
 
             <div className="space-y-1.5">
               <Label htmlFor="confirmPassword">
-                Ongera wandike Password utazayibagirwa
+                Ongera wandike Password wanditse ruguru
               </Label>
               <div className="relative">
                 <Input
