@@ -1,5 +1,13 @@
 //src/components/shared/nav-links.ts
-import { Home, Compass, Book, Pen, History, ShieldCheck } from "lucide-react";
+import {
+  Home,
+  Compass,
+  Book,
+  Pen,
+  History,
+  ShieldCheck,
+  CircleQuestionMark,
+} from "lucide-react";
 import { Role } from "@/types/role.enum"; // Import your Role enum
 
 /**
@@ -31,6 +39,11 @@ export const navLinks = [
     href: "/exams/history",
     label: "History",
     icon: History,
+  },
+  {
+    href: "/help",
+    label: "Help",
+    icon: CircleQuestionMark,
   },
   // NEW: Add the link to the admin panel
   {

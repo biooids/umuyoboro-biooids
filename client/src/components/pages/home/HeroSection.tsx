@@ -28,7 +28,7 @@ function HeroSection() {
   return (
     <section className="bg-background text-foreground">
       <div className="container mx-auto flex flex-col items-center px-4 py-16 text-center md:py-24">
-        <h1 className="text-4xl font-bold leading-tight tracking-tighter sm:text-5xl md:text-6xl">
+        <h1 className="text-3xl font-bold leading-tight tracking-tighter sm:text-5xl md:text-6xl">
           Tsinnda neza ikizamini cya provisoire
         </h1>
         <p className="mt-4 max-w-2xl text-lg text-muted-foreground">

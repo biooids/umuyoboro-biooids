@@ -1,5 +1,3 @@
-// src/components/layouts/header/Header.tsx
-
 "use client";
 
 import Link from "next/link";
@@ -13,31 +11,26 @@ import { CircleQuestionMark, Volume2, VolumeX } from "lucide-react";
 import { useAppSelector, useAppDispatch } from "@/lib/hooks/hooks";
 import { toggleAudio } from "@/lib/features/audio/audioSlice";
 
-/**
- * The main application header. It is responsive and adapts its content
- * based on the user's authentication state.
- */
 export default function Header() {
   const { user } = useAuth();
   const { isPlaying } = useAppSelector((state) => state.audio);
   const dispatch = useAppDispatch();
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/80 shadow-sm backdrop-blur-lg p-3">
       <div className="container flex h-16 items-center justify-between">
-        {/* === Left Side: App Logo and Mobile Nav Trigger === */}
+        {/* === Left Side === */}
         <div className="flex items-center gap-4">
-          {/* CHANGE: The mobile sidebar trigger is now part of the unified header. */}
           <MobileSidebar />
-          {/* CHANGE: The app name/logo is now in the header for a consistent look. */}
           <Link
             href="/"
             className="hidden items-center gap-2 font-semibold md:flex"
           >
-            <Logo />{" "}
+            <Logo />
           </Link>
         </div>
 
-        {/* === Center (Visible for logged-in users on larger screens) === */}
+        {/* === Center === */}
         <div className="hidden flex-1 justify-center md:flex">
           {user && (
             <h1 className="text-lg font-semibold text-foreground">
@@ -47,8 +40,9 @@ export default function Header() {
           )}
         </div>
 
-        {/* === Right Side: Theme and User Account Buttons === */}
-        <div className="flex items-center gap-2 md:gap-4">
+        {/* === Right Side: Actions & User Menu === */}
+        {/* Adjusted gap for better mobile spacing */}
+        <div className="flex items-center gap-1">
           <Button
             variant="ghost"
             size="icon"
@@ -61,12 +55,17 @@ export default function Header() {
               <VolumeX className="h-5 w-5" />
             )}
           </Button>
-          <Button variant="ghost" size="sm" asChild>
+
+          {/* --- THIS IS THE FIX --- */}
+          {/* This button is now responsive. It's an icon on mobile and has text on larger screens. */}
+          <Button variant="ghost" size="sm" asChild className="px-2 sm:px-3">
             <Link href="/help" className="text-primary">
-              <CircleQuestionMark className="mr-2 h-4 w-4" />
-              baza
+              <CircleQuestionMark className="h-5 w-5" />
+              {/* This span hides the text on extra-small screens */}
+              <span className="hidden sm:inline sm:ml-2">baza</span>
             </Link>
-          </Button>{" "}
+          </Button>
+
           <ThemeToggler />
           <UserAccountNav />
         </div>

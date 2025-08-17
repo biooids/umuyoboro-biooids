@@ -1,8 +1,8 @@
-// src/components/pages/exams/ExamCard.tsx
-
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,7 +11,7 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Loader2 } from "lucide-react";
 
 interface ExamCardProps {
   exam: {
@@ -22,10 +22,17 @@ interface ExamCardProps {
   };
 }
 
-/**
- * A reusable card component to display summary information for a single exam.
- */
 export default function ExamCard({ exam }: ExamCardProps) {
+  // 1. Add router and loading state
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  // 2. Create a click handler
+  const handleClick = () => {
+    setIsLoading(true);
+    router.push(`/exams/${exam.id}`);
+  };
+
   return (
     <Card className="w-full sm:max-w-sm">
       <CardHeader>
@@ -38,10 +45,13 @@ export default function ExamCard({ exam }: ExamCardProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        {/* The `asChild` prop allows the Button to render the Link component,
-            combining the button's styles with the link's navigation behavior. */}
-        <Button asChild className="w-full">
-          <Link href={`/exams/${exam.id}`}>Tangira ikizamini</Link>
+        {/* 3. Update the button to use the handler and show loading state */}
+        <Button onClick={handleClick} disabled={isLoading} className="w-full">
+          {isLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            "Tangira ikizamini"
+          )}
         </Button>
       </CardContent>
     </Card>

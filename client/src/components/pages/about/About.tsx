@@ -81,7 +81,7 @@ export default function AboutPage() {
           <div className="p-5">
             <Logo />
           </div>
-          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
+          <h1 className="text-3xl font-extrabold tracking-tight lg:text-5xl">
             Tsinda Ikizamini cyawe cyo Gutwara ufite Icyizere{" "}
           </h1>
           <p className="mt-6 max-w-2xl mx-auto text-lg text-muted-foreground">

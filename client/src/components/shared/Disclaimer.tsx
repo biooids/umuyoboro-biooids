@@ -3,8 +3,8 @@ import { Button } from "../ui/button";
 
 export default function Disclaimer() {
   return (
-    // Use a top margin to create space from the content above
-    <div className="mt-16 w-full max-w-4xl rounded-lg border-2 border-amber-500/30 bg-amber-500/10 p-6 text-left shadow-lg">
+    // THE FIX: Removed the 'max-w-4xl' class to prevent overflow
+    <div className="mt-16 w-full rounded-lg border-2 border-amber-500/30 bg-amber-500/10 p-6 text-left shadow-lg">
       <div className="flex flex-col items-start gap-4 sm:flex-row sm:gap-6">
         {/* Icon */}
         <div className="flex-shrink-0">
@@ -29,7 +29,12 @@ export default function Disclaimer() {
               platform is for educational purposes and may contain errors.
             </p>
           </div>
-          <Button asChild variant="outline" size="sm" className="mt-4">
+          <Button
+            asChild
+            variant="outline"
+            size="sm"
+            className="mt-4 whitespace-normal break-words"
+          >
             <a
               href="https://police.gov.rw/services/traffic-and-road-safety/"
               target="_blank"
